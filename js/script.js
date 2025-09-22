@@ -2,14 +2,21 @@
 let estatDeLaPartida = {
     contadorPreguntes: 0,//contador de quantes preguntes porta l'usuari
     respostesUsuari : [], //contador (array) de les respostes del usuari
-    preguntaActual: 0  //contador de a quina pregunta actual
 };
 
 // Funció per actualtzar el marcador que es veu en pantalla
 function actualitzarMarcador(){
     let marcador = document.getElementById("marcador");  // Agafem l'element HTML on mostrarem el marcador
-    //modifiquem el contingut del marcador amb les pregutnes i respostes del usuari
-    marcador.innerHTML = `Pregunta actual: ${estatDeLaPartida.preguntaActual + 1}`;
+    //creem un string per anar afegint les preguntes i si s'han respost o no
+    let textMarcador = "Preguntes Respostes:<br>";
+
+    // Recorrem l'array de respostes de l'usuari
+    estatDeLaPartida.respostesUsuari.forEach((resposta, i) => {
+        // Mostrem "X" si ja té resposta, "O" si no
+        textMarcador += `Pregunta ${i+1}: ${resposta !== undefined ? "X" : "O"}<br>`;
+    });
+
+    marcador.innerHTML = textMarcador;
 }
 
 //Assignem la funcio actualtizarMarcador al objecte global window, per poder trucar-la desde qualsevol lloc

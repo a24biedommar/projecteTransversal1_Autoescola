@@ -10,11 +10,12 @@ function actualitzarMarcador(){
     //creem un string per anar afegint les preguntes i si s'han respost o no
     let textMarcador = "Preguntes Respostes:<br>";
 
-    // Recorrem l'array de respostes de l'usuari
-    estatDeLaPartida.respostesUsuari.forEach((resposta, i) => {
-        // Mostrem "X" si ja té resposta, "O" si no
-        textMarcador += `Pregunta ${i+1}: ${resposta !== undefined ? "X" : "O"}<br>`;
-    });
+    // Fem un bucle per recorre les preguntes i veure si s'han respost o no 
+    for(let i = 0; i < estatDeLaPartida.respostesUsuari.length; i++){
+        // Mostrem "X" si l'usuari ha respost, "O" si encara no
+        const estat = estatDeLaPartida.respostesUsuari[i] !== undefined ? "X" : "O";
+        textMarcador += `Pregunta ${i+1}: ${estat}<br>`;
+    }
 
     marcador.innerHTML = textMarcador;
 }

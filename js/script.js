@@ -85,6 +85,7 @@ function mostrarResultats() {
             <h2>Resultats</h2>
             <p>Total preguntes: ${resultat.total}</p>
             <p>Correctes: ${resultat.correctes}</p>
+            <button class="btn-Reiniciar" class="btn-Reiniciar" id="btnReiniciar" onclick="window.location.href='index.html'">Reiniciar</button>
         `;
         console.log(resultat);
     })

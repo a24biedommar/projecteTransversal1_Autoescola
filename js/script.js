@@ -55,7 +55,7 @@ function renderPregunta(data){
         htmlString += `<br><button class="btn-seguent" id="btnSeguent">Següent</button>`; 
     } else {
         //botó "Finalitzar" que crida a mostrarResultats per enviar les respostes al PHP (finalitzar.php)
-        htmlString += `<br><button class="btn-finaliitzar" onclick="mostrarResultats()">Finalitzar</button>`;
+        htmlString += `<br><button class="btn-finalitzar" onclick="mostrarResultats()">Finalitzar</button>`;
     }
     contenidor.innerHTML = htmlString;
 
@@ -72,7 +72,7 @@ function renderPregunta(data){
 
 // Funció per enviar les respostes a finalitzar.php i mostrar el resultat
 function mostrarResultats() {
-    fetch('../php/finalitzar.php', {
+    fetch('../php/finalitza.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(estatDeLaPartida.respostesUsuari)

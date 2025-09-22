@@ -89,6 +89,7 @@ function mostrarResultats() {
         console.log(resultat);
     })
 }
+window.mostrarResultats = mostrarResultats; //mostrem els resultat a la finestra amb la funcio GLOBAL window.
 
 // Esperem que el DOM estigui carregat abans d'executar el codi
 window.addEventListener('DOMContentLoaded', (event) => {

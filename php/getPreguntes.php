@@ -38,6 +38,7 @@ foreach($_SESSION['preguntes'] as $p){
 }
 
 //creem el fitxer json amb les preguntes que mostrarem al usuari
+header('Content-Type: application/json');
 echo json_encode($preguntesNoCorrect);
 
 ?>

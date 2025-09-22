@@ -38,7 +38,8 @@ window.marcarRespuesta = marcarRespuesta;
 function renderPregunta(data){
     let contenidor = document.getElementById("questionari"); // Agafem l'element on posarem les preguntes (element amb id questionari)
     let i = estatDeLaPartida.preguntaActual; //index de la pregunta la qual mostrem
-    let pregunta = data.preguntes[i]; //guardem les preguntes del index
+    //agafem la pregunta de l'array que ve directament del PHP sense els correctIndex
+    let pregunta = data[i]; //guardem les preguntes del index
 
     //mostrem el index de la pregunta, despres la pregunta, i despres l'imatge
     let htmlString = `<h3>${pregunta.pregunta}</h3>
@@ -50,10 +51,11 @@ function renderPregunta(data){
     }
 
     //si encara queden pregutnes mostrem el botó seguent si no queden preguntes mostrem el botó de finalitzar
-    if (i < data.preguntes.length - 1){
+    if (i < data.length - 1){
         htmlString += `<br><button class="btn-seguent" id="btnSeguent">Següent</button>`; 
     } else {
-        htmlString += `<br><button class="btn-finaliitzar"onclick="mostrarResultats()">Finalitzar</button>`;
+        //botó "Finalitzar" que crida a mostrarResultats per enviar les respostes al PHP (finalitzar.php)
+        htmlString += `<br><button class="btn-finaliitzar" onclick="mostrarResultats()">Finalitzar</button>`;
     }
     contenidor.innerHTML = htmlString;
 
@@ -68,10 +70,30 @@ function renderPregunta(data){
     actualitzarMarcador(); //despreés de tot aquest proces acutalitzem el marcador
 }
 
+// Funció per enviar les respostes a finalitzar.php i mostrar el resultat
+function mostrarResultats() {
+    fetch('../php/finalitzar.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(estatDeLaPartida.respostesUsuari)
+    })
+    .then(response => response.json())
+    .then(resultat => {
+        let contenidor = document.getElementById("questionari");
+        // Mostrem els resultats a l'usuari
+        contenidor.innerHTML = `
+            <h2>Resultats</h2>
+            <p>Total preguntes: ${resultat.total}</p>
+            <p>Correctes: ${resultat.correctes}</p>
+        `;
+        console.log(resultat);
+    })
+}
+
 // Esperem que el DOM estigui carregat abans d'executar el codi
 window.addEventListener('DOMContentLoaded', (event) => {
-    // Fem fetch del fitxer JSON amb les preguntes
-    fetch('../js/data.json')
+    // Fem fetch del fitxer getPreguntes.php amb les preguntes (sense correctIndex)
+    fetch('../php/getPreguntes.php')
         .then(response => response.json()) // Convertim la resposta a objecte JSON
         .then(preg => renderPregunta(preg));   // Cridem la funció per renderitzar el joc amb les dades
     }

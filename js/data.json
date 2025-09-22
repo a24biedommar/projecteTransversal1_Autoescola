@@ -1,0 +1,334 @@
+{
+  "preguntes": [
+    {
+      "id": 1,
+      "pregunta": "Quin senyal indica obligació de girar a la dreta?",
+      "respostes": [
+        { "id": 1, "resposta": "El cercle blau amb una fletxa blanca cap a la dreta", "correcta": true },
+        { "id": 2, "resposta": "Un triangle vermell amb una fletxa", "correcta": false },
+        { "id": 3, "resposta": "Un quadrat blau amb una fletxa", "correcta": false },
+        { "id": 4, "resposta": "Un cercle vermell amb una fletxa negra", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Spain_traffic_signal_r302.svg"
+    },
+    {
+      "id": 2,
+      "pregunta": "Quin significat té el senyal STOP?",
+      "respostes": [
+        { "id": 1, "resposta": "Obligació d’aturar-se completament i cedir el pas", "correcta": true },
+        { "id": 2, "resposta": "Només reduir la velocitat", "correcta": false },
+        { "id": 3, "resposta": "Cedir el pas sense aturar-se", "correcta": false },
+        { "id": 4, "resposta": "Prioritat de pas", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/0/02/STOP_sign.jpg"
+    },
+    {
+      "id": 3,
+      "pregunta": "Què indica una línia contínua al centre de la calçada?",
+      "respostes": [
+        { "id": 1, "resposta": "Prohibició d’avançar i de canviar de carril", "correcta": true },
+        { "id": 2, "resposta": "Zona d’avançament permesa", "correcta": false },
+        { "id": 3, "resposta": "Carril bus", "correcta": false },
+        { "id": 4, "resposta": "Zona d’aparcament", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Solid_line.jpg"
+    },
+    {
+      "id": 4,
+      "pregunta": "Quin senyal indica prohibit estacionar?",
+      "respostes": [
+        { "id": 1, "resposta": "Un cercle blau amb vora vermella i una línia vermella diagonal", "correcta": true },
+        { "id": 2, "resposta": "Un quadrat blau amb una P ratllada", "correcta": false },
+        { "id": 3, "resposta": "Un triangle amb una P", "correcta": false },
+        { "id": 4, "resposta": "Un cercle vermell amb una P dins", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/1/10/Spain_traffic_signal_r308a.svg"
+    },
+    {
+      "id": 5,
+      "pregunta": "Quan tens prioritat en una intersecció sense senyals?",
+      "respostes": [
+        { "id": 1, "resposta": "Quan vens per la dreta", "correcta": true },
+        { "id": 2, "resposta": "Quan vens per l’esquerra", "correcta": false },
+        { "id": 3, "resposta": "Quan ets en un carrer principal", "correcta": false },
+        { "id": 4, "resposta": "Quan vas més ràpid", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/6/62/Right_priority.png"
+    },
+    {
+      "id": 6,
+      "pregunta": "Quin significat té el semàfor amb llum groga fixa?",
+      "respostes": [
+        { "id": 1, "resposta": "Has d’aturar-te si pots fer-ho amb seguretat", "correcta": true },
+        { "id": 2, "resposta": "Passar sempre sense aturar-se", "correcta": false },
+        { "id": 3, "resposta": "Accelerar per creuar ràpid", "correcta": false },
+        { "id": 4, "resposta": "Prohibit girar a l’esquerra", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Amber_traffic_light.jpg"
+    },
+    {
+      "id": 7,
+      "pregunta": "Quin és el límit de velocitat en vies urbanes a Espanya?",
+      "respostes": [
+        { "id": 1, "resposta": "50 km/h", "correcta": true },
+        { "id": 2, "resposta": "30 km/h", "correcta": false },
+        { "id": 3, "resposta": "70 km/h", "correcta": false },
+        { "id": 4, "resposta": "90 km/h", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/1/16/Spain_traffic_signal_r301-50.svg"
+    },
+    {
+      "id": 8,
+      "pregunta": "Quin senyal indica perill de pas de vianants?",
+      "respostes": [
+        { "id": 1, "resposta": "Un triangle vermell amb dibuix de persones creuant", "correcta": true },
+        { "id": 2, "resposta": "Un cercle vermell amb persones dins", "correcta": false },
+        { "id": 3, "resposta": "Un quadrat blau amb una persona caminant", "correcta": false },
+        { "id": 4, "resposta": "Un cercle blau amb una P", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Spain_traffic_signal_p20.svg"
+    },
+    {
+      "id": 9,
+      "pregunta": "Què indica una línia discontínua blanca al centre de la calçada?",
+      "respostes": [
+        { "id": 1, "resposta": "Es permet avançar si hi ha seguretat", "correcta": true },
+        { "id": 2, "resposta": "Prohibit avançar", "correcta": false },
+        { "id": 3, "resposta": "Carril exclusiu per a bus", "correcta": false },
+        { "id": 4, "resposta": "Zona d’estacionament", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/3/32/Discontinuous_line.jpg"
+    },
+    {
+      "id": 10,
+      "pregunta": "Quin senyal indica obligació de portar cadenes o pneumàtics d’hivern?",
+      "respostes": [
+        { "id": 1, "resposta": "Un cercle blau amb una roda i cadenes dibuixades", "correcta": true },
+        { "id": 2, "resposta": "Un triangle vermell amb un floc de neu", "correcta": false },
+        { "id": 3, "resposta": "Un cercle vermell amb una roda dins", "correcta": false },
+        { "id": 4, "resposta": "Un quadrat blau amb un cotxe", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Spain_traffic_signal_r412.svg"
+    },
+    {
+      "id": 11,
+      "pregunta": "Quina és la taxa màxima d’alcohol per a conductors novells a Espanya?",
+      "respostes": [
+        { "id": 1, "resposta": "0,15 mg/l en aire expirat", "correcta": true },
+        { "id": 2, "resposta": "0,25 mg/l", "correcta": false },
+        { "id": 3, "resposta": "0,30 mg/l", "correcta": false },
+        { "id": 4, "resposta": "0,10 mg/l", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/f/fb/Alcohol_test.jpg"
+    },
+    {
+      "id": 12,
+      "pregunta": "Quan és obligatori utilitzar el cinturó de seguretat?",
+      "respostes": [
+        { "id": 1, "resposta": "Sempre, tant davant com darrere", "correcta": true },
+        { "id": 2, "resposta": "Només a carretera", "correcta": false },
+        { "id": 3, "resposta": "Només a ciutat", "correcta": false },
+        { "id": 4, "resposta": "Només els menors d’edat", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/f/f7/Seat_belt_sign.jpg"
+    },
+    {
+      "id": 13,
+      "pregunta": "Quin significat té aquest senyal triangular amb un cotxe i ones darrere?",
+      "respostes": [
+        { "id": 1, "resposta": "Perill de calçada relliscosa", "correcta": true },
+        { "id": 2, "resposta": "Zona de sorolls", "correcta": false },
+        { "id": 3, "resposta": "Paviment irregular", "correcta": false },
+        { "id": 4, "resposta": "Pas de bicicletes", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/f/f4/Spain_traffic_signal_p19.svg"
+    },
+    {
+      "id": 14,
+      "pregunta": "A quina distància mínima cal encendre les llums d’encreuament en túnels?",
+      "respostes": [
+        { "id": 1, "resposta": "Sempre, en qualsevol túnel", "correcta": true },
+        { "id": 2, "resposta": "Només si és llarg", "correcta": false },
+        { "id": 3, "resposta": "Només de nit", "correcta": false },
+        { "id": 4, "resposta": "Només si hi ha trànsit", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/3/37/Tunnel_icon.png"
+    },
+    {
+      "id": 15,
+      "pregunta": "Quin senyal indica que has de cedir el pas?",
+      "respostes": [
+        { "id": 1, "resposta": "Un triangle invertit amb vora vermella", "correcta": true },
+        { "id": 2, "resposta": "Un cercle vermell amb una ratlla", "correcta": false },
+        { "id": 3, "resposta": "Un rectangle blau amb una P", "correcta": false },
+        { "id": 4, "resposta": "Un triangle amb un STOP dins", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/0/05/Ceda_el_paso.jpg"
+    },
+    {
+      "id": 16,
+      "pregunta": "Quina és la velocitat màxima per a un turisme en autopista a Espanya?",
+      "respostes": [
+        { "id": 1, "resposta": "120 km/h", "correcta": true },
+        { "id": 2, "resposta": "100 km/h", "correcta": false },
+        { "id": 3, "resposta": "110 km/h", "correcta": false },
+        { "id": 4, "resposta": "130 km/h", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/2/28/Spain_traffic_signal_r301-120.svg"
+    },
+    {
+      "id": 17,
+      "pregunta": "Quin senyal t’avisa de pas de bestiar?",
+      "respostes": [
+        { "id": 1, "resposta": "Un triangle vermell amb una vaca dibuixada", "correcta": true },
+        { "id": 2, "resposta": "Un quadrat blau amb una vaca", "correcta": false },
+        { "id": 3, "resposta": "Un cercle vermell amb una vaca dins", "correcta": false },
+        { "id": 4, "resposta": "Un triangle amb un porc dibuixat", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/6/64/Spain_traffic_signal_p24.svg"
+    },
+    {
+      "id": 18,
+      "pregunta": "Quan pots utilitzar el telèfon mòbil conduint?",
+      "respostes": [
+        { "id": 1, "resposta": "Mai, només amb mans lliures i sense manipular-lo", "correcta": true },
+        { "id": 2, "resposta": "Sempre a ciutat", "correcta": false },
+        { "id": 3, "resposta": "Només si tens prioritat", "correcta": false },
+        { "id": 4, "resposta": "Quan condueixes lentament", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Cellphone_driving.jpg"
+    },
+    {
+      "id": 19,
+      "pregunta": "Quin senyal t’indica una autopista?",
+      "respostes": [
+        { "id": 1, "resposta": "Un rectangle blau amb un dibuix de carretera amb pont", "correcta": true },
+        { "id": 2, "resposta": "Un cercle blau amb cotxe", "correcta": false },
+        { "id": 3, "resposta": "Un triangle amb carretera", "correcta": false },
+        { "id": 4, "resposta": "Un quadrat verd amb cotxe", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Spain_traffic_signal_s1.svg"
+    },
+    {
+      "id": 20,
+      "pregunta": "Quan s’ha d’utilitzar el triangle d’emergència?",
+      "respostes": [
+        { "id": 1, "resposta": "Quan el vehicle queda aturat en la calçada", "correcta": true },
+        { "id": 2, "resposta": "Només si hi ha accident", "correcta": false },
+        { "id": 3, "resposta": "Només de nit", "correcta": false },
+        { "id": 4, "resposta": "Només en autopista", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/1/13/Emergency_triangle.jpg"
+    },
+    {
+    "id": 21,
+    "pregunta": "Quin senyal indica prohibició de circular a més de 80 km/h?",
+    "respostes": [
+        { "id": 1, "resposta": "Un cercle blanc amb vora vermella i el número 80 dins", "correcta": true },
+        { "id": 2, "resposta": "Un quadrat blau amb 80", "correcta": false },
+        { "id": 3, "resposta": "Un triangle amb 80", "correcta": false },
+        { "id": 4, "resposta": "Un cercle blau amb 80", "correcta": false }
+    ],
+    "imatge": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Spain_traffic_signal_r301-80.svg"
+    },
+    {
+    "id": 22,
+    "pregunta": "Quan és obligatori utilitzar el casc?",
+    "respostes": [
+        { "id": 1, "resposta": "Sempre en motocicletes i ciclomotors", "correcta": true },
+        { "id": 2, "resposta": "Només en vies ràpides", "correcta": false },
+        { "id": 3, "resposta": "Només a la nit", "correcta": false },
+        { "id": 4, "resposta": "Només si portes passatger", "correcta": false }
+    ],
+    "imatge": "https://upload.wikimedia.org/wikipedia/commons/8/8a/Motorcycle_helmet.jpg"
+    },
+    {
+    "id": 23,
+    "pregunta": "Quina és la distància mínima de seguretat recomanada amb el vehicle davanter?",
+    "respostes": [
+        { "id": 1, "resposta": "2 segons", "correcta": true },
+        { "id": 2, "resposta": "1 segon", "correcta": false },
+        { "id": 3, "resposta": "3 segons", "correcta": false },
+        { "id": 4, "resposta": "5 segons", "correcta": false }
+    ],
+    "imatge": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Driving_distance.jpg"
+    },
+    {
+    "id": 24,
+    "pregunta": "Quin senyal indica fi de totes les prohibicions?",
+    "respostes": [
+        { "id": 1, "resposta": "Un cercle blanc amb ratlles negres diagonals", "correcta": true },
+        { "id": 2, "resposta": "Un quadrat blau amb ratlles", "correcta": false },
+        { "id": 3, "resposta": "Un triangle amb ratlles", "correcta": false },
+        { "id": 4, "resposta": "Un cercle vermell amb ratlles", "correcta": false }
+    ],
+    "imatge": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Spain_traffic_signal_r500.svg"
+    },
+    {
+    "id": 25,
+    "pregunta": "Quin significat té un semàfor amb fletxa verda a la dreta?",
+    "respostes": [
+        { "id": 1, "resposta": "Es pot girar a la dreta encara que estigui vermell per als altres", "correcta": true },
+        { "id": 2, "resposta": "Prohibit girar", "correcta": false },
+        { "id": 3, "resposta": "Obligació seguir recte", "correcta": false },
+        { "id": 4, "resposta": "Es pot girar en vermell en qualsevol direcció", "correcta": false }
+    ],
+    "imatge": "https://upload.wikimedia.org/wikipedia/commons/3/39/Green_arrow_traffic_light.jpg"
+    },
+    {
+    "id": 26,
+    "pregunta": "Quin senyal t’indica un pas a nivell amb barreres?",
+    "respostes": [
+        { "id": 1, "resposta": "Un triangle vermell amb un tren i barreres", "correcta": true },
+        { "id": 2, "resposta": "Un cercle vermell amb tren", "correcta": false },
+        { "id": 3, "resposta": "Un quadrat blau amb tren", "correcta": false },
+        { "id": 4, "resposta": "Un triangle amb semàfor", "correcta": false }
+    ],
+    "imatge": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Spain_traffic_signal_p7.svg"
+    },
+    {
+    "id": 27,
+    "pregunta": "Quan has de posar les llums llargues?",
+    "respostes": [
+        { "id": 1, "resposta": "De nit i en vies sense il·luminació suficient", "correcta": true },
+        { "id": 2, "resposta": "Sempre a l’autopista", "correcta": false },
+        { "id": 3, "resposta": "Sempre dins de túnels", "correcta": false },
+        { "id": 4, "resposta": "De dia en ciutat", "correcta": false }
+    ],
+    "imatge": "https://upload.wikimedia.org/wikipedia/commons/4/41/Car_headlights.jpg"
+    },
+    {
+    "id": 28,
+    "pregunta": "Quin senyal indica perill per corba perillosa a la dreta?",
+    "respostes": [
+        { "id": 1, "resposta": "Un triangle vermell amb una corba a la dreta", "correcta": true },
+        { "id": 2, "resposta": "Un cercle vermell amb corba", "correcta": false },
+        { "id": 3, "resposta": "Un quadrat blau amb corba", "correcta": false },
+        { "id": 4, "resposta": "Un triangle amb corba a l’esquerra", "correcta": false }
+    ],
+    "imatge": "https://upload.wikimedia.org/wikipedia/commons/3/34/Spain_traffic_signal_p1a.svg"
+    },
+    {
+    "id": 29,
+    "pregunta": "Quina és la velocitat mínima en autopista?",
+    "respostes": [
+        { "id": 1, "resposta": "60 km/h", "correcta": true },
+        { "id": 2, "resposta": "40 km/h", "correcta": false },
+        { "id": 3, "resposta": "50 km/h", "correcta": false },
+        { "id": 4, "resposta": "70 km/h", "correcta": false }
+    ],
+    "imatge": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Spain_traffic_signal_r306.svg"
+    },
+    {
+      "id": 30,
+      "pregunta": "Quina és la senyal que indica stop?",
+      "respostes": [
+          { "id": 1, "resposta": "Un cercle vermell amb línia blanca horitzontal", "correcta": false },
+          { "id": 2, "resposta": "Un triangle invertit amb vora vermella", "correcta": false },
+          { "id": 3, "resposta": "Un octàgon vermell amb la paraula STOP", "correcta": true },
+          { "id": 4, "resposta": "Un rectangle blau amb fletxa blanca", "correcta": false }
+      ],
+      "imatge": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Spain_traffic_sign_senal_stop.svg"
+    }
+  ]
+}  

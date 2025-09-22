@@ -12,8 +12,16 @@ function actualitzarMarcador(){
 
     // Fem un bucle per recorre les preguntes i veure si s'han respost o no 
     for(let i = 0; i < estatDeLaPartida.respostesUsuari.length; i++){
-        // Mostrem "X" si l'usuari ha respost, "O" si encara no
-        const estat = estatDeLaPartida.respostesUsuari[i] !== undefined ? "X" : "O";
+        
+        //Declarem una variable per guardar l'estat de la pregunta
+        let estat;
+
+        // Si la resposta de la pregunta i es undefined, vol dir que no s'ha respost
+        if (estatDeLaPartida.respostesUsuari[i] === undefined) {
+            estat = "O"; // O de "No respost"
+        } else {
+            estat = "X"; //si s'ha respost, X de "Respost"
+        }
         textMarcador += `Pregunta ${i+1}: ${estat}<br>`;
     }
 
@@ -77,6 +85,12 @@ function renderTotesLesPreguntes(data){
 
 // Funció per enviar les respostes a finalitzar.php i mostrar el resultat
 function mostrarResultats() {
+    // Agafem l'element del marcador per poder ocultar-lo
+    let marcador = document.getElementById("marcador");
+    if (marcador) { //si existeix el marcador el ocultem
+        marcador.style.display = "none";
+    }
+
     fetch('../php/finalitza.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -102,6 +116,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // Fem fetch del fitxer getPreguntes.php amb les preguntes (sense correctIndex)
     fetch('../php/getPreguntes.php')
         .then(response => response.json()) // Convertim la resposta a objecte JSON
-        .then(preg => renderTotesLesPreguntes(preg));   // Cridem la funció per renderitzar el joc amb les dades
-    }
-);
+        .then(preg => {
+            // Inicialitzem l'array de respostes amb tants elements com preguntes
+            estatDeLaPartida.respostesUsuari = new Array(preg.length).fill(undefined);
+            renderTotesLesPreguntes(preg);   // Cridem la funció per renderitzar el joc amb les dades
+            actualitzarMarcador();           // Mostrem el marcador des del principi
+        });
+});

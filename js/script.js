@@ -28,6 +28,15 @@ function marcarRespuesta(numPregunta, numResposta) {
     //Guardem la resposta de l'usuari dins l'array de respostes, en la posició de la pregunta
     estatDeLaPartida.respostesUsuari[numPregunta] =  numResposta;
 
+     // Guardem la resposta
+    estatDeLaPartida.respostesUsuari[numPregunta] = numResposta;
+
+    // Si ja s'han respost totes les preguntes(10), mostrem el botó
+    if(estatDeLaPartida.contadorPreguntes === estatDeLaPartida.respostesUsuari.length){
+        const btnFinalitzar = document.getElementById("btnFinalitzar");
+        if(btnFinalitzar) btnFinalitzar.style.display = "inline-block";
+    }
+
     console.log(estatDeLaPartida);   // Mostrem l'objecte complet de l'estat actual a la consola
     actualitzarMarcador();            //Cridem a la funció actualitzarMarcador (per actualitzar el Marcador)
 }
@@ -35,39 +44,27 @@ function marcarRespuesta(numPregunta, numResposta) {
 window.marcarRespuesta = marcarRespuesta;
 
 // Funció que crea i mostra el qüestionari al DOM
-function renderPregunta(data){
-    let contenidor = document.getElementById("questionari"); // Agafem l'element on posarem les preguntes (element amb id questionari)
-    let i = estatDeLaPartida.preguntaActual; //index de la pregunta la qual mostrem
-    //agafem la pregunta de l'array que ve directament del PHP sense els correctIndex
-    let pregunta = data[i]; //guardem les preguntes del index
+function renderTotesLesPreguntes(data){
+    let contenidor = document.getElementById("questionari"); 
+    let htmlString = "";
 
-    //mostrem el index de la pregunta, despres la pregunta, i despres l'imatge
-    let htmlString = `<h3>${pregunta.pregunta}</h3>
-        <img src="${pregunta.imatge}" alt="Pregunta ${i+1}"><br>`;
+    data.forEach((pregunta, i) => {
+        htmlString += `
+            <h3>Pregunta ${i+1}: ${pregunta.pregunta}</h3><br>
+            <img src="${pregunta.imatge}" alt="Pregunta ${i+1}"><br>`;
 
-    //fem un per mostrar les 4 possibles respostes
-    for(let j = 0; j < pregunta.respostes.length; j++){
-        htmlString += `<button class="btn-resposta" onclick="marcarRespuesta(${i}, ${j})">${pregunta.respostes[j].resposta}</button><br>`;
-    }
-
-    //si encara queden pregutnes mostrem el botó seguent si no queden preguntes mostrem el botó de finalitzar
-    if (i < data.length - 1){
-        htmlString += `<br><button class="btn-seguent" id="btnSeguent">Següent</button>`; 
-    } else {
-        //botó "Finalitzar" que crida a mostrarResultats per enviar les respostes al PHP (finalitzar.php)
-        htmlString += `<br><button class="btn-finalitzar" onclick="mostrarResultats()">Finalitzar</button>`;
-    }
-    contenidor.innerHTML = htmlString;
-
-    let btn = document.getElementById("btnSeguent"); 
-    if(btn){
-        btn.addEventListener("click", () => {
-            estatDeLaPartida.preguntaActual++;   //si el botó seguent es clica sumem un a la pregunta acutal (cambiem de index)
-            renderPregunta(data);                //un cop clicat, tornem a renderizar una nova pregunta
+        // Afegim les possibles respostes com a botons
+        pregunta.respostes.forEach((resposta, j) => {
+            htmlString += `<button class="btn-resposta" onclick="marcarRespuesta(${i}, ${j})">${resposta.resposta}</button><br>`;
         });
-    }
+        // Afegim una línia horitzontal per separar les preguntes
+        htmlString += `<hr>`;
+    });
 
-    actualitzarMarcador(); //despreés de tot aquest proces acutalitzem el marcador
+    // Botó de finalitzar inicialment ocult
+    htmlString += `<br><button id="btnFinalitzar" class="btn-finalitzar" style="display:none;" onclick="mostrarResultats()">Finalitzar</button>`;    
+    
+    contenidor.innerHTML = htmlString;
 }
 
 // Funció per enviar les respostes a finalitzar.php i mostrar el resultat

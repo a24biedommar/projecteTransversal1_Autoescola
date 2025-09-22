@@ -94,6 +94,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // Fem fetch del fitxer getPreguntes.php amb les preguntes (sense correctIndex)
     fetch('../php/getPreguntes.php')
         .then(response => response.json()) // Convertim la resposta a objecte JSON
-        .then(preg => renderPregunta(preg));   // Cridem la funció per renderitzar el joc amb les dades
+        .then(preg => renderTotesLesPreguntes(preg));   // Cridem la funció per renderitzar el joc amb les dades
     }
 );

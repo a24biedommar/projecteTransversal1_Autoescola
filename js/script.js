@@ -81,9 +81,10 @@ function renderTotesLesPreguntes(data){
     htmlString += `<button id="btnFinalitzar" class="btn-finalitzar" style="display:none">Finalitzar</button>`;    
     
     contenidor.innerHTML = htmlString;
+    
+    document.getElementById("btnFinalitzar").addEventListener("click", mostrarResultats);
 }
 
-document.getElementById("btnFinalitzar").addEventListener("click", mostrarResultats);
 
 // Funció per enviar les respostes a finalitzar.php i mostrar el resultat
 function mostrarResultats() {

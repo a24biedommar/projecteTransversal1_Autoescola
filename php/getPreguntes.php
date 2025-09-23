@@ -64,6 +64,5 @@ foreach($preguntesSeleccionades as $pregunta){
 
 //creem el fitxer json amb les preguntes que mostrarem al usuari
 header('Content-Type: application/json');
-echo json_encode($preguntesNoCorrect);
-
+echo json_encode(['preguntes' => $preguntesNoCorrect]);
 ?>

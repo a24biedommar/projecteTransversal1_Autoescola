@@ -44,9 +44,6 @@ function marcarRespuesta(numPregunta, numResposta) {
     //Guardem la resposta de l'usuari dins l'array de respostes, en la posició de la pregunta
     estatDeLaPartida.respostesUsuari[numPregunta] =  numResposta;
 
-     // Guardem la resposta
-    estatDeLaPartida.respostesUsuari[numPregunta] = numResposta;
-
     // Si ja s'han respost totes les preguntes(10), mostrem el botó
     if(estatDeLaPartida.contadorPreguntes === estatDeLaPartida.respostesUsuari.length){
         const btnFinalitzar = document.getElementById("btnFinalitzar");
@@ -60,11 +57,11 @@ function marcarRespuesta(numPregunta, numResposta) {
 window.marcarRespuesta = marcarRespuesta;
 
 // Funció que crea i mostra el qüestionari al DOM
-function renderTotesLesPreguntes(data){
+function renderTotesLesPreguntes(preguntes){
     let contenidor = document.getElementById("questionari"); 
     let htmlString = "";
 
-    data.forEach((pregunta, i) => {
+    preguntes.forEach((pregunta, i) => {
         htmlString += `
             <h3>Pregunta ${i+1}: ${pregunta.pregunta}</h3><br>
             <img src="${pregunta.imatge}" alt="Pregunta ${i+1}"><br>`;
@@ -119,10 +116,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // Fem fetch del fitxer getPreguntes.php amb les preguntes (sense correctIndex)
     fetch('../php/getPreguntes.php')
         .then(response => response.json()) // Convertim la resposta a objecte JSON
-        .then(preg => {
+        .then(data => {
+            const preguntes = data.preguntes;
             // Inicialitzem l'array de respostes amb tants elements com preguntes
-            estatDeLaPartida.respostesUsuari = new Array(preg.length).fill(undefined);
-            renderTotesLesPreguntes(preg);   // Cridem la funció per renderitzar el joc amb les dades
+            estatDeLaPartida.respostesUsuari = new Array(preguntes.length).fill(undefined);
+            renderTotesLesPreguntes(preguntes);   // Cridem la funció per renderitzar el joc amb les dades
             actualitzarMarcador();           // Mostrem el marcador des del principi
         });
 });

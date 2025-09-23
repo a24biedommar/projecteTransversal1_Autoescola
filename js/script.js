@@ -118,11 +118,11 @@ window.mostrarResultats = mostrarResultats; //mostrem els resultat a la finestra
 window.addEventListener('DOMContentLoaded', (event) => {
     // Fem fetch del fitxer getPreguntes.php amb les preguntes (sense correctIndex)
     fetch('../php/getPreguntes.php')
-        .then(response => response.json()) // Convertim la resposta a objecte JSON
-        .then(preg => {
-            // Inicialitzem l'array de respostes amb tants elements com preguntes
+        .then(response => response.json())
+        .then(data => {
+            let preg = data.preguntes; // agafem la clau 'preguntes'
             estatDeLaPartida.respostesUsuari = new Array(preg.length).fill(undefined);
-            renderTotesLesPreguntes(preg);   // Cridem la funció per renderitzar el joc amb les dades
-            actualitzarMarcador();           // Mostrem el marcador des del principi
+            renderTotesLesPreguntes(preg);
+            actualitzarMarcador();
         });
 });

@@ -33,22 +33,26 @@ while ($row = $result->fetch_assoc()) {
 //declarem la variable (array) on guardarem les preguntes i respostes sense correctIndex
 $preguntesNoCorrect = [];
 
-//fem un foreach per cada pregunta seleccionada i per guardar aquesta a preguntesNoCorrect
+// per cada pregunta seleccionada, busquem les respostes
 foreach($preguntesSeleccionades as $pregunta){
-    
-    //guardem l'id de la pregunta actual
+    // guardem l'id de la pregunta actual
     $id = $pregunta['ID_PREGUNTA'];
 
-    // Consultem respostes
-    $sqlRespostes = "SELECT ID_RESPOSTA, RESPOSTA, LINK_IMATGE FROM RESPOSTES WHERE ID_PREGUNTA = $id ORDER BY ID_RESPOSTA";
+    // Consultem totes les respostes i els seus camps (id, resposta) per a la pregunta actual
+    $sqlRespostes = "SELECT ID_RESPOSTA, RESPOSTA FROM RESPOSTES WHERE ID_PREGUNTA = $id ORDER BY ID_RESPOSTA";
     $resResult = $conn->query($sqlRespostes);
-    var_dump($resResult->fetch_assoc());
 
     $respostes = [];
+
+    // Aquest bucle recupera totes les respostes per a la pregunta
     while($r = $resResult->fetch_assoc()){
-        $respostes[] = $r;
+        $respostes[] = [
+            'id' => $r['ID_RESPOSTA'],
+            'resposta' => $r['RESPOSTA'],
+        ];
     }
 
+    // Afegim la pregunta completa a l'array final
     $preguntesNoCorrect[] = [
         'id' => $pregunta['ID_PREGUNTA'],
         'pregunta' => $pregunta['PREGUNTA'],
@@ -56,15 +60,13 @@ foreach($preguntesSeleccionades as $pregunta){
         'imatge' => $pregunta['LINK_IMATGE']
     ];
 
-    // Guardem només l'ID de la pregunta a la sessió per després corregir el quiz
+    // Guardem només l'ID de la pregunta a la sessió per a futures validacions
     $_SESSION['preguntes'][] = $pregunta['ID_PREGUNTA'];
 }
 
-
-//creem el fitxer json amb les preguntes que mostrarem al usuari
+// Creem el fitxer JSON amb les preguntes que mostrarem a l'usuari
 header('Content-Type: application/json');
-echo json_encode($preguntesNoCorrect);
-
+echo json_encode(['preguntes' => $preguntesNoCorrect]);
 ?>
 
-//fa falta fer correcte lo de les id i preguntes, fer un select per agafar les respostes nomes m'agafa una
+

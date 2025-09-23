@@ -1,0 +1,29 @@
+/* Alternativa amb Flexbox */
+.contenidor-principal {
+    width: 90%;
+    max-width: 1200px;
+    height: 80vh;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    
+    /* Flexbox */
+    display: flex;
+}
+
+#marcador {
+    flex: 1; /* Ocupa 1 part de 5 (20%) */
+    background-color: #e3f2fd;
+    padding: 20px;
+    border-right: 2px solid #bbdefb;
+    overflow-y: auto;
+    min-width: 200px;
+}
+
+#questionari {
+    flex: 4; /* Ocupa 4 parts de 5 (80%) */
+    background-color: white;
+    padding: 20px;
+    overflow-y: auto;
+}

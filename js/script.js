@@ -78,7 +78,7 @@ function renderTotesLesPreguntes(data){
     });
 
     // Botó de finalitzar inicialment ocult
-    htmlString += `<br><button id="btnFinalitzar" class="btn-finalitzar" style="display:none;" onclick="mostrarResultats()">Finalitzar</button>`;    
+    htmlString += `<button id="btnFinalitzar" class="btn-finalitzar" style="display:none;" onclick="mostrarResultats()">Finalitzar</button>`;    
     
     contenidor.innerHTML = htmlString;
 }

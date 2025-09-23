@@ -15,6 +15,11 @@ $dbname = "a24biedommar_Projecte0";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die(json_encode(["error" => "Connexió fallida: " . $conn->connect_error]));
+}
+
 //creem la variable que ens diu quantes preguntes volem mostrar
 $numPreguntes = 10;
 

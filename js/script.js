@@ -81,8 +81,8 @@ function renderTotesLesPreguntes(data){
     htmlString += `<button id="btnFinalitzar" class="btn-finalitzar" style="display:none">Finalitzar</button>`;    
     
     contenidor.innerHTML = htmlString;
-    
     document.getElementById("btnFinalitzar").addEventListener("click", mostrarResultats);
+
 }
 
 

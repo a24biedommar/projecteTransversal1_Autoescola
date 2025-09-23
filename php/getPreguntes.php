@@ -42,6 +42,7 @@ foreach($preguntesSeleccionades as $pregunta){
     // Consultem respostes
     $sqlRespostes = "SELECT ID_RESPOSTA, RESPOSTA, LINK_IMATGE FROM RESPOSTES WHERE ID_PREGUNTA = $id ORDER BY ID_RESPOSTA";
     $resResult = $conn->query($sqlRespostes);
+    var_dump($resResult);
 
     $respostes = [];
     while($r = $resResult->fetch_assoc()){

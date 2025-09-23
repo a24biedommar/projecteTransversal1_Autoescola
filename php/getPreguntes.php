@@ -7,35 +7,59 @@ $_SESSION['index'] = 0;
 $_SESSION['puntuacio'] = 0;
 $_SESSION['preguntes'] = [];
 
-//llegim el contingut del fitxer json
-$json = file_get_contents("../js/data.json");
+// Inicialitzem les variables de connexió a la base de dades
+$servername = "localhost";
+$username = "root";
+$password = "J7CqPQhC|Gwb%=%@"; 
+$dbname = "a24biedommar_Projecte0"; 
 
-//fem decode del fitxer.json per aixi poder tenir en una variable tota l'informació
-$preguntes = json_decode($json, true);
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-// Selecciona 10 preguntes (preguntes al fitxer .json) aleatòries de la variable pregutnes
-$preguntesSeleccionades = array_rand($preguntes['preguntes'], 10);
+//creem la variable que ens diu quantes preguntes volem mostrar
+$numPreguntes = 10;
 
-//fem un bucle foreach per tal de guardar en la variable $preguntes les 10 preguntes seleccionades
-foreach ($preguntesSeleccionades as $i) {
-$_SESSION['preguntes'][] = $preguntes['preguntes'][$i];
+// agafem $numPreguntes preguntes aleatòries de la taula PREGUNTES (index i pregunta)
+$sqlPreguntes = "SELECT * FROM PREGUNTES ORDER BY RAND() LIMIT $numPreguntes";
+$result = $conn->query($sqlPreguntes);
+
+// Inicialitzem l'array on guardarem les preguntes seleccionades
+$preguntesSeleccionades = [];
+
+// Recorrem cada fila del resultat($result) i l'afegim a l'array $preguntesSeleccionades
+while ($row = $result->fetch_assoc()) {
+    $preguntesSeleccionades[] = $row;
 }
 
 //declarem la variable (array) on guardarem les preguntes i respostes sense correctIndex
 $preguntesNoCorrect = [];
 
 //fem un bucle foreach per tal d'agafar les preguntes (contant els answers, i el correct index)
-foreach($_SESSION['preguntes'] as $p){
-    $linia = $p;
+foreach($preguntesSeleccionades as $pregunta){
+    // Agafem l'id de la pregunta actual
+    $id = $pregunta['ID_PREGUNTA'];
+
+    // Consultem respostes
+    $sqlRespostes = "SELECT ID_RESPOSTA, RESPOSTA, LINK_IMATGE FROM RESPOSTES WHERE ID_PREGUNTA = $id ORDER BY ID_RESPOSTA";
+    $resResult = $conn->query($sqlRespostes);
+
+    //declarem un array on guardarem les respostes de la pregunta actual
+    $respostes = [];
     
-    // Eliminem la clau correcta de cada resposta
-    foreach($linia['respostes'] as &$resposta){
-        unset($resposta['correcta']);
+    // Recorrem cada fila del resultat($resResult) i l'afegim a l'array $respostes
+    while($r = $resResult->fetch_assoc()){
+        $respostes[] = $r;
     }
+    // Construïm array final
+    $preguntesNoCorrect[] = [
+        'id' => $pregunta['ID_PREGUNTA'],
+        'pregunta' => $pregunta['PREGUNTA'],
+        'respostes' => $respostes
+    ];
     
-    //un cop hem eliminat de la llista el correctIndex afegim a l'array declarada anteriorment l'informació
-    $preguntesNoCorrect[] = $linia;
+    // Guardem també a la sessió per després corregir el quiz
+    $_SESSION['preguntes'][] = $pregunta['ID_PREGUNTA'];
 }
+
 
 //creem el fitxer json amb les preguntes que mostrarem al usuari
 header('Content-Type: application/json');

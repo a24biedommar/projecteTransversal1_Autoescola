@@ -33,36 +33,35 @@ while ($row = $result->fetch_assoc()) {
 //declarem la variable (array) on guardarem les preguntes i respostes sense correctIndex
 $preguntesNoCorrect = [];
 
-//fem un bucle foreach per tal d'agafar les preguntes (contant els answers, i el correct index)
+//fem un foreach per cada pregunta seleccionada i per guardar aquesta a preguntesNoCorrect
 foreach($preguntesSeleccionades as $pregunta){
-    // Agafem l'id de la pregunta actual
+    
+    //guardem l'id de la pregunta actual
     $id = $pregunta['ID_PREGUNTA'];
 
     // Consultem respostes
     $sqlRespostes = "SELECT ID_RESPOSTA, RESPOSTA, LINK_IMATGE FROM RESPOSTES WHERE ID_PREGUNTA = $id ORDER BY ID_RESPOSTA";
     $resResult = $conn->query($sqlRespostes);
 
-    //declarem un array on guardarem les respostes de la pregunta actual
     $respostes = [];
-    
-    // Recorrem cada fila del resultat($resResult) i l'afegim a l'array $respostes
     while($r = $resResult->fetch_assoc()){
         $respostes[] = $r;
     }
-    // Construïm array final
+
     $preguntesNoCorrect[] = [
-    'id' => $pregunta['ID_PREGUNTA'],
-    'pregunta' => $pregunta['PREGUNTA'],
-    'respostes' => $respostes,
-    'imatge' => $pregunta['LINK_IMATGE']
+        'id' => $pregunta['ID_PREGUNTA'],
+        'pregunta' => $pregunta['PREGUNTA'],
+        'respostes' => $respostes,
+        'imatge' => $pregunta['LINK_IMATGE']
     ];
-    
-    // Guardem també a la sessió per després corregir el quiz
+
+    // Guardem només l'ID de la pregunta a la sessió per després corregir el quiz
     $_SESSION['preguntes'][] = $pregunta['ID_PREGUNTA'];
 }
 
 
 //creem el fitxer json amb les preguntes que mostrarem al usuari
 header('Content-Type: application/json');
-echo json_encode(['preguntes' => $preguntesNoCorrect]);
+echo json_encode($preguntesNoCorrect);
+
 ?>

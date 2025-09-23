@@ -15,11 +15,6 @@ $dbname = "a24biedommar_Projecte0";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die(json_encode(["error" => "Connexió fallida: " . $conn->connect_error]));
-}
-
 //creem la variable que ens diu quantes preguntes volem mostrar
 $numPreguntes = 10;
 
@@ -56,9 +51,10 @@ foreach($preguntesSeleccionades as $pregunta){
     }
     // Construïm array final
     $preguntesNoCorrect[] = [
-        'id' => $pregunta['ID_PREGUNTA'],
-        'pregunta' => $pregunta['PREGUNTA'],
-        'respostes' => $respostes
+    'id' => $pregunta['ID_PREGUNTA'],
+    'pregunta' => $pregunta['PREGUNTA'],
+    'respostes' => $respostes,
+    'imatge' => $pregunta['LINK_IMATGE']
     ];
     
     // Guardem també a la sessió per després corregir el quiz

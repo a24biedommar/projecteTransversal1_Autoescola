@@ -66,3 +66,5 @@ header('Content-Type: application/json');
 echo json_encode($preguntesNoCorrect);
 
 ?>
+
+//fa falta fer correcte lo de les id i preguntes, fer un select per agafar les respostes nomes m'agafa una

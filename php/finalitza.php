@@ -1,4 +1,5 @@
 <?php 
+//linia de prova per el commit and push
 //iniciem la sessió
 session_start();
 

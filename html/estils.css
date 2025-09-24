@@ -4,7 +4,10 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    /* Elimina 'flex-direction: column' ya que el marcador no es un elemento hijo directo del body */
+    /* Utilitzem Flexbox per alinear el contenidor principal */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 #contenidor-principal {
@@ -12,22 +15,29 @@ body {
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
     width: 100%;
+
+    flex-grow: 1; 
+
     margin-top: 5%;
+
+    /* No cal un height fix, s'adapta amb Flexbox */
     padding: 2rem;
     box-sizing: border-box;
+    /* Flexbox per als elements interns */
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     gap: 2rem;
+    /* Aquesta alçada mínima assegura que es vegi gran */
     min-height: 90vh;
 }
 
-#questionari, #marcador {
-    /* Aquí definiremos los estilos comunes */
+#questionari, #marcador{
     background-color: #ffffff;
     padding: 2rem;
     border-radius: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
 }
 
 #questionari {
@@ -35,10 +45,5 @@ body {
 }
 
 #marcador {
-    position: fixed;
-    top: 25%; /* Ajusta esta propiedad si quieres que esté más arriba o más abajo */
-    right: 5%; /* Ajusta la separación del lado derecho de la pantalla */
     width: 30%;
-    /* Asegura que el marcador esté en la parte superior de otros elementos */
-    z-index: 100;
 }

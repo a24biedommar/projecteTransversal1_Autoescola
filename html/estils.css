@@ -7,8 +7,7 @@ body {
     /* Utilitzem Flexbox per alinear el contenidor principal */
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; 
-    box-sizing: border-box;
+    min-height: 100vh;
 }
 
 #contenidor-principal {
@@ -16,6 +15,11 @@ body {
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
     width: 100%;
+
+    flex-grow: 1; 
+
+    margin-top: 5vh;
+
     /* No cal un height fix, s'adapta amb Flexbox */
     padding: 2rem;
     box-sizing: border-box;
@@ -42,4 +46,5 @@ body {
 
 #marcador {
     width: 30%;
+    
 }

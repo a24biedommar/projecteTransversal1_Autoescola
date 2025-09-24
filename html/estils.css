@@ -1,40 +1,45 @@
 body {
-    background: linear-gradient(to bottom, #92DCE5, #517A7F); /*li fiquem un degradat al fons*/
+    background: linear-gradient(to bottom, #92DCE5, #517A7F);
     min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 0;
     margin: 0;
+    padding: 0;
+    /* Utilitzem Flexbox per alinear el contenidor principal */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; 
+    box-sizing: border-box;
 }
 
-#contenidor-principal{
+#contenidor-principal {
     background-color: #F8F7F9;
-    border-top-left-radius: 30px; 
-    border-top-right-radius: 30px; 
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
     width: 100%;
-    min-height: 90vh;
-    position: absolute;
-    bottom: 0;
+    /* No cal un height fix, s'adapta amb Flexbox */
     padding: 2rem;
     box-sizing: border-box;
+    /* Flexbox per als elements interns */
     display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    /* Aquesta alçada mínima assegura que es vegi gran */
+    min-height: 90vh;
 }
 
 #questionari, #marcador{
-    display:inline-block;
-    height: auto;
-    border: solid #e0e0e0 1px;
+    background-color: #ffffff;
     padding: 2rem;
     border-radius: 15px;
-    background-color: #ffffff;
-    box-shadow: 3px 3px 8px #b3b3b3;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
 }
 
-#questionari{
-    width: 70%;
-    margin-right: 2rem;
-}
-#marcador{
-    text-align: center;
-    right: 0;
+#questionari {
     flex-grow: 1;
+}
+
+#marcador {
+    width: 30%;
 }

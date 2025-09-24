@@ -18,7 +18,7 @@ body {
 
     flex-grow: 1; 
 
-    margin-top: 5vh;
+    margin-top: 10%;
 
     /* No cal un height fix, s'adapta amb Flexbox */
     padding: 2rem;
@@ -46,5 +46,5 @@ body {
 
 #marcador {
     width: 30%;
-    
+    position: fixed;
 }

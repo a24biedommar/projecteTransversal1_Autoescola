@@ -156,12 +156,7 @@ function eliminarPregunta(idPregunta) {
     .then(res => res.json())
     .then(resp => {
         //si hem pogut eliminar mostrem el missatge i despres recarreguem la vista d'admin
-        if (resp.success) {
-            alert(resp.message); // Mostrem el missatge que retorna el PHP
-            carregarAdmin();     // Recarreguem la vista d'admin
-        }else{
-            alert("Error: " + resp.message); // Mostrem el missatge d'error que retorna el PHP
-        }
+        carregarAdmin();
     });
 }
 //TODO: No cal fer la funcio eliminarPregunta global, ja que es crida des de dins de carregarAdmin

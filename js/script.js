@@ -162,6 +162,8 @@ function eliminarPregunta(idPregunta) {
     });
 }
 
+// Assignem la funció eliminarPregunta a l'objecte global window
+window.eliminarPregunta = eliminarPregunta;
 
 
 // Esperem que el DOM estigui carregat abans d'executar el codi

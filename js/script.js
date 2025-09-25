@@ -179,40 +179,41 @@ function editarPregunta(idPregunta) {
     contenidorForm.innerHTML = '';
     contenidorForm.style.display = "block";
 
-    // Fem el fetch per obtenir les dades de la pregunta
-    fetch(`../php/admin/getPregunta.php?id=${idPregunta}`)
-        .then(response => response.json())
-        .then(data => {
-            const pregunta = data.pregunta;
-            let htmlForm = `
-                <h2>Editar Pregunta</h2>
-                <form>
-                    <label>Pregunta:</label><br>
-                    <input type="text" id="nouTextPregunta" value="${pregunta.pregunta}"><br><br>
+    // Busquem la pregunta a l'array que ja tenim
+    const pregunta = totesLesPreguntes.find(p => p.id == idPregunta);
+        
+    let htmlForm = `
+            <h2>Editar Pregunta</h2>
+            <form>
+                <label>Pregunta:</label><br>
+                <input type="text" id="nouTextPregunta" value="${pregunta.pregunta}"><br><br>
             `;
-            pregunta.respostes.forEach(resposta => {
-                let checked = '';
-                //si la resposta es 1 deixem com a checked(per el input radio), si no estara vuida
-                if (resposta.correcta == 1) {
-                    checked = 'checked';
-                }
-                
-                htmlForm += `
-                    <label>Resposta:</label>
-                    <input type="text" class="input-resposta" data-id="${resposta.id}" value="${resposta.resposta}">
-                    <input type="radio" name="respostaCorrecta" value="${resposta.id}" ${checked}> Correcta<br><br>
-                `;
-            });
+            
+        pregunta.respostes.forEach(resposta => {
+            let checked = '';
+            if (resposta.correcta == 1) {
+                checked = 'checked';
+            }
+            
             htmlForm += `
-                    <button type="button" onclick="guardarCanvis(${idPregunta})">Guardar</button> 
-                    <button type="button" onclick="carregarAdmin()">Enrere</button>
-                </form>
+                <label>Resposta:</label>
+                <input type="text" class="input-resposta" data-id="${resposta.id}" value="${resposta.resposta}">
+                <input type="radio" name="respostaCorrecta" value="${resposta.id}" ${checked}> Correcta<br><br>
             `;
-            contenidorForm.innerHTML = htmlForm;
         });
+        
+        htmlForm += `
+                <button type="button" onclick="guardarCanvis(${idPregunta})">Guardar</button> 
+                <button type="button" onclick="carregarAdmin()">Enrere</button>
+            </form>
+        `;
+        
+        contenidorForm.innerHTML = htmlForm;
+    
 }
+
 //TODO: ELIMINAR QUE SIGUI UNA FUNCIO GLOBAL JA QUE NOMES ES CRIDA UN COP
-// fem que edtiarPRegunta sigui una funcio global
+// fem que editarPRegunta sigui una funcio global
 window.editarPregunta = editarPregunta;
 
 // Funció per a guardar els canvis de la pregunta
@@ -257,6 +258,7 @@ function guardarCanvis(idPregunta) {
 // Fem que la funció guardarCanvis sigui global per poder-la cridar des del botó
 window.guardarCanvis = guardarCanvis;
 
+let  totesLesPreguntes = [];
 
 // Esperem que el DOM estigui carregat abans d'executar el codi
 window.addEventListener('DOMContentLoaded', (event) => {
@@ -264,10 +266,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
     fetch('../php/getPreguntes.php')
         .then(response => response.json()) // Convertim la resposta a objecte JSON
         .then(data => {
-            const preguntes = data.preguntes;
+            totesLesPreguntes = data.preguntes;
             // Inicialitzem l'array de respostes amb tants elements com preguntes
-            estatDeLaPartida.respostesUsuari = new Array(preguntes.length).fill(undefined);
-            renderTotesLesPreguntes(preguntes);   // Cridem la funció per renderitzar el joc amb les dades
+            estatDeLaPartida.respostesUsuari = new Array(totesLesPreguntes.length).fill(undefined);
+            renderTotesLesPreguntes(totesLesPreguntes);   // Cridem la funció per renderitzar el joc amb les dades
             actualitzarMarcador();           // Mostrem el marcador des del principi
         });
 

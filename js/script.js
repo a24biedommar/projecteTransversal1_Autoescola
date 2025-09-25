@@ -191,7 +191,7 @@ function editarPregunta(idPregunta) {
             
         pregunta.respostes.forEach(resposta => {
             let checked = '';
-            if (resposta.correcta == 1) {
+            if (resposta.correcta == '1') {
                 checked = 'checked';
             }
             

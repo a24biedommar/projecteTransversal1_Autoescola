@@ -3,8 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-var_dump($_SESSION['preguntes']);
-var_dump($respostesUsuari);
+
 
 
 //iniciem la sessió
@@ -20,6 +19,9 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 // decodifiquem el fitxer json que ha generat el script de index.html (enviat per petició http)
 $json_data = file_get_contents('php://input');
 $respostesUsuari = json_decode($json_data, true);
+
+var_dump($_SESSION['preguntes']);
+var_dump($respostesUsuari);
 
 //creem les variables seguents:
 $preguntes = $_SESSION['preguntes']; //agafem les preguntes que s'han mostrat a index.html

@@ -1,17 +1,11 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 header('Content-Type: application/json');
 
-if (!isset($_POST['id'])) {
-    echo json_encode(['success' => false, 'message' => 'No s\'ha rebut l\'ID']);
-    exit;
-}
+$docu = json_decode(file_get_contents('php://input'), true);
+$idPregunta = $docu['id'];
 
-$idPregunta = intval($_POST['id']);
 
+// Connexió a la base de dades
 $servername = "localhost";
 $username = "a24biedommar_Projecte0";
 $password = "J7CqPQhC|Gwb%=%@";
@@ -19,10 +13,15 @@ $dbname = "a24biedommar_Projecte0";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-if ($conn->connect_error) {
-    echo json_encode(['success' => false, 'message' => 'Connexió fallida: ' . $conn->connect_error]);
-    exit;
-}
+//eliminem les respostes associades a la pregunta seleccionada
+$sqlRespostes = "DELETE FROM respostes WHERE id_pregunta = $idPregunta";
+$conn->query($sqlRespostes);
 
-// Afegim debug
-echo json_encode(['debug_id' => $idPregunta]); exit;
+// Després eliminem la pregunta seleccionada
+$sqlPregunta = "DELETE FROM preguntes WHERE id = $idPregunta";
+$conn->query($sqlPregunta);
+
+// Retornem resultat
+echo json_encode(['success' => true, 'message' => 'Pregunta i respostes eliminades correctament']);
+
+$conn->close();

@@ -125,7 +125,7 @@ function carregarAdmin() {
         .then(res => res.json())
         .then(data => {
             // Creem el llistat de preguntes i respostes
-            let htmlString = `<button id="btnTornarEnrere" class="btn-tornar" onclick="window.location.href='index.html'">Tornar enrere</button>`;
+            let htmlString = `<button id="btnTornarEnrere" class="btn-tornar" onclick="window.location.href='index.html'">Tornar enrere</button><br>`;
             htmlString = `<button id="btnCrearPregunta" class="btn-crear" onclick="renderCrearPregunta()">Crear nova pregunta</button>`;
             htmlString += `<h2>Llistat complet de preguntes</h2>`;
             

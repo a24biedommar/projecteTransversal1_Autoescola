@@ -148,7 +148,6 @@ function carregarAdmin() {
 }
 
 function eliminarPregunta(idPregunta) {
-    // Petició POST al PHP per eliminar la pregunta
     fetch('../php/admin/eliminarAdmin.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -156,14 +155,15 @@ function eliminarPregunta(idPregunta) {
     })
     .then(res => res.json())
     .then(resp => {
+        //si hem pogut eliminar mostrem el missatge i despres recarreguem la vista d'admin
         if (resp.success) {
-            carregarAdmin(); // Recarreguem la vista d'admin
+            alert(resp.message); // Mostrem el missatge que retorna el PHP
+            carregarAdmin();     // Recarreguem la vista d'admin
         }
     });
 }
-
-// Assignem la funció eliminarPregunta a l'objecte global window
-window.eliminarPregunta = eliminarPregunta;
+//TODO: No cal fer la funcio eliminarPregunta global, ja que es crida des de dins de carregarAdmin
+window.carregarAdmin = carregarAdmin; //fem la funcio carregarAdmin global per poder trucar-la desde qualsevol lloc
 
 
 // Esperem que el DOM estigui carregat abans d'executar el codi

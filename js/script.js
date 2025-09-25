@@ -80,7 +80,6 @@ function renderTotesLesPreguntes(preguntes){
     
     contenidor.innerHTML = htmlString;
     document.getElementById("btnFinalitzar").addEventListener("click", mostrarResultats);
-
 }
 
 
@@ -114,22 +113,19 @@ window.mostrarResultats = mostrarResultats; //mostrem els resultat a la finestra
 
 // Funció per carregar la vista d'admin
 function carregarAdmin() {
-
     // amaguem els divs de questionari i marcador
     document.getElementById("questionari").style.display = "none";
     document.getElementById("marcador").style.display = "none";
     document.getElementById("crearPregunta").style.display = "none";
-
     // mostrem el div admin on carregarem les preguntes i respostes
     const llistatAdmin = document.getElementById("admin");
     llistatAdmin.style.display = "block";
-
     fetch('../php/admin/llistatPreguntes.php')
         .then(res => res.json())
         .then(data => {
-            // Creem el llistat de preguntes i respostes
             let htmlString = `<button id="btnTornarEnrere" class="btn-tornar" onclick="window.location.href='index.html'">Tornar enrere</button><br>`;
-            htmlString += `<button id="btnCrearPregunta" class="btn-crear" onclick="renderCrearPregunta()">Crear nova pregunta</button>`;
+            // Aquest botó no crida directament, utiltiza event listener que es crida despres
+            htmlString += `<button id="btnCrearPregunta" class="btn-crear">Crear nova pregunta</button>`;
             htmlString += `<h2>Llistat complet de preguntes</h2>`;
             
             data.preguntes.forEach((pregunta, indexPregunta) => {
@@ -138,19 +134,46 @@ function carregarAdmin() {
                 pregunta.respostes.forEach(resposta => {
                     htmlString += `<p>- ${resposta.resposta}</p>`;
                 });
-                // Afegim el botó d'eliminar amb la funció eliminarPregunta
                 htmlString += `<button class="btn-eliminar" onclick="eliminarPregunta(${pregunta.id})">Eliminar</button>`;
-                
-                // Afegim el botó d'editar amb la funció editarPregunta 
                 htmlString += `<button class="btn-editar" onclick="editarPregunta(${pregunta.id})">Editar</button>`;
-                
-                //tancem el div de la pregunta i afegim una línia horitzontal
                 htmlString += `</div><hr>`;
             });
-            
             llistatAdmin.innerHTML = htmlString;
 
-            llistatAdmin.style.display = "block"; // Mostrem el div admin
+            // Añadimos el event listener al botón de crear pregunta.
+            document.getElementById("btnCrearPregunta").addEventListener("click", () => {
+                 //amaguem els altres divs
+                document.getElementById("questionari").style.display = "none";
+                document.getElementById("marcador").style.display = "none";
+                document.getElementById("admin").style.display = "none";
+
+                const crearPreguntaDiv = document.getElementById("crearPregunta");
+                crearPreguntaDiv.style.display = "block"; //fem que sigui visible el div crearPRegunta
+
+                crearPreguntaDiv.innerHTML = `
+                    <button id="btnTornarEnrere" class="btn-tornar" onclick="carregarAdmin()">Enrere</button>
+                    <h2>Crear Nova Pregunta</h2>
+                    <form id="formCrearPregunta">
+                        <label for="preguntaText">Pregunta:</label><br>
+                        <input type="text" id="preguntaText" name="preguntaText" required><br><br>
+
+                        <label for="imatgeLink">Link Imatge:</label><br>
+                        <input type="text" id="imatgeLink" name="imatgeLink"><br><br>
+
+                        <div id="respostes-container">
+                            <label>Respostes:</label><br>
+                            //fem que el primer input sigui required ja que com pertañen al mateix grup nomes cal ficar-ho un cop
+                            <input type="text" name="resposta1" required> <label>Correcta: <input type="radio" name="correcta" value="0" required></label><br>
+                            <input type="text" name="resposta2" required> <label>Correcta: <input type="radio" name="correcta" value="1"></label><br>
+                            <input type="text" name="resposta3" required> <label>Correcta: <input type="radio" name="correcta" value="2"></label><br>
+                            <input type="text" name="resposta4" required> <label>Correcta: <input type="radio" name="correcta" value="3"></label><br>
+                        </div>
+
+                        <br>
+                        <button type="button" onclick="crearPregunta()">Guardar Pregunta</button>
+                    </form>
+                `;
+            });
         });
 }
 
@@ -170,41 +193,6 @@ function eliminarPregunta(idPregunta) {
 }
 //TODO: No cal fer la funcio eliminarPregunta global, ja que es crida des de dins de carregarAdmin
 window.eliminarPregunta = eliminarPregunta; //fem la funcio eliminarPregunta global per poder trucar-la desde qualsevol lloc
-
-//CREEM LA FUNCIO RENDERCCREARPREGUNTA PER AIXI FER EL FORMULARI DE CREACIÓ DE PREGUTNES
-function renderCrearPregunta() {
-    //amaguem els altres divs
-    document.getElementById("questionari").style.display = "none";
-    document.getElementById("marcador").style.display = "none";
-    document.getElementById("admin").style.display = "none";
-
-    const crearPreguntaDiv = document.getElementById("crearPregunta");
-    crearPreguntaDiv.style.display = "block"; //fem que sigui visible el div crearPRegunta
-
-    crearPreguntaDiv.innerHTML = `
-        <button id="btnTornarEnrere" class="btn-tornar" onclick="carregarAdmin()">Enrere</button>
-        <h2>Crear Nova Pregunta</h2>
-        <form id="formCrearPregunta">
-            <label for="preguntaText">Pregunta:</label><br>
-            <input type="text" id="preguntaText" name="preguntaText" required><br><br>
-
-            <label for="imatgeLink">Link Imatge:</label><br>
-            <input type="text" id="imatgeLink" name="imatgeLink"><br><br>
-
-            <div id="respostes-container">
-                <label>Respostes:</label><br>
-                //fem que el primer input sigui required ja que com pertañen al mateix grup nomes cal ficar-ho un cop
-                <input type="text" name="resposta1" required> <label>Correcta: <input type="radio" name="correcta" value="0" required></label><br>
-                <input type="text" name="resposta2" required> <label>Correcta: <input type="radio" name="correcta" value="1"></label><br>
-                <input type="text" name="resposta3" required> <label>Correcta: <input type="radio" name="correcta" value="2"></label><br>
-                <input type="text" name="resposta4" required> <label>Correcta: <input type="radio" name="correcta" value="3"></label><br>
-            </div>
-
-            <br>
-            <button type="button" onclick="crearPregunta()">Guardar Pregunta</button>
-        </form>
-    `;
-}
 
 // creem la funcio CREARPREGUNTA
 function crearPregunta() {

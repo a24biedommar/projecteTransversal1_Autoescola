@@ -148,7 +148,7 @@ function carregarAdmin() {
 }
 
 function eliminarPregunta(idPregunta) {
-    fetch('../php/admin/eliminarAdmin.php', {
+    fetch('../php/admin/eliminarPreguntes.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `id=${idPregunta}`

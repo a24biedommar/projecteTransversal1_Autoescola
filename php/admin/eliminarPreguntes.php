@@ -20,17 +20,13 @@ $dbname = "a24biedommar_Projecte0";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-$resultRespostes = $conn->query($sqlRespostes);
-if(!$resultRespostes){
-    echo json_encode(['success'=>false,'message'=>'Error eliminant respostes: '.$conn->error]);
-    exit;
-}
+//eliminem les respostes associades a la pregunta seleccionada
+$sqlRespostes = "DELETE FROM RESPOSTES WHERE ID_PREGUNTA = $idPregunta";
+$conn->query($sqlRespostes);
 
-$resultPregunta = $conn->query($sqlPregunta);
-if(!$resultPregunta){
-    echo json_encode(['success'=>false,'message'=>'Error eliminant pregunta: '.$conn->error]);
-    exit;
-}
+// Després eliminem la pregunta seleccionada
+$sqlPregunta = "DELETE FROM PREGUNTES WHERE ID_PREGUNTA = $idPregunta";
+$conn->query($sqlPregunta);
 
 // Retornem resultat
 echo json_encode(['success' => true, 'message' => 'Pregunta i respostes eliminades correctament']);

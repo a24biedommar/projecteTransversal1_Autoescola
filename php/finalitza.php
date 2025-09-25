@@ -1,5 +1,8 @@
 <?php 
-//linia de prova per el commit and push
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 //iniciem la sessió
 session_start();
 

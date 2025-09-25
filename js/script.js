@@ -133,7 +133,7 @@ function carregarAdmin() {
                     htmlString += `<p>- ${resposta.resposta}</p>`;
                 });
                 // Afegim el botó d'eliminar amb la funció eliminarPregunta
-                htmlString += `<button class="btn-eliminar" onclick="eliminarPregunta(${pregunta.id})">Eliminar</button>`;
+                htmlString += `<button class="btn-eliminar" onclick="eliminarPregunta(${pregunta.id_pregunta})">Eliminar</button>`;
                 
                 //tancem el div de la pregunta i afegim una línia horitzontal
                 htmlString += `</div><hr>`;
@@ -156,7 +156,7 @@ function eliminarPregunta(idPregunta) {
     .then(res => res.json())
     .then(resp => {
         //si hem pogut eliminar mostrem el missatge i despres recarreguem la vista d'admin
-        if (resp.success === 'true') {
+        if (resp.success) {
             alert(resp.message); // Mostrem el missatge que retorna el PHP
             carregarAdmin();     // Recarreguem la vista d'admin
         }

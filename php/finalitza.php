@@ -1,10 +1,4 @@
 <?php 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-
-
 
 //iniciem la sessió
 session_start();
@@ -20,9 +14,6 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 $json_data = file_get_contents('php://input');
 $respostesUsuari = json_decode($json_data, true);
 
-var_dump($_SESSION['preguntes']);
-var_dump($respostesUsuari);
-
 //creem les variables seguents:
 $preguntes = $_SESSION['preguntes']; //agafem les preguntes que s'han mostrat a index.html
 $puntuacio = 0; //inicialitzem la puntuació del usuari
@@ -34,7 +25,7 @@ foreach ($preguntes as $index => $idPregunta) {
 
     //Fem la consulta select per agafar la resposta correcta de la BD
     $sqlCorrecta = "SELECT ID_RESPOSTA FROM RESPOSTES 
-                    WHERE ID_PREGUNTA = $idPregunta AND ES_CORRECTA = 1";
+                    WHERE ID_PREGUNTA = $idPregunta AND CORRECTA = 1";
     $res = $conn->query($sqlCorrecta);
     $row = $res->fetch_assoc();
 

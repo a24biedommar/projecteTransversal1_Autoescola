@@ -167,9 +167,6 @@ function eliminarPregunta(idPregunta) {
 //TODO: No cal fer la funcio eliminarPregunta global, ja que es crida des de dins de carregarAdmin
 window.eliminarPregunta = eliminarPregunta; //fem la funcio eliminarPregunta global per poder trucar-la desde qualsevol lloc
 
-
-
-
 let  totesLesPreguntes = [];
 
 // Esperem que el DOM estigui carregat abans d'executar el codi

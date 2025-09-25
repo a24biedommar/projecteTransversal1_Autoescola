@@ -167,6 +167,73 @@ function eliminarPregunta(idPregunta) {
 //TODO: No cal fer la funcio eliminarPregunta global, ja que es crida des de dins de carregarAdmin
 window.eliminarPregunta = eliminarPregunta; //fem la funcio eliminarPregunta global per poder trucar-la desde qualsevol lloc
 
+//CREEM LA FUNCIO RENDERCCREARPREGUNTA PER AIXI FER EL FORMULARI DE CREACIÓ DE PREGUTNES
+function renderCrearPregunta() {
+    //amaguem els altres divs
+    document.getElementById("questionari").style.display = "none";
+    document.getElementById("marcador").style.display = "none";
+    document.getElementById("admin").style.display = "none";
+
+    const crearPreguntaDiv = document.getElementById("crearPregunta");
+    crearPreguntaDiv.style.display = "block"; //fem que sigui visible el div crearPRegunta
+
+    crearPreguntaDiv.innerHTML = `
+        <button id="btnTornarEnrere" class="btn-tornar" onclick="carregarAdmin()">Enrere</button>
+        <h2>Crear Nova Pregunta</h2>
+        <form id="formCrearPregunta">
+            <label for="preguntaText">Pregunta:</label><br>
+            <input type="text" id="preguntaText" name="preguntaText" required><br><br>
+
+            <label for="imatgeLink">Link Imatge:</label><br>
+            <input type="text" id="imatgeLink" name="imatgeLink"><br><br>
+
+            <div id="respostes-container">
+                <label>Respostes:</label><br>
+                //fem que el primer input sigui required ja que com pertañen al mateix grup nomes cal ficar-ho un cop
+                <input type="text" name="resposta1" required> <label>Correcta: <input type="radio" name="correcta" value="0" required></label><br>
+                <input type="text" name="resposta2" required> <label>Correcta: <input type="radio" name="correcta" value="1"></label><br>
+                <input type="text" name="resposta3" required> <label>Correcta: <input type="radio" name="correcta" value="2"></label><br>
+                <input type="text" name="resposta4" required> <label>Correcta: <input type="radio" name="correcta" value="3"></label><br>
+            </div>
+
+            <br>
+            <button type="button" onclick="crearPregunta()">Guardar Pregunta</button>
+        </form>
+    `;
+}
+
+// creem la funcio CREARPREGUNTA
+function crearPregunta() {
+    const form = document.getElementById("formCrearPregunta"); //agafem en un objecte el formulari creat en la funcio renderCrearPregunta
+    const preguntaText = form.querySelector('#preguntaText').value; //"" agafemdel cormulari la preguta
+    const imatgeLink = form.querySelector('#imatgeLink').value; // "" agafem del fomrulari el link de l'imatge
+    const respostes = [ //agafem en un array totes les respostes
+        form.querySelector('input[name="resposta1"]').value,
+        form.querySelector('input[name="resposta2"]').value,
+        form.querySelector('input[name="resposta3"]').value,
+        form.querySelector('input[name="resposta4"]').value
+    ];
+    //guardem en un objecte el correct
+    const correctaIndex = form.querySelector('input[name="correcta"]:checked').value;
+
+    // Enviem les dades anteriors al crearPRegunta.php amb fetch
+    fetch('../php/admin/crearPregunta.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ //passem a string les variables anteriors
+            pregunta: preguntaText,
+            respostes: respostes,
+            correcta: correctaIndex,
+            imatge: imatgeLink
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message); //mostrem el missatge del fitxar crearPreguntes.php i seguit carreguem un altre cop la feed del admin
+        carregarAdmin();
+    });
+}
+
 let  totesLesPreguntes = [];
 
 // Esperem que el DOM estigui carregat abans d'executar el codi

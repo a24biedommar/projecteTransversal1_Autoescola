@@ -3,6 +3,13 @@
 //iniciem la sessió
 session_start();
 
+// Connexió DB
+$servername = "localhost";
+$username = "a24biedommar_Projecte0";
+$password = "J7CqPQhC|Gwb%=%@"; 
+$dbname = "a24biedommar_Projecte0"; 
+$conn = new mysqli($servername, $username, $password, $dbname);
+
 // decodifiquem el fitxer json que ha generat el script de index.html (enviat per petició http)
 $json_data = file_get_contents('php://input');
 $respostesUsuari = json_decode($json_data, true);
@@ -11,10 +18,18 @@ $respostesUsuari = json_decode($json_data, true);
 $preguntes = $_SESSION['preguntes']; //agafem les preguntes que s'han mostrat a index.html
 $puntuacio = 0; //inicialitzem la puntuació del usuari
 
-// Recorrem les respostes de l'usuari i les comparem
-foreach ($respostesUsuari as $index => $respostaUsuari) {
-    //si la resposta de la pregunta del index on està el foreach és igual al correctIndex sumem 1 a la puntuació
-    if ($respostesUsuari[$index] == $preguntes[$index]['correctIndex']) {
+// Recorrem les respostes de l'usuari i les comparemm amb les correctes
+foreach ($preguntes as $index => $idPregunta) {
+    // Agafem la resposta de l'usuari per a la pregunta actual
+    $respostaUsuari = $respostesUsuari[$index];
+
+    //Fem la consulta select per agafar la resposta correcta de la BD
+    $sqlCorrecta = "SELECT ID_RESPOSTA FROM RESPOSTES 
+                    WHERE ID_PREGUNTA = $idPregunta AND ES_CORRECTA = 1";
+    $res = $conn->query($sqlCorrecta);
+    $row = $res->fetch_assoc();
+
+    if ($respostaUsuari == $row['ID_RESPOSTA']) {
         $puntuacio++;
     }
 }

@@ -113,6 +113,7 @@ window.mostrarResultats = mostrarResultats; //mostrem els resultat a la finestra
 
 // Funció per carregar la vista d'admin
 function carregarAdmin() {
+
     // amaguem els divs de questionari i marcador
     document.getElementById("questionari").style.display = "none";
     document.getElementById("marcador").style.display = "none";
@@ -124,7 +125,8 @@ function carregarAdmin() {
         .then(res => res.json())
         .then(data => {
             // Creem el llistat de preguntes i respostes
-            let htmlString = `<h2>Llistat complet de preguntes</h2>`;
+            let htmlString = `<button id="btnTornarEnrere" class="btn-tornar" onclick="window.location.href='index.html'">Tornar enrere</button>`;
+            htmlString += `<h2>Llistat complet de preguntes</h2>`;
             
             data.preguntes.forEach((pregunta, indexPregunta) => {
                 htmlString += `<div class="pregunta-admin">
@@ -135,12 +137,13 @@ function carregarAdmin() {
                 // Afegim el botó d'eliminar amb la funció eliminarPregunta
                 htmlString += `<button class="btn-eliminar" onclick="eliminarPregunta(${pregunta.id})">Eliminar</button>`;
                 
+                // Afegim el botó d'eliminar amb la funció eliminarPregunta
+                htmlString += `<button class="btn-eliminar" onclick="eliminarPregunta(${pregunta.id})">Eliminar</button>`;
+                
                 //tancem el div de la pregunta i afegim una línia horitzontal
                 htmlString += `</div><hr>`;
             });
             
-            htmlString += `<button id="btnTornarEnrere" class="btn-tornar" onclick="window.location.href='index.html'">Tornar enrere</button>`;
-
             llistatAdmin.innerHTML = htmlString;
 
             llistatAdmin.style.display = "block"; // Mostrem el div admin
@@ -155,6 +158,8 @@ function eliminarPregunta(idPregunta) {
     })
     .then(res => res.json())
     .then(resp => {
+        // Mostrem el missatge que retorna el PHP (conforme s'ha eliminat)
+        alert(resp.message);
         //si hem pogut eliminar mostrem el missatge i despres recarreguem la vista d'admin
         carregarAdmin();
     });

@@ -163,7 +163,7 @@ function eliminarPregunta(idPregunta) {
     });
 }
 //TODO: No cal fer la funcio eliminarPregunta global, ja que es crida des de dins de carregarAdmin
-window.carregarAdmin = carregarAdmin; //fem la funcio carregarAdmin global per poder trucar-la desde qualsevol lloc
+window.eliminarPregunta = eliminarPregunta; //fem la funcio eliminarPregunta global per poder trucar-la desde qualsevol lloc
 
 
 // Esperem que el DOM estigui carregat abans d'executar el codi

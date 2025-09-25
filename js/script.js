@@ -133,7 +133,7 @@ function carregarAdmin() {
                     htmlString += `<p>- ${resposta.resposta}</p>`;
                 });
                 // Afegim el botó d'eliminar amb la funció eliminarPregunta
-                htmlString += `<button class="btn-eliminar" onclick="eliminarPregunta(${pregunta.id_pregunta})">Eliminar</button>`;
+                htmlString += `<button class="btn-eliminar" onclick="eliminarPregunta(${pregunta.id})">Eliminar</button>`;
                 
                 //tancem el div de la pregunta i afegim una línia horitzontal
                 htmlString += `</div><hr>`;

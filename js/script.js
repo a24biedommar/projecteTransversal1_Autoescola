@@ -134,6 +134,8 @@ function carregarAdmin() {
                 });
                 htmlString += `</div><hr>`;
             });
+            
+            htmlString += `<button id="btnTornarEnrere" class="btn-tornar" onclick="window.location.href='index.html'">Tornar enrere</button>`;
 
             llistatAdmin.innerHTML = htmlString;
 

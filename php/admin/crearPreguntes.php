@@ -15,18 +15,37 @@ $dbname = "a24biedommar_Projecte0";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-$sqlPregunta = "INSERT INTO PREGUNTES (PREGUNTA, LINK_IMATGE) VALUES ('$preguntaText', '$imatge')";
-$conn->query($sqlPregunta);
-$idPregunta = $conn->insert_id;
+if ($conn->connect_error) {
+    echo json_encode(['success' => false, 'message' => 'Error de connexió a la BD: ' . $conn->connect_error]);
+    exit();
+}
 
+// Inserim la pregunta amb sentències preparades per evitar errors de sintaxi
+$sqlPregunta = "INSERT INTO PREGUNTES (PREGUNTA, LINK_IMATGE) VALUES (?, ?)";
+$stmt = $conn->prepare($sqlPregunta);
+$stmt->bind_param("ss", $preguntaText, $imatge);
+if (!$stmt->execute()) {
+    echo json_encode(['success' => false, 'message' => 'Error en la consulta de pregunta: ' . $stmt->error]);
+    exit();
+}
+$idPregunta = $conn->insert_id;
+$stmt->close();
+
+// Inserim les respostes amb sentències preparades
+$sqlResposta = "INSERT INTO RESPOSTES (ID_PREGUNTA, RESPOSTA, CORRECTA) VALUES (?, ?, ?)";
+$stmt = $conn->prepare($sqlResposta);
 foreach ($respostes as $index => $resposta) {
     $isCorrecta = 0;
     if ($index == $correctaIndex) {
         $isCorrecta = 1;
     }
-    $sqlResposta = "INSERT INTO RESPOSTES (ID_PREGUNTA, RESPOSTA, CORRECTA) VALUES ('$idPregunta', '$resposta', '$isCorrecta')";
-    $conn->query($sqlResposta);
+    $stmt->bind_param("isi", $idPregunta, $resposta, $isCorrecta);
+    if (!$stmt->execute()) {
+        echo json_encode(['success' => false, 'message' => 'Error en la consulta de resposta: ' . $stmt->error]);
+        exit();
+    }
 }
+$stmt->close();
 
 echo json_encode(['success' => true, 'message' => 'Pregunta i respostes creades correctament']);
 

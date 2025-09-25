@@ -211,7 +211,9 @@ function editarPregunta(idPregunta) {
             contenidorForm.innerHTML = htmlForm;
         });
 }
-
+//TODO: ELIMINAR QUE SIGUI UNA FUNCIO GLOBAL JA QUE NOMES ES CRIDA UN COP
+// fem que edtiarPRegunta sigui una funcio global
+window.editarPregunta = editarPregunta;
 
 
 // Esperem que el DOM estigui carregat abans d'executar el codi

@@ -156,7 +156,7 @@ function eliminarPregunta(idPregunta) {
     .then(res => res.json())
     .then(resp => {
         //si hem pogut eliminar mostrem el missatge i despres recarreguem la vista d'admin
-        if (resp.success) {
+        if (resp.success === 'true') {
             alert(resp.message); // Mostrem el missatge que retorna el PHP
             carregarAdmin();     // Recarreguem la vista d'admin
         }

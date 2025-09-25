@@ -20,6 +20,6 @@ $sqlPregunta = "DELETE FROM preguntes WHERE id = $idPregunta";
 $conn->query($sqlPregunta);
 
 // Retornem el resultat del procés d'eliminació
-echo json_encode(['success' => true, 'message' => 'Pregunta i respostes eliminades correctament']);
+echo json_encode(['success' => 'true', 'message' => 'Pregunta i respostes eliminades correctament']);
 
 $conn->close();

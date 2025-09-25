@@ -1,4 +1,5 @@
 <?php
+
 header('Content-Type: application/json');
 
 $docu = json_decode(file_get_contents('php://input'), true);
@@ -15,37 +16,27 @@ $dbname = "a24biedommar_Projecte0";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-if ($conn->connect_error) {
-    echo json_encode(['success' => false, 'message' => 'Error de connexió a la BD: ' . $conn->connect_error]);
-    exit();
-}
-
-// Inserim la pregunta amb sentències preparades per evitar errors de sintaxi
-$sqlPregunta = "INSERT INTO PREGUNTES (PREGUNTA, LINK_IMATGE) VALUES (?, ?)";
-$stmt = $conn->prepare($sqlPregunta);
-$stmt->bind_param("ss", $preguntaText, $imatge);
-if (!$stmt->execute()) {
-    echo json_encode(['success' => false, 'message' => 'Error en la consulta de pregunta: ' . $stmt->error]);
-    exit();
-}
+// Inserim les dades a la taula preguntes
+$sqlPregunta = "INSERT INTO PREGUNTES (PREGUNTA, LINK_IMATGE) VALUES ('$preguntaText', '$imatge')";
+$conn->query($sqlPregunta);
 $idPregunta = $conn->insert_id;
-$stmt->close();
 
-// Inserim les respostes amb sentències preparades
-$sqlResposta = "INSERT INTO RESPOSTES (ID_PREGUNTA, RESPOSTA, CORRECTA) VALUES (?, ?, ?)";
-$stmt = $conn->prepare($sqlResposta);
+// Inserim les respostes a la taula 'RESPOSTES' amb el bucle foreach
 foreach ($respostes as $index => $resposta) {
+    // Declarem lla variable per saber si es correcta o no
     $isCorrecta = 0;
+    
+    // utilitzem el if per saber si es correcta o no
     if ($index == $correctaIndex) {
         $isCorrecta = 1;
     }
-    $stmt->bind_param("isi", $idPregunta, $resposta, $isCorrecta);
-    if (!$stmt->execute()) {
-        echo json_encode(['success' => false, 'message' => 'Error en la consulta de resposta: ' . $stmt->error]);
-        exit();
-    }
+    
+    // fem la query 
+    $sqlResposta = "INSERT INTO RESPOSTES (ID_PREGUNTA, RESPOSTA, CORRECTA) VALUES ('$idPregunta', '$resposta', '$isCorrecta')";
+    
+    //executem la query
+    $conn->query($sqlResposta) or die("Error en la consulta de resposta: " . mysqli_error($conn));
 }
-$stmt->close();
 
 echo json_encode(['success' => true, 'message' => 'Pregunta i respostes creades correctament']);
 

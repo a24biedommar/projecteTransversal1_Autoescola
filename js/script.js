@@ -132,6 +132,10 @@ function carregarAdmin() {
                 pregunta.respostes.forEach(resposta => {
                     htmlString += `<p>- ${resposta.resposta}</p>`;
                 });
+                // Afegim el botó d'eliminar amb la funció eliminarPregunta
+                htmlString += `<button class="btn-eliminar" onclick="eliminarPregunta(${pregunta.id})">Eliminar</button>`;
+                
+                //tancem el div de la pregunta i afegim una línia horitzontal
                 htmlString += `</div><hr>`;
             });
             
@@ -142,6 +146,22 @@ function carregarAdmin() {
             llistatAdmin.style.display = "block"; // Mostrem el div admin
         });
 }
+
+function eliminarPregunta(idPregunta) {
+    // Petició POST al PHP per eliminar la pregunta
+    fetch('../php/admin/eliminarAdmin.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `id=${idPregunta}`
+    })
+    .then(res => res.json())
+    .then(resp => {
+        if (resp.success) {
+            carregarAdmin(); // Recarreguem la vista d'admin
+        }
+    });
+}
+
 
 
 // Esperem que el DOM estigui carregat abans d'executar el codi

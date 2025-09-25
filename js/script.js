@@ -172,7 +172,6 @@ function editarPregunta(idPregunta) {
     // Amaguem els altres divs
     document.getElementById("questionari").style.display = "none";
     document.getElementById("marcador").style.display = "none";
-    document.getElementById("admin").style.display = "none";
     
     // Mostrem el contenidor editarPRegunta (desde un principi estava ocult)
     const contenidorForm = document.getElementById("editarPregunta");

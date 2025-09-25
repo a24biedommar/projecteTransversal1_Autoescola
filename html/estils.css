@@ -32,7 +32,7 @@ body {
     min-height: 90vh;
 }
 
-#questionari, #marcador{
+#questionari, #marcador, #admin{
     background-color: #ffffff;
     padding: 2rem;
     border-radius: 15px;
@@ -40,7 +40,7 @@ body {
 
 }
 
-#questionari {
+#questionari, #admin {
     flex-grow: 1;
 }
 

@@ -111,9 +111,40 @@ function mostrarResultats() {
 }
 window.mostrarResultats = mostrarResultats; //mostrem els resultat a la finestra amb la funcio GLOBAL window.
 
+// Funció per carregar la vista d'admin
+function carregarAdmin() {
+    // amaguem els divs de questionari i marcador
+    document.getElementById("questionari").style.display = "none";
+    document.getElementById("marcador").style.display = "none";
+
+    // mostrem el div admin on carregarem les preguntes i respostes
+    const llistatAdmin = document.getElementById("admin");
+
+    fetch('../php/admin/llistatPreguntes.php')
+        .then(res => res.json())
+        .then(data => {
+            // Creem el llistat de preguntes i respostes
+            let htmlString = `<h2>Llistat complet de preguntes</h2>`;
+            
+            data.preguntes.forEach((pregunta, indexPregunta) => {
+                htmlString += `<div class="pregunta-admin">
+                                <h3>${indexPregunta + 1}. ${pregunta.pregunta}</h3>`;
+                pregunta.respostes.forEach(resposta => {
+                    htmlString += `<p>- ${resposta.resposta}</p>`;
+                });
+                htmlString += `</div><hr>`;
+            });
+
+            llistatAdmin.innerHTML = htmlString;
+
+            llistatAdmin.style.display = "block"; // Mostrem el div admin
+        });
+}
+
+
 // Esperem que el DOM estigui carregat abans d'executar el codi
 window.addEventListener('DOMContentLoaded', (event) => {
-    // Fem fetch del fitxer getPreguntes.php amb les preguntes (sense correctIndex)
+    // FETCH DEL QUESTIONARI
     fetch('../php/getPreguntes.php')
         .then(response => response.json()) // Convertim la resposta a objecte JSON
         .then(data => {
@@ -123,4 +154,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
             renderTotesLesPreguntes(preguntes);   // Cridem la funció per renderitzar el joc amb les dades
             actualitzarMarcador();           // Mostrem el marcador des del principi
         });
+
+    //CREEM EL BOTÓ D'ADMIN
+    const btnAdmin = document.createElement("button");
+    btnAdmin.textContent = "Admin";
+    btnAdmin.className = "btn-admin";
+    btnAdmin.id = "btnAdmin";
+    document.getElementById("contenidor-principal").appendChild(btnAdmin);
+    document.getElementById("btnAdmin").addEventListener("click", carregarAdmin);
+
 });

@@ -39,6 +39,9 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
 }
+#admin{
+    display: none;
+}
 
 #questionari, #admin {
     flex-grow: 1;

@@ -162,7 +162,6 @@ function carregarAdmin() {
 
                         <div id="respostes-container">
                             <label>Respostes:</label><br>
-                            //fem que el primer input sigui required ja que com pertañen al mateix grup nomes cal ficar-ho un cop
                             <input type="text" name="resposta1" required> <label>Correcta: <input type="radio" name="correcta" value="0" required></label><br>
                             <input type="text" name="resposta2" required> <label>Correcta: <input type="radio" name="correcta" value="1"></label><br>
                             <input type="text" name="resposta3" required> <label>Correcta: <input type="radio" name="correcta" value="2"></label><br>
@@ -209,7 +208,7 @@ function crearPregunta() {
     const correctaIndex = form.querySelector('input[name="correcta"]:checked').value;
 
     // Enviem les dades anteriors al crearPRegunta.php amb fetch
-    fetch('../php/admin/crearPregunta.php', {
+    fetch('../php/admin/crearPreguntes.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ //passem a string les variables anteriors

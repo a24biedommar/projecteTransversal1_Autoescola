@@ -2,6 +2,10 @@
 header('Content-Type: application/json');
 
 $idPregunta = $_POST['id'];
+if (!$idPregunta) {
+    echo json_encode(['success' => false, 'message' => 'No s\'ha rebut l\'id de la pregunta']);
+    exit;
+}
 
 // Connexió a la base de dades
 $servername = "localhost";

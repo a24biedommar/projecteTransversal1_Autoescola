@@ -159,6 +159,8 @@ function eliminarPregunta(idPregunta) {
         if (resp.success) {
             alert(resp.message); // Mostrem el missatge que retorna el PHP
             carregarAdmin();     // Recarreguem la vista d'admin
+        }else{
+            alert("Error: " + resp.message); // Mostrem el missatge d'error que retorna el PHP
         }
     });
 }

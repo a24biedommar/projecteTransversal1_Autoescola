@@ -50,3 +50,6 @@ body {
 #marcador {
     width: 30%;
 }
+#editarPregunta{
+    display: none;
+}

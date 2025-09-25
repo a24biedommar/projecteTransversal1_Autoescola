@@ -167,6 +167,52 @@ function eliminarPregunta(idPregunta) {
 //TODO: No cal fer la funcio eliminarPregunta global, ja que es crida des de dins de carregarAdmin
 window.eliminarPregunta = eliminarPregunta; //fem la funcio eliminarPregunta global per poder trucar-la desde qualsevol lloc
 
+//creem la funcio editar pregunta
+function editarPregunta(idPregunta) {
+    // Amaguem els altres divs
+    document.getElementById("questionari").style.display = "none";
+    document.getElementById("marcador").style.display = "none";
+    document.getElementById("admin").style.display = "none";
+    
+    // Mostrem el contenidor editarPRegunta (desde un principi estava ocult)
+    const contenidorForm = document.getElementById("editarPregunta");
+    contenidorForm.innerHTML = '';
+    contenidorForm.style.display = "block";
+
+    // Fem el fetch per obtenir les dades de la pregunta
+    fetch(`../php/admin/getPregunta.php?id=${idPregunta}`)
+        .then(response => response.json())
+        .then(data => {
+            const pregunta = data.pregunta;
+            let htmlForm = `
+                <h2>Editar Pregunta</h2>
+                <form>
+                    <label>Pregunta:</label><br>
+                    <input type="text" id="nouTextPregunta" value="${pregunta.pregunta}"><br><br>
+            `;
+            pregunta.respostes.forEach(resposta => {
+                let checked = '';
+                //si la resposta es 1 deixem com a checked(per el input radio), si no estara vuida
+                if (resposta.correcta == 1) {
+                    checked = 'checked';
+                }
+                
+                htmlForm += `
+                    <label>Resposta:</label>
+                    <input type="text" class="input-resposta" data-id="${resposta.id}" value="${resposta.resposta}">
+                    <input type="radio" name="respostaCorrecta" value="${resposta.id}" ${checked}> Correcta<br><br>
+                `;
+            });
+            htmlForm += `
+                    <button type="button" onclick="guardarCanvis(${idPregunta})">Guardar</button> //TODO: funcio guardarCanvis
+                    <button type="button" onclick="carregarAdmin()">Enrere</button>
+                </form>
+            `;
+            contenidorForm.innerHTML = htmlForm;
+        });
+}
+
+
 
 // Esperem que el DOM estigui carregat abans d'executar el codi
 window.addEventListener('DOMContentLoaded', (event) => {

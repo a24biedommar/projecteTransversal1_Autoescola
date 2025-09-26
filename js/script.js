@@ -232,10 +232,19 @@ function crearPregunta() {
 }
 window.crearPregunta = crearPregunta;
 
-//funcio per generar el formulari d'editar pregunta
-// Aquesta funció carrega la pregunta i les respostes existents en el formulari de creació per poder editar-les
+//fem la funcio per editar una pregunta segons quina id li arribi
 function editarPregunta(idPregunta) {
-    //fem que els altres divs s'amaguin
+    //agafem la variable totesLesPreguntes (que es global) i busquem la pregunta que te la id que ens han passat
+    var pregunta = null;
+    for (var i = 0; i < totesLesPreguntes.length; i++) {
+        if (totesLesPreguntes[i].id == idPregunta) {
+            pregunta = totesLesPreguntes[i];
+            break;
+            //si trobem la pregunta, sortim del bucle
+        }
+    }
+
+    // Fem que els altres divs s'amaguin
     document.getElementById("questionari").style.display = "none";
     document.getElementById("marcador").style.display = "none";
     document.getElementById("admin").style.display = "none";
@@ -248,27 +257,23 @@ function editarPregunta(idPregunta) {
     let htmlString = `
         <h2>Editar Pregunta</h2>
         <form id="formEditarPregunta">
-        //pregunta i la mostrem en un input que sigui editable
-        //aquest input te per defecte el valor de la pregunta que volem editar (igual que amb la resta de coses)
             <label>Pregunta:</label><br>
-            <input type="text" id="editarTextPregunta" value="${idPregunta.pregunta}"><br><br>
+            <input type="text" id="editarTextPregunta" value="${pregunta.pregunta}"><br><br>
 
             <label>Imatge:</label><br>
-            <input type="text" id="editarLinkImatge" value="${idPregunta.imatge}"><br><br>
+            <input type="text" id="editarLinkImatge" value="${pregunta.imatge}"><br><br>
 
             <label>Respostes:</label><br>`;
 
-    //fem un forEach per recorre les respostes de la pregunta i les mostrem en inputs editables
-        pregunta.respostes.forEach((resposta, index) => {
-            //fem un if per saber quina resposta es la correcta i posar el radio button marcat
-            let checked = "";
-            if (resposta.correcta) {
-                checked = "checked";
-            }
-            htmlString += `
-                <input type="text" id="resposta${index}" value="${resposta.resposta}">
-                <input type="radio" name="correctaEditar" value="${index}" ${checked}> Correcta<br>`;
-        });
+    pregunta.respostes.forEach((resposta, index) => {
+        let checked = "";
+        if (resposta.correcta) {
+            checked = "checked";
+        }
+        htmlString += `
+            <input type="text" id="resposta${index}" value="${resposta.resposta}">
+            <input type="radio" name="correctaEditar" value="${index}" ${checked}> Correcta<br>`;
+    });
 
     htmlString += `<br>
         <button type="button" onclick="actualitzarPregunta(${idPregunta})">Guardar Canvis</button>
@@ -277,7 +282,7 @@ function editarPregunta(idPregunta) {
 
     editarDiv.innerHTML = htmlString;
 }
-window.editarPregunta = editarPregunta; //fem la funcio editarPregunta global per poder trucar-la desde qualsevol lloc
+window.editarPregunta = editarPregunta;
 
 //fem la funcio per actualitzar la pregunta segons quina id li arribi
 function actualitzarPregunta(idPregunta) {

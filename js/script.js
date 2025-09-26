@@ -136,7 +136,7 @@ function carregarAdmin() {
                     htmlString += `<p>- ${resposta.resposta}</p>`;
                 });
                 htmlString += `<button class="btn-eliminar" onclick="eliminarPregunta(${pregunta.id})">Eliminar</button>`;
-                htmlString += `<button class="btn-editar" onclick="editarPregunta(${pregunta.id})">Editar</button>`;
+                htmlString += `<button class="btn-editar" onclick="editarPregunta(${pregunta.id + 1})">Editar</button>`;
                 htmlString += `</div><hr>`;
             });
             llistatAdmin.innerHTML = htmlString;

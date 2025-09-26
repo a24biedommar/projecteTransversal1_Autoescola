@@ -34,7 +34,10 @@ foreach ($respostes as $index => $resposta) {
     if($index == $correctaIndex){
         $isCorrecta = 1;
     }
-    $sqlResposta = "UPDATE RESPOSTES SET RESPOSTA = '$resposta', CORRECTA = '$isCorrecta' WHERE ID_PREGUNTA = '$idPregunta' AND ID_RESPOSTA = ".($index);
+    $sqlResposta = "UPDATE RESPOSTES 
+                SET RESPOSTA = '$resposta', CORRECTA = '$isCorrecta' 
+                WHERE ID_PREGUNTA = '$idPregunta' 
+                AND ID_RESPOSTA = (SELECT MAX(ID_RESPOSTA)+1 FROM RESPOSTES WHERE ID_PREGUNTA = '$idPregunta')";
     $conn->query($sqlResposta);
 }
 

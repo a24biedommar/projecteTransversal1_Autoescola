@@ -175,6 +175,8 @@ function carregarAdmin() {
             });
         });
 }
+window.carregarAdmin = carregarAdmin; //fem la funcio carregarAdmin global per poder trucar-la desde qualsevol lloc
+
 
 function eliminarPregunta(idPregunta) {
     fetch('../php/admin/eliminarPreguntes.php', {

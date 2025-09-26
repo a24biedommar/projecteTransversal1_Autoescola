@@ -24,7 +24,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 //fem la query per actualitzar la pregunta
 $sqlPregunta = "UPDATE PREGUNTES 
-                SET PREGUNTA = '$preguntaText', IMATGE = '$imatgeText' 
+                SET PREGUNTA = '$preguntaText', LINK_IMATGE = '$imatgeText' 
                 WHERE ID_PREGUNTA = '$idPregunta'";
 $conn->query($sqlPregunta);
 

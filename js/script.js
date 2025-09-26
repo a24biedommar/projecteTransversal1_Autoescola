@@ -198,7 +198,8 @@ function crearPregunta() {
     const form = document.getElementById("formCrearPregunta"); //agafem en un objecte el formulari creat en la funcio renderCrearPregunta
     const preguntaText = form.querySelector('#preguntaText').value; //"" agafemdel cormulari la preguta
     const imatgeLink = form.querySelector('#imatgeLink').value; // "" agafem del fomrulari el link de l'imatge
-    const respostes = [ //agafem en un array totes les respostes
+    //agafem en un array totes les respostes
+    const respostes = [ 
         form.querySelector('input[name="resposta1"]').value,
         form.querySelector('input[name="resposta2"]').value,
         form.querySelector('input[name="resposta3"]').value,

@@ -7,12 +7,12 @@ header('Content-Type: application/json');
 //rebem les dades del fetch i les decodifiquem en una variable $docu
 $docu = json_decode(file_get_contents('php://input'), true);
 
-//Anomenem les variables per agafar les dades del JSON
-$idPregunta = $docu['id'];
-$imatgeLink = $docu['imatgeLink'];
+// Anomenem les variables per agafar les dades del JSON
+$idPregunta = (int)$docu['id'];
 $preguntaText = $docu['pregunta'];
-$respostes = $docu['respostes']; // array de respostes
-$correctaIndex = $docu['correcta'];
+$imatge = $docu['imatge'];
+$respostes = $docu['respostes'];
+$correctaIndex = (int)$docu['correcta'];
 
 //fem la connexió a la base de dades
 $servername = "localhost";
@@ -24,21 +24,18 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 //fem la query per actualitzar la pregunta
 $sqlPregunta = "UPDATE PREGUNTES 
-                SET PREGUNTA = '$preguntaText', LINK_IMATGE = '$imatgeText' 
+                SET PREGUNTA = '$preguntaText', LINK_IMATGE = '$imatge' 
                 WHERE ID_PREGUNTA = '$idPregunta'";
 $conn->query($sqlPregunta);
 
-// Actualitzem les respostes
+// Reemplaçem les respostes: eliminem les existents i inserim les noves
+$conn->query("DELETE FROM RESPOSTES WHERE ID_PREGUNTA = '$idPregunta'");
+
 foreach ($respostes as $index => $resposta) {
-    $isCorrecta = 0;
-    if($index == $correctaIndex){
-        $isCorrecta = 1;
-    }
-    $sqlResposta = "UPDATE RESPOSTES 
-                SET RESPOSTA = '$resposta', CORRECTA = '$isCorrecta' 
-                WHERE ID_PREGUNTA = '$idPregunta' 
-                AND ID_RESPOSTA = (SELECT MAX(ID_RESPOSTA)+1 FROM RESPOSTES WHERE ID_PREGUNTA = '$idPregunta')";
-    $conn->query($sqlResposta);
+    $isCorrecta = ($index === $correctaIndex) ? 1 : 0;
+    $sqlInsert = "INSERT INTO RESPOSTES (ID_PREGUNTA, RESPOSTA, CORRECTA) 
+                  VALUES ('$idPregunta', '$resposta', '$isCorrecta')";
+    $conn->query($sqlInsert);
 }
 
 // Retornem missatge d’èxit

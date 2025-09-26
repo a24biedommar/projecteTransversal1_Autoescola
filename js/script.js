@@ -124,6 +124,8 @@ function carregarAdmin() {
     fetch('../php/admin/llistatPreguntes.php')
         .then(res => res.json())
         .then(data => {
+            // Sincronitzem el dataset global amb el que s'està mostrant a la vista d'admin
+            totesLesPreguntes = data.preguntes;
             let htmlString = `<button id="btnTornarEnrere" class="btn-tornar" onclick="window.location.href='index.html'">Tornar enrere</button><br>`;
             // Aquest botó no crida directament, utiltiza event listener que es crida despres
             htmlString += `<button id="btnCrearPregunta" class="btn-crear">Crear nova pregunta</button>`;
@@ -183,7 +185,8 @@ function eliminarPregunta(idPregunta) {
     fetch('../php/admin/eliminarPreguntes.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: idPregunta })
+        // Normalitzem a número per evitar discrepàncies de tipus amb el backend
+        body: JSON.stringify({ id: Number(idPregunta) })
     })
     .then(res => res.json())
     .then(resp => {

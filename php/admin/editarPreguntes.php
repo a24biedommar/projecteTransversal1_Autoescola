@@ -9,6 +9,7 @@ $docu = json_decode(file_get_contents('php://input'), true);
 
 //Anomenem les variables per agafar les dades del JSON
 $idPregunta = $docu['id'];
+$imatgeLink = $docu['imatgeLink'];
 $preguntaText = $docu['pregunta'];
 $respostes = $docu['respostes']; // array de respostes
 $correctaIndex = $docu['correcta'];
@@ -22,7 +23,9 @@ $dbname = "a24biedommar_Projecte0";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 //fem la query per actualitzar la pregunta
-$sqlPregunta = "UPDATE PREGUNTES SET PREGUNTA = '$preguntaText' WHERE ID_PREGUNTA = '$idPregunta'";
+$sqlPregunta = "UPDATE PREGUNTES 
+                SET PREGUNTA = '$preguntaText', IMATGE = '$imatgeText' 
+                WHERE ID_PREGUNTA = '$idPregunta'";
 $conn->query($sqlPregunta);
 
 // Actualitzem les respostes

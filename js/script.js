@@ -67,9 +67,9 @@ function renderTotesLesPreguntes(preguntes){
             <h3>Pregunta ${i+1}: ${pregunta.pregunta}</h3><br>
             <img src="${pregunta.imatge}" alt="Pregunta ${i+1}"><br>`;
 
-        // Afegim les possibles respostes com a botons
+        // Afegim les possibles respostes com a botons (estil professor: classe 'btn' i atributs 'preg' i 'resp')
         pregunta.respostes.forEach((resposta, j) => {
-            htmlString += `<button class="btn-resposta" onclick="marcarRespuesta(${i}, ${j})">${resposta.resposta}</button><br>`;
+            htmlString += `<button class="btn" preg="${i}" resp="${j}">${resposta.resposta}</button><br>`;
         });
         // Afegim una línia horitzontal per separar les preguntes
         htmlString += `<hr>`;
@@ -80,6 +80,14 @@ function renderTotesLesPreguntes(preguntes){
     
     contenidor.innerHTML = htmlString;
     document.getElementById("btnFinalitzar").addEventListener("click", mostrarResultats);
+    // detectem botó de resposta per classe 'btn' i atributs 'preg' i 'resp'
+    contenidor.addEventListener('click', function (e) {
+        console.log("Has fet click a: " + e.target);
+        if (e.target.classList && e.target.classList.contains('btn')) {
+            console.log("aixo es un botó que conté les dades " + e.target.getAttribute("preg") + "--" + e.target.getAttribute("resp"));
+            marcarRespuesta(e.target.getAttribute("preg"), e.target.getAttribute("resp"));
+        }
+    });
 }
 
 

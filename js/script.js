@@ -84,7 +84,7 @@ function renderTotesLesPreguntes(preguntes){
     contenidor.addEventListener('click', function (e) {
         console.log("Has fet click a: " + e.target);
         if (e.target.classList && e.target.classList.contains('btn')) {
-            console.log("aixo es un botó que conté les dades " + e.target.getAttribute("preg") + "--" + e.target.getAttribute("resp"));
+            console.log("Pregunta: " + e.target.getAttribute("preg") + "- Resposta: " + e.target.getAttribute("resp"));
             marcarRespuesta(e.target.getAttribute("preg"), e.target.getAttribute("resp"));
         }
     });

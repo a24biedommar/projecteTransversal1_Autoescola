@@ -251,10 +251,10 @@ function editarPregunta(idPregunta) {
         //pregunta i la mostrem en un input que sigui editable
         //aquest input te per defecte el valor de la pregunta que volem editar (igual que amb la resta de coses)
             <label>Pregunta:</label><br>
-            <input type="text" id="editarTextPregunta" value="${pregunta.pregunta}"><br><br>
+            <input type="text" id="editarTextPregunta" value="${idPregunta.pregunta}"><br><br>
 
             <label>Imatge:</label><br>
-            <input type="text" id="editarLinkImatge" value="${pregunta.imatge}"><br><br>
+            <input type="text" id="editarLinkImatge" value="${idPregunta.imatge}"><br><br>
 
             <label>Respostes:</label><br>`;
 

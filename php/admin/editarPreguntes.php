@@ -31,7 +31,7 @@ foreach ($respostes as $index => $resposta) {
     if($index == $correctaIndex){
         $isCorrecta = 1;
     }
-    $sqlResposta = "UPDATE RESPOSTES SET RESPOSTA = '$resposta', CORRECTA = '$isCorrecta' WHERE ID_PREGUNTA = '$idPregunta' AND ID_RESPOSTA = ".($index+1);
+    $sqlResposta = "UPDATE RESPOSTES SET RESPOSTA = '$resposta', CORRECTA = '$isCorrecta' WHERE ID_PREGUNTA = '$idPregunta' AND ID_RESPOSTA = ".($index);
     $conn->query($sqlResposta);
 }
 

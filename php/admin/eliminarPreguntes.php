@@ -1,4 +1,7 @@
 <?php
+//iniciem la sessió
+session_start();
+
 header('Content-Type: application/json');
 
 $docu = json_decode(file_get_contents('php://input'), true);

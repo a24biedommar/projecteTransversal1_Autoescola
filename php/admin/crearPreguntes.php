@@ -1,4 +1,6 @@
 <?php
+//iniciem la sessió
+session_start();
 
 header('Content-Type: application/json');
 

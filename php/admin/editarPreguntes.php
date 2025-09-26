@@ -1,4 +1,7 @@
 <?php
+//iniciem la sessió
+session_start();
+
 header('Content-Type: application/json');
 
 //rebem les dades del fetch i les decodifiquem en una variable $docu

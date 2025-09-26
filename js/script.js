@@ -319,6 +319,7 @@ function actualitzarPregunta(idPregunta) {
         document.getElementById('editarPregunta').style.display = 'none'; //amaguem el div d'editarPregunta
     });
 }
+window.actualitzarPregunta = actualitzarPregunta; //fem la funcio actualitzarPregunta global per poder trucar-la desde qualsevol lloc
 
 
 // Esperem que el DOM estigui carregat abans d'executar el codi

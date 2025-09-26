@@ -236,8 +236,9 @@ window.crearPregunta = crearPregunta;
 function editarPregunta(idPregunta) {
     //agafem la variable totesLesPreguntes (que es global) i busquem la pregunta que te la id que ens han passat
     var pregunta = null;
+    const idBuscada = Number(idPregunta); // passem a numero per facilitar els seguents processos
     for (var i = 0; i < totesLesPreguntes.length; i++) {
-        if (totesLesPreguntes[i].id == idPregunta) {
+        if (Number(totesLesPreguntes[i].id) === idBuscada) { //si la idbuscada es igual a la id de la pregunta de totes les preguntes
             pregunta = totesLesPreguntes[i];
             break;
             //si trobem la pregunta, sortim del bucle
@@ -305,10 +306,12 @@ function actualitzarPregunta(idPregunta) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            id: idPregunta,
+            // Normalitzem a número per evitar errors de tipus al PHP
+            id: Number(idPregunta),
             pregunta: preguntaText,
             respostes: respostes,
-            correcta: correctaIndex,
+            // Ens assegurem que la correcta sigui un número
+            correcta: Number(correctaIndex),
             imatge: imatgeLink
         })
     })

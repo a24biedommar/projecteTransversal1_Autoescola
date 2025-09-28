@@ -138,26 +138,42 @@ function carregarAdmin() {
         .then(data => {
             // Sincronitzem el dataset global amb el que s'està mostrant a la vista d'admin
             totesLesPreguntes = data.preguntes;
-            let htmlString = `<button id="btnTornarEnrere" class="btn-tornar" onclick="window.location.href='index.html'">Tornar enrere</button><br>`;
+            // Hem eliminat l'onclick dels botons de l'admin
+            let htmlString = `<button id="btnTornarEnrere" class="btn-tornar">Tornar enrere</button><br>`;
             // Aquest botó no crida directament, utiltiza event listener que es crida despres
             htmlString += `<button id="btnCrearPregunta" class="btn-crear">Crear nova pregunta</button>`;
             htmlString += `<h2>Llistat complet de preguntes</h2>`;
-            
+
             data.preguntes.forEach((pregunta, indexPregunta) => {
                 htmlString += `<div class="pregunta-admin">
                                 <h3>${indexPregunta + 1}. ${pregunta.pregunta}</h3>`;
                 pregunta.respostes.forEach(resposta => {
                     htmlString += `<p>- ${resposta.resposta}</p>`;
                 });
-                htmlString += `<button class="btn-eliminar" onclick="eliminarPregunta(${pregunta.id})">Eliminar</button>`;
-                htmlString += `<button class="btn-editar" onclick="editarPregunta(${pregunta.id})">Editar</button>`;
+                htmlString += `<button class="btn-eliminar" data-id="${pregunta.id}">Eliminar</button>`;
+                htmlString += `<button class="btn-editar" data-id="${pregunta.id}">Editar</button>`;
                 htmlString += `</div><hr>`;
             });
             llistatAdmin.innerHTML = htmlString;
+            
+            // afegim un event listener contenidor per a tota la vista d'admin contenidor id admin
+            llistatAdmin.addEventListener('click', function(e) {
+                const target = e.target;
+                if (target.id === 'btnTornarEnrere') {
+                    window.location.href = 'index.html';
+                } else if (target.id === 'btnCrearPregunta') {
+                    carregarFormulariCrear();
+                } else if (target.classList.contains('btn-eliminar')) {
+                    const id = target.getAttribute('data-id');
+                    eliminarPregunta(id);
+                } else if (target.classList.contains('btn-editar')) {
+                    const id = target.getAttribute('data-id');
+                    editarPregunta(id);
+                }
+            });
 
-            ////aquest event listener es crida quan es pitja el boto crear pregunta
             document.getElementById("btnCrearPregunta").addEventListener("click", () => {
-                 //amaguem els altres divs
+                //amaguem els altres divs
                 document.getElementById("questionari").style.display = "none";
                 document.getElementById("marcador").style.display = "none";
                 document.getElementById("admin").style.display = "none";
@@ -166,7 +182,7 @@ function carregarAdmin() {
                 crearPreguntaDiv.style.display = "block"; //fem que sigui visible el div crearPRegunta
 
                 crearPreguntaDiv.innerHTML = `
-                    <button id="btnTornarEnrere" class="btn-tornar" onclick="carregarAdmin()">Enrere</button>
+                    <button id="btnTornarEnrereCrear" class="btn-tornar">Enrere</button>
                     <h2>Crear Nova Pregunta</h2>
                     <form id="formCrearPregunta">
                         <label for="preguntaText">Pregunta:</label><br>
@@ -184,9 +200,12 @@ function carregarAdmin() {
                         </div>
 
                         <br>
-                        <button type="button" onclick="crearPregunta()">Guardar Pregunta</button>
+                        <button type="button" id="btnGuardarPregunta">Guardar Pregunta</button>
                     </form>
                 `;
+                // Hem eliminat l'onclick del formulari de creació
+                document.getElementById("btnTornarEnrereCrear").addEventListener("click", carregarAdmin);
+                document.getElementById("btnGuardarPregunta").addEventListener("click", crearPregunta);
             });
         });
 }
@@ -292,11 +311,14 @@ function editarPregunta(idPregunta) {
     });
 
     htmlString += `<br>
-        <button type="button" onclick="actualitzarPregunta(${idPregunta})">Guardar Canvis</button>
-        <button type="button" onclick="carregarAdmin()">Cancelar</button>
+        <button type="button" id="btnGuardarCanvis">Guardar Canvis</button>
+        <button type="button" id="btnCancelarEdicio">Cancelar</button>
         </form>`;
 
     editarDiv.innerHTML = htmlString;
+    // afegim els event listeners dels botons d'editar preguntes
+    document.getElementById("btnGuardarCanvis").addEventListener("click", () => actualitzarPregunta(idPregunta));
+    document.getElementById("btnCancelarEdicio").addEventListener("click", carregarAdmin);
 }
 window.editarPregunta = editarPregunta;
 

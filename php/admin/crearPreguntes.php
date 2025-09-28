@@ -12,7 +12,7 @@ $correctaIndex = $docu['correcta'];
 $imatge = $docu['imatge'];
 
 // Inclou el fitxer de connexió
-require_once 'connexio.php';
+require_once '../connexio.php';
 
 //fem el select de l'id mes alt i sumem 1 
 $sqlId = "SELECT MAX(ID_PREGUNTA) + 1 FROM PREGUNTES";

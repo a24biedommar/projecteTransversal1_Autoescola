@@ -3,7 +3,7 @@
 session_start();
 
 // Inclou el fitxer de connexió
-require_once 'connexio.php';
+require_once '../connexio.php';
 
 // Agafem totes les preguntes en ordre d'ID
 $sqlPreguntes = "SELECT * FROM PREGUNTES ORDER BY ID_PREGUNTA";

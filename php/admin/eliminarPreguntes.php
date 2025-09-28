@@ -8,7 +8,7 @@ $docu = json_decode(file_get_contents('php://input'), true);
 $idPregunta = $docu['id'];
 
 // Inclou el fitxer de connexió
-require_once 'connexio.php';
+require_once '../connexio.php';
 
 //eliminem les respostes associades a la pregunta seleccionada
 $sqlRespostes = "DELETE FROM RESPOSTES WHERE ID_PREGUNTA = $idPregunta";

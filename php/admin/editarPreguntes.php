@@ -15,7 +15,7 @@ $respostes     = $docu['respostes'];
 $correctaIndex = (int)$docu['correcta'];
 
 // Inclou el fitxer de connexió
-require_once 'connexio.php';
+require_once '../connexio.php';
 
 //Fem que tot el contngut d'aquestes dues variables sigui "net"
 // es a dir fem que sigui tot un stringper evitar errors

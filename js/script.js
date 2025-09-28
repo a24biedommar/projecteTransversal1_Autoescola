@@ -83,7 +83,7 @@ function renderTotesLesPreguntes(preguntes){
     // detectem botó de resposta per classe 'btn' i atributs 'preg' i 'resp'
     contenidor.addEventListener('click', function (e) {
         console.log("Has fet click a: " + e.target);
-        if (e.target.classList && e.target.classList.contains('btn')) {
+        if (e.target.classList.contains('btn')) {
             console.log("Pregunta: " + e.target.getAttribute("preg") + "- Resposta: " + e.target.getAttribute("resp"));
             marcarRespuesta(e.target.getAttribute("preg"), e.target.getAttribute("resp"));
         }
@@ -112,10 +112,14 @@ function mostrarResultats() {
             <h2>Resultats</h2>
             <p>Total preguntes: ${resultat.total}</p>
             <p>Correctes: ${resultat.correctes}</p>
-            <button class="btn-Reiniciar" class="btn-Reiniciar" id="btnReiniciar" onclick="window.location.href='index.html'">Reiniciar</button>
-        `;
-        console.log(resultat);
-    })
+            <button class="btn-Reiniciar" id="btnReiniciar">Reiniciar</button>
+            `;
+            // Hem eliminat l'onclick del botó de Reiniciar
+            document.getElementById("btnReiniciar").addEventListener("click", () => {
+                window.location.href = 'index.html';
+            });
+            console.log(resultat);
+        })
 }
 window.mostrarResultats = mostrarResultats; //mostrem els resultat a la finestra amb la funcio GLOBAL window.
 

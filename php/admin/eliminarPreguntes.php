@@ -7,14 +7,8 @@ header('Content-Type: application/json');
 $docu = json_decode(file_get_contents('php://input'), true);
 $idPregunta = $docu['id'];
 
-
-// Connexió a la base de dades
-$servername = "localhost";
-$username = "a24biedommar_Projecte0";
-$password = "J7CqPQhC|Gwb%=%@";
-$dbname = "a24biedommar_Projecte0";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Inclou el fitxer de connexió
+require_once 'connexio.php';
 
 //eliminem les respostes associades a la pregunta seleccionada
 $sqlRespostes = "DELETE FROM RESPOSTES WHERE ID_PREGUNTA = $idPregunta";

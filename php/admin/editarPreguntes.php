@@ -14,13 +14,8 @@ $imatge        = $docu['imatge'];
 $respostes     = $docu['respostes'];
 $correctaIndex = (int)$docu['correcta'];
 
-// Connexió a la base de dades
-$servername = "localhost";
-$username = "a24biedommar_Projecte0";
-$password = "J7CqPQhC|Gwb%=%@";
-$dbname = "a24biedommar_Projecte0";
-
-$conn = new mysqli($servername, $username, $password, $dbname);$conn->set_charset('utf8mb4');
+// Inclou el fitxer de connexió
+require_once 'connexio.php';
 
 //Fem que tot el contngut d'aquestes dues variables sigui "net"
 // es a dir fem que sigui tot un stringper evitar errors

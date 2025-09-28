@@ -11,12 +11,8 @@ $respostes = $docu['respostes'];
 $correctaIndex = $docu['correcta'];
 $imatge = $docu['imatge'];
 
-$servername = "localhost";
-$username = "a24biedommar_Projecte0";
-$password = "J7CqPQhC|Gwb%=%@";
-$dbname = "a24biedommar_Projecte0";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Inclou el fitxer de connexió
+require_once 'connexio.php';
 
 //fem el select de l'id mes alt i sumem 1 
 $sqlId = "SELECT MAX(ID_PREGUNTA) + 1 FROM PREGUNTES";

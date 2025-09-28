@@ -7,13 +7,8 @@ $_SESSION['index'] = 0;
 $_SESSION['puntuacio'] = 0;
 $_SESSION['preguntes'] = [];
 
-// Inicialitzem les variables de connexió a la base de dades
-$servername = "localhost";
-$username = "a24biedommar_Projecte0";
-$password = "J7CqPQhC|Gwb%=%@"; 
-$dbname = "a24biedommar_Projecte0"; 
-
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Inclou el fitxer de connexió
+require_once 'connexio.php';
 
 //creem la variable que ens diu quantes preguntes volem mostrar
 $numPreguntes = 10;

@@ -2,13 +2,8 @@
 // Iniciem sessió
 session_start();
 
-// Connexió a la base de dades
-$servername = "localhost";
-$username = "a24biedommar_Projecte0";
-$password = "J7CqPQhC|Gwb%=%@";
-$dbname = "a24biedommar_Projecte0";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Inclou el fitxer de connexió
+require_once 'connexio.php';
 
 // Agafem totes les preguntes en ordre d'ID
 $sqlPreguntes = "SELECT * FROM PREGUNTES ORDER BY ID_PREGUNTA";

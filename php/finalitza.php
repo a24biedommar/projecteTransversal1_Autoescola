@@ -3,12 +3,8 @@
 //iniciem la sessió
 session_start();
 
-// Connexió DB
-$servername = "localhost";
-$username = "a24biedommar_Projecte0";
-$password = "J7CqPQhC|Gwb%=%@"; 
-$dbname = "a24biedommar_Projecte0"; 
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Inclou el fitxer de connexió
+require_once 'connexio.php';
 
 // decodifiquem el fitxer json que ha generat el script de index.html (enviat per petició http)
 $json_data = file_get_contents('php://input');

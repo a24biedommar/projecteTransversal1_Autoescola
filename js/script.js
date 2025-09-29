@@ -15,6 +15,10 @@ function esborrarPartida() {
         respostesUsuari: new Array(totesLesPreguntes.length).fill(undefined),
         tempsRestant: 30
     };
+    // Oculta el botón de "Finalitzar" cuando se borra la partida
+    const btnFinalitzar = document.getElementById("btnFinalitzar")
+    btnFinalitzar.style.display = "none";
+
     actualitzarMarcador();
 }
 

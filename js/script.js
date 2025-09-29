@@ -20,7 +20,8 @@ function demanarNomUsuari() {
             localStorage.setItem("usuari", nom);
             loginDiv.innerHTML = ""; //amaguem el div login
             mostrarBenvinguda();
-            iniciarQüestionari();
+            renderTotesLesPreguntes(totesLesPreguntes); //renderitzem les preguntes
+            actualitzarMarcador(); //actualitzem el marcador
         } else {
             alert("CAL INTRODUIR UN NOM!");
         }

@@ -6,7 +6,6 @@ let estatDeLaPartida = {
     tempsRestant: 30
 };
 let totesLesPreguntes = [];
-let idTimer = null;
 
 function esborrarPartida() {
     localStorage.removeItem("partida");
@@ -16,22 +15,13 @@ function esborrarPartida() {
         respostesUsuari: new Array(totesLesPreguntes.length).fill(undefined),
         tempsRestant: 30
     };
-    if (idTimer) {
-        clearInterval(idTimer);
-        idTimer = null;
-    }
     actualitzarMarcador();
 }
 
 // Funció que actualitza el marcador de respostes a la pantalla.
 function actualitzarMarcador() {
     const marcador = document.getElementById("marcador");
-    let textMarcador = `Preguntes respostes ${estatDeLaPartida.contadorPreguntes}/${totesLesPreguntes.length} <br>`;
-    textMarcador += `temps partida ${estatDeLaPartida.tempsRestant}`;
-    textMarcador += `
-    <div class="progress" role="progressbar" aria-valuenow=" ${(estatDeLaPartida.tempsRestant/30)*100}" aria-valuemin="0" aria-valuemax="100">
-      <div class="progress-bar" style="width:  ${(estatDeLaPartida.tempsRestant/30)*100}%"></div>
-    </div>`;
+    let textMarcador = "Preguntes Respostes:<br>";
 
     for (let i = 0; i < estatDeLaPartida.respostesUsuari.length; i++) {
         let estat;
@@ -42,7 +32,10 @@ function actualitzarMarcador() {
         }
         textMarcador += `Pregunta  ${i} : <span class='badge'> ${(estatDeLaPartida.respostesUsuari[i] == undefined ? "O" : "X")} </span><br>`;
     }
+    textMarcador += `<div> <button id="btnBorrar">Borrar Partida</button> </div>`;
     marcador.innerHTML = textMarcador;
+    const btnBorrar = document.getElementById("btnBorrar");
+    if (btnBorrar) btnBorrar.addEventListener('click', esborrarPartida);
 
     // Elimino tots els "seleccionada" que tingui de darrere endavant per evitar errors
     let seleccio = document.getElementsByClassName("seleccionada");
@@ -108,14 +101,6 @@ function renderTotesLesPreguntes(preguntes) {
         }
     });
 
-    // Gestió del timer
-    idTimer = setInterval(function(){
-        if (estatDeLaPartida.tempsRestant>0) {
-            estatDeLaPartida.tempsRestant--;
-        }
-        actualitzarMarcador();
-    },1000);
-
     // Restaura seleccions si existeixen
     actualitzarMarcador();
 }
@@ -146,10 +131,6 @@ function mostrarResultats() {
         });
         // Un cop finalitzat, esborrem la partida guardada
         localStorage.removeItem('partida');
-        if (idTimer) {
-            clearInterval(idTimer);
-            idTimer = null;
-        }
     });
 }
 

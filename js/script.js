@@ -141,19 +141,6 @@ function carregarAdmin() {
             }
             llistatAdmin.innerHTML = htmlString;
             
-            llistatAdmin.addEventListener('click', (e) => {
-                const target = e.target;
-                const id = target.getAttribute('data-id');
-                if (target.id === 'btnTornarEnrere') {
-                    window.location.href = 'index.html';
-                } else if (target.id === 'btnCrearPregunta') {
-                    carregarFormulariCrear();
-                } else if (target.classList.contains('btn-eliminar')) {
-                    eliminarPregunta(id);
-                } else if (target.classList.contains('btn-editar')) {
-                    editarPregunta(id);
-                }
-            });
         });
 }
 
@@ -324,4 +311,22 @@ document.addEventListener('DOMContentLoaded', () => {
     btnAdmin.id = "btnAdmin";
     document.getElementById("contenidor-principal").appendChild(btnAdmin);
     btnAdmin.addEventListener("click", carregarAdmin);
+
+    // Afegim el listener de clics per a l'administració aquí fora de la funció `carregarAdmin`.
+    const llistatAdmin = document.getElementById("admin");
+    if (llistatAdmin) {
+        llistatAdmin.addEventListener('click', (e) => {
+            const target = e.target;
+            const id = target.getAttribute('data-id');
+            if (target.id === 'btnTornarEnrere') {
+                window.location.href = 'index.html';
+            } else if (target.id === 'btnCrearPregunta') {
+                carregarFormulariCrear();
+            } else if (target.classList.contains('btn-eliminar')) {
+                eliminarPregunta(id);
+            } else if (target.classList.contains('btn-editar')) {
+                editarPregunta(id);
+            }
+        });
+    }
 });

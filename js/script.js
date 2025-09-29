@@ -1,3 +1,40 @@
+//creem un objecte per guardar l'estat de l'usuari (el nom)
+let estatUsuari = {
+    nom: null
+};
+
+//funcio per iniciar el login (demanat el nom de l'usuari)
+function demanarNomUsuari() {
+    //agafem el div login i li posem el formulari per demanar el nom
+    const loginDiv = document.getElementById("login");
+    loginDiv.innerHTML = `
+        <h2>Introdueix el teu nom:</h2>
+        <input type="text" id="nomUsuari" placeholder="Nom d'usuari">
+        <button id="btnEntrar">Entrar</button>
+    `;
+    //afegim l'event listener al botó d'entrar
+    document.getElementById("btnEntrar").addEventListener("click", () => {
+        const nom = document.getElementById("nomUsuari").value.trim();
+        if(nom){
+            estatUsuari.nom = nom;
+            localStorage.setItem("usuari", nom);
+            loginDiv.innerHTML = ""; //amaguem el div login
+            mostrarBenvinguda();
+            iniciarQüestionari();
+        } else {
+            alert("CAL INTRODUIR UN NOM!");
+        }
+    });
+}
+
+function mostrarBenvinguda() {
+    const h1 = document.getElementById("missatgeBenvinguda");
+    h1.textContent = `Benvingut, ${estatUsuari.nom}!`;
+}
+
+
+
+
 // Creem un objecte per poder guardar l'estat de la partida
 let estatDeLaPartida = {
     contadorPreguntes: 0,//contador de quantes preguntes porta l'usuari
@@ -133,7 +170,24 @@ function mostrarResultats() {
             `;
             // Hem eliminat l'onclick del botó de Reiniciar
             document.getElementById("btnReiniciar").addEventListener("click", () => {
-                window.location.href = 'index.html';
+                // esborrem les dades de localStorage
+                localStorage.removeItem("usuari");
+                localStorage.removeItem("partida");
+
+                //reinicialitzem les variables globals (usuari i estat de la partida)
+                estatUsuari.nom = null;
+                estatDeLaPartida = {
+                    contadorPreguntes: 0,
+                    respostesUsuari: []
+                };
+
+                //netegem el contingut de la pàgina 
+                contenidor.innerHTML = "";
+                let h1Benvinguda = document.getElementById("missatgeBenvinguda");
+                if(h1Benvinguda) h1Benvinguda.textContent = "";
+
+                //tornem a demanar el nom del usuari
+                demanarNomUsuari();
             });
             console.log(resultat);
         })

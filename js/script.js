@@ -435,6 +435,17 @@ window.actualitzarPregunta = actualitzarPregunta; //fem la funcio actualitzarPre
 
 // Esperem que el DOM estigui carregat abans d'executar el codi
 window.addEventListener('DOMContentLoaded', (event) => {
+    //comprovem si tenim un usuari guardat a localStorage
+    const usuariGuardat = localStorage.getItem("usuari");
+    //si hi ha usuari guardat, el carreguem i mostrem la benvinguda
+    if (usuariGuardat) {
+        estatUsuari.nom = usuariGuardat;
+        mostrarBenvinguda();
+        iniciarQüestionari(); // Funció que inicialitza el qüestionari
+    } else {
+        // Si no hi ha usuari, demanem el nom
+        demanarNomUsuari();
+    }
     // FETCH DEL QUESTIONARI
     fetch('../php/getPreguntes.php')
         .then(response => response.json()) // Convertim la resposta a objecte JSON

@@ -1,60 +1,9 @@
-//creem un objecte per guardar l'estat de l'usuari (el nom)
-let estatUsuari = {
-    nom: null
-};
-
-//funcio per iniciar el login (demanat el nom de l'usuari)
-function demanarNomUsuari() {
-    //agafem el div login i li posem el formulari per demanar el nom
-    const loginDiv = document.getElementById("login");
-    loginDiv.innerHTML = `
-        <h2>Introdueix el teu nom:</h2>
-        <input type="text" id="nomUsuari" placeholder="Nom d'usuari">
-        <button id="btnEntrar">Entrar</button>
-    `;
-    //afegim l'event listener al botó d'entrar
-    document.getElementById("btnEntrar").addEventListener("click", () => {
-        const nom = document.getElementById("nomUsuari").value.trim();
-        if(nom){
-            estatUsuari.nom = nom;
-            localStorage.setItem("usuari", nom);
-            loginDiv.innerHTML = ""; //amaguem el div login
-            mostrarBenvinguda();
-            renderTotesLesPreguntes(totesLesPreguntes); //renderitzem les preguntes
-            actualitzarMarcador(); //actualitzem el marcador
-        } else {
-            alert("CAL INTRODUIR UN NOM!");
-        }
-    });
-}
-
-function mostrarBenvinguda() {
-    const h1 = document.getElementById("missatgeBenvinguda");
-    h1.textContent = `Benvingut, ${estatUsuari.nom}!`;
-}
-
-
-
-
 // Creem un objecte per poder guardar l'estat de la partida
 let estatDeLaPartida = {
     contadorPreguntes: 0,//contador de quantes preguntes porta l'usuari
     respostesUsuari : [], //contador (array) de les respostes del usuari
 };  
 let totesLesPreguntes = [];
-
-// Funció per guardar l'estat de la partida al localStorage
-function EsborrarPartida() {
-  localStorage.removeItem("partida");
-  estatDeLaPartida = {
-    preguntaActual: 0,
-    contadorPreguntes: 0,
-    respostesUsuari: [], // Aquí anirem guardant les respostes 
-    tempsRestant:30
-  }
-  actualitzarMarcador();
-};
-
 
 // Funció per actualtzar el marcador que es veu en pantalla
 function actualitzarMarcador(){
@@ -78,10 +27,6 @@ function actualitzarMarcador(){
     }
 
     marcador.innerHTML = textMarcador;
-
-    //EMMAGATZEMO L'ESTAT DE LA PARTIDA A LOCALSTORAGE
-    localStorage.setItem("partida", JSON.stringify(estatDeLaPartida))
-    console.log(estatDeLaPartida)
 }
 
 //Assignem la funcio actualtizarMarcador al objecte global window, per poder trucar-la desde qualsevol lloc
@@ -171,24 +116,7 @@ function mostrarResultats() {
             `;
             // Hem eliminat l'onclick del botó de Reiniciar
             document.getElementById("btnReiniciar").addEventListener("click", () => {
-                // esborrem les dades de localStorage
-                localStorage.removeItem("usuari");
-                localStorage.removeItem("partida");
-
-                //reinicialitzem les variables globals (usuari i estat de la partida)
-                estatUsuari.nom = null;
-                estatDeLaPartida = {
-                    contadorPreguntes: 0,
-                    respostesUsuari: []
-                };
-
-                //netegem el contingut de la pàgina 
-                contenidor.innerHTML = "";
-                let h1Benvinguda = document.getElementById("missatgeBenvinguda");
-                if(h1Benvinguda) h1Benvinguda.textContent = "";
-
-                //tornem a demanar el nom del usuari
-                demanarNomUsuari();
+                window.location.href = 'index.html';
             });
             console.log(resultat);
         })
@@ -434,53 +362,20 @@ function actualitzarPregunta(idPregunta) {
 window.actualitzarPregunta = actualitzarPregunta; //fem la funcio actualitzarPregunta global per poder trucar-la desde qualsevol lloc
 
 
+// Esperem que el DOM estigui carregat abans d'executar el codi
 window.addEventListener('DOMContentLoaded', (event) => {
-    const usuariGuardat = localStorage.getItem("usuari");
-    
-    if (usuariGuardat) {
-        estatUsuari.nom = usuariGuardat;
-        mostrarBenvinguda();
+    // FETCH DEL QUESTIONARI
+    fetch('../php/getPreguntes.php')
+        .then(response => response.json()) // Convertim la resposta a objecte JSON
+        .then(data => {
+            totesLesPreguntes = data.preguntes;
+            // Inicialitzem l'array de respostes amb tants elements com preguntes
+            estatDeLaPartida.respostesUsuari = new Array(totesLesPreguntes.length).fill(undefined);
+            renderTotesLesPreguntes(totesLesPreguntes);   // Cridem la funció per renderitzar el joc amb les dades
+            actualitzarMarcador();          // Mostrem el marcador des del principi
+        });
 
-        fetch('../php/getPreguntes.php')
-            .then(response => response.json())
-            .then(data => {
-                totesLesPreguntes = data.preguntes;
-
-                // Comprovem si hi ha una partida guardada
-                if (localStorage.partida) {
-                    // Carreguem partida guardada
-                    estatDeLaPartida = JSON.parse(localStorage.getItem("partida"));
-
-                    // Omplim amb undefined les posicions buides per a preguntes no contestades
-                    estatDeLaPartida.respostesUsuari = estatDeLaPartida.respostesUsuari.map(r => r !== null ? r : undefined);
-
-                    // Comptem només les respostes reals
-                    estatDeLaPartida.contadorPreguntes = estatDeLaPartida.respostesUsuari.filter(r => r !== undefined).length;
-                } else {
-                    // No hi ha partida guardada, iniciem una nova
-                    estatDeLaPartida = {
-                        respostesUsuari: new Array(totesLesPreguntes.length).fill(undefined),
-                        contadorPreguntes: 0
-                    };
-                }
-
-                // Renderitzem preguntes i marcador
-                renderTotesLesPreguntes(totesLesPreguntes); 
-                actualitzarMarcador();
-
-                // Mostrem botó de finalitzar només si totes les preguntes ja estan respostes
-                const btnFinalitzar = document.getElementById("btnFinalitzar");
-                if (estatDeLaPartida.contadorPreguntes === totesLesPreguntes.length && btnFinalitzar) {
-                    btnFinalitzar.style.display = "inline-block";
-                } else if (btnFinalitzar) {
-                    btnFinalitzar.style.display = "none";
-                }
-            });
-    } else {
-        demanarNomUsuari();
-    }
-
-    // Creem botó d'admin
+    //CREEM EL BOTÓ D'ADMIN
     const btnAdmin = document.createElement("button");
     btnAdmin.textContent = "Admin";
     btnAdmin.className = "btn-admin";
@@ -488,4 +383,3 @@ window.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById("contenidor-principal").appendChild(btnAdmin);
     document.getElementById("btnAdmin").addEventListener("click", carregarAdmin);
 });
-

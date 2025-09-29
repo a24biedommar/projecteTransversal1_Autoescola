@@ -434,49 +434,53 @@ function actualitzarPregunta(idPregunta) {
 window.actualitzarPregunta = actualitzarPregunta; //fem la funcio actualitzarPregunta global per poder trucar-la desde qualsevol lloc
 
 
-// Esperem que el DOM estigui carregat abans d'executar el codi
 window.addEventListener('DOMContentLoaded', (event) => {
-    //guardem l'usuari al localStorage
     const usuariGuardat = localStorage.getItem("usuari");
-    // Si hi ha un usuari guardat, el carreguem
+    
     if (usuariGuardat) {
-        // Carreguem l'usuari i mostrem benvinguda
         estatUsuari.nom = usuariGuardat;
         mostrarBenvinguda();
 
-        // FETCH DEL QUESTIONARI
         fetch('../php/getPreguntes.php')
             .then(response => response.json())
             .then(data => {
                 totesLesPreguntes = data.preguntes;
+
                 // Comprovem si hi ha una partida guardada
                 if (localStorage.partida) {
                     // Carreguem partida guardada
                     estatDeLaPartida = JSON.parse(localStorage.getItem("partida"));
+
+                    // Omplim amb undefined les posicions buides per a preguntes no contestades
+                    estatDeLaPartida.respostesUsuari = estatDeLaPartida.respostesUsuari.map(r => r !== null ? r : undefined);
+
+                    // Comptem només les respostes reals
                     estatDeLaPartida.contadorPreguntes = estatDeLaPartida.respostesUsuari.filter(r => r !== undefined).length;
-                } else { //no hi ha partida guardada, iniciem una de nova
-                    // Inicialitzem array de respostes
-                    estatDeLaPartida.respostesUsuari = new Array(totesLesPreguntes.length).fill(undefined);
-                    estatDeLaPartida.contadorPreguntes = 0;
+                } else {
+                    // No hi ha partida guardada, iniciem una nova
+                    estatDeLaPartida = {
+                        respostesUsuari: new Array(totesLesPreguntes.length).fill(undefined),
+                        contadorPreguntes: 0
+                    };
                 }
 
                 // Renderitzem preguntes i marcador
                 renderTotesLesPreguntes(totesLesPreguntes); 
                 actualitzarMarcador();
 
-                // Mostrem botó de finalitzar si totes les preguntes ja estan respostes
+                // Mostrem botó de finalitzar només si totes les preguntes ja estan respostes
                 const btnFinalitzar = document.getElementById("btnFinalitzar");
-                if (estatDeLaPartida.contadorPreguntes === estatDeLaPartida.respostesUsuari.length && btnFinalitzar) {
+                if (estatDeLaPartida.contadorPreguntes === totesLesPreguntes.length && btnFinalitzar) {
                     btnFinalitzar.style.display = "inline-block";
+                } else if (btnFinalitzar) {
+                    btnFinalitzar.style.display = "none";
                 }
             });
-
     } else {
-        // Si no hi ha usuari, demanem el nom
         demanarNomUsuari();
     }
 
-    // CREEM EL BOTÓ D'ADMIN
+    // Creem botó d'admin
     const btnAdmin = document.createElement("button");
     btnAdmin.textContent = "Admin";
     btnAdmin.className = "btn-admin";

@@ -1,246 +1,385 @@
-// Estado global de la partida y preguntas
-let estatDeLaPartida = { contadorPreguntes: 0, respostesUsuari: [] };
+// Creem un objecte per poder guardar l'estat de la partida
+let estatDeLaPartida = {
+    contadorPreguntes: 0,//contador de quantes preguntes porta l'usuari
+    respostesUsuari : [], //contador (array) de les respostes del usuari
+};  
 let totesLesPreguntes = [];
 
-// Actualiza el marcador en pantalla
-function actualitzarMarcador() {
-    const marcador = document.getElementById("marcador");
-    let text = "Preguntes Respostes:<br>";
-    for (let i = 0; i < estatDeLaPartida.respostesUsuari.length; i++) {
+// Funció per actualtzar el marcador que es veu en pantalla
+function actualitzarMarcador(){
+    let marcador = document.getElementById("marcador");  // Agafem l'element HTML on mostrarem el marcador
+    //creem un string per anar afegint les preguntes i si s'han respost o no
+    let textMarcador = "Preguntes Respostes:<br>";
+
+    // Fem un bucle per recorre les preguntes i veure si s'han respost o no 
+    for(let i = 0; i < estatDeLaPartida.respostesUsuari.length; i++){
+        
+        //Declarem una variable per guardar l'estat de la pregunta
+        let estat;
+
+        // Si la resposta de la pregunta i es undefined, vol dir que no s'ha respost
         if (estatDeLaPartida.respostesUsuari[i] === undefined) {
-            text += "Pregunta " + (i+1) + ": O<br>";
+            estat = "O"; // O de "No respost"
         } else {
-            text += "Pregunta " + (i+1) + ": X<br>";
+            estat = "X"; //si s'ha respost, X de "Respost"
         }
+        textMarcador += `Pregunta ${i+1}: ${estat}<br>`;
     }
-    marcador.innerHTML = text;
+
+    marcador.innerHTML = textMarcador;
 }
+
+//Assignem la funcio actualtizarMarcador al objecte global window, per poder trucar-la desde qualsevol lloc
 window.actualitzarMarcador = actualitzarMarcador;
 
-// Marca la respuesta del usuario
+//Fem la funcio marcarResposta per marcar les respostes del usuari
 function marcarRespuesta(numPregunta, numResposta) {
+    //Mostrem per consola quina pregunta i resposta s'ha seleccionat
+    console.log("Pregunta " + numPregunta + " Resposta " + numResposta); 
+
+    // si la pregunta no s'ha respos es suma si s'ha respos no es suma (al contador de preguntes)
     if (estatDeLaPartida.respostesUsuari[numPregunta] === undefined) {
         estatDeLaPartida.contadorPreguntes++;
     }
-    estatDeLaPartida.respostesUsuari[numPregunta] = numResposta;
 
-    const btnFinalitzar = document.getElementById("btnFinalitzar");
-    if (estatDeLaPartida.contadorPreguntes === estatDeLaPartida.respostesUsuari.length && btnFinalitzar) {
-        btnFinalitzar.style.display = "inline-block";
+    //Guardem la resposta de l'usuari dins l'array de respostes, en la posició de la pregunta
+    estatDeLaPartida.respostesUsuari[numPregunta] =  numResposta;
+
+    // Si ja s'han respost totes les preguntes(10), mostrem el botó
+    if(estatDeLaPartida.contadorPreguntes === estatDeLaPartida.respostesUsuari.length){
+        const btnFinalitzar = document.getElementById("btnFinalitzar");
+        if(btnFinalitzar) btnFinalitzar.style.display = "inline-block";
     }
 
-    actualitzarMarcador();
+    console.log(estatDeLaPartida);   // Mostrem l'objecte complet de l'estat actual a la consola
+    actualitzarMarcador();              //Cridem a la funció actualitzarMarcador (per actualitzar el Marcador)
 }
+
 window.marcarRespuesta = marcarRespuesta;
 
-// Renderiza todas las preguntas en el DOM
-function renderTotesLesPreguntes(preguntes) {
-    const contenidor = document.getElementById("questionari");
-    contenidor.innerHTML = "";
-    for (let i = 0; i < preguntes.length; i++) {
-        const p = preguntes[i];
-        contenidor.innerHTML += "<h3>Pregunta " + (i+1) + ": " + p.pregunta + "</h3><br>";
-        contenidor.innerHTML += '<img src="' + p.imatge + '" alt="Pregunta ' + (i+1) + '"><br>';
-        for (let j = 0; j < p.respostes.length; j++) {
-            contenidor.innerHTML += '<button class="btn" preg="' + i + '" resp="' + j + '">' + p.respostes[j].resposta + '</button><br>';
-        }
-        contenidor.innerHTML += "<hr>";
-    }
-    contenidor.innerHTML += '<button id="btnFinalitzar" class="btn-finalitzar" style="display:none">Finalitzar</button>';
+// Funció que crea i mostra el qüestionari al DOM
+function renderTotesLesPreguntes(preguntes){
+    let contenidor = document.getElementById("questionari"); 
+    let htmlString = "";
 
+    preguntes.forEach((pregunta, i) => {
+        htmlString += `
+            <h3>Pregunta ${i+1}: ${pregunta.pregunta}</h3><br>
+            <img src="${pregunta.imatge}" alt="Pregunta ${i+1}"><br>`;
+
+        // Afegim les possibles respostes com a botons (estil professor: classe 'btn' i atributs 'preg' i 'resp')
+        pregunta.respostes.forEach((resposta, j) => {
+            htmlString += `<button class="btn" preg="${i}" resp="${j}">${resposta.resposta}</button><br>`;
+        });
+        // Afegim una línia horitzontal per separar les preguntes
+        htmlString += `<hr>`;
+    });
+
+    // Botó de finalitzar inicialment ocult
+    htmlString += `<button id="btnFinalitzar" class="btn-finalitzar" style="display:none">Finalitzar</button>`;     
+    
+    contenidor.innerHTML = htmlString;
     document.getElementById("btnFinalitzar").addEventListener("click", mostrarResultats);
-    contenidor.addEventListener("click", function(e) {
-        if (e.target.classList.contains("btn")) {
-            marcarRespuesta(Number(e.target.getAttribute("preg")), Number(e.target.getAttribute("resp")));
+    // detectem botó de resposta per classe 'btn' i atributs 'preg' i 'resp'
+    contenidor.addEventListener('click', function (e) {
+        console.log("Has fet click a: " + e.target);
+        if (e.target.classList.contains('btn')) {
+            console.log("Pregunta: " + e.target.getAttribute("preg") + "- Resposta: " + e.target.getAttribute("resp"));
+            marcarRespuesta(e.target.getAttribute("preg"), e.target.getAttribute("resp"));
         }
     });
 }
 
-// Envía respuestas y muestra resultados
+
+// Funció per enviar les respostes a finalitzar.php i mostrar el resultat
 function mostrarResultats() {
-    const marcador = document.getElementById("marcador");
-    if (marcador) marcador.style.display = "none";
+    // Agafem l'element del marcador per poder ocultar-lo
+    let marcador = document.getElementById("marcador");
+    if (marcador) { //si existeix el marcador el ocultem
+        marcador.style.display = "none";
+    }
 
     fetch('../php/finalitza.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(estatDeLaPartida.respostesUsuari)
     })
-    .then(res => res.json())
+    .then(response => response.json())
     .then(resultat => {
-        const contenidor = document.getElementById("questionari");
-        contenidor.innerHTML = "<h2>Resultats</h2>" +
-                                "<p>Total preguntes: " + resultat.total + "</p>" +
-                                "<p>Correctes: " + resultat.correctes + "</p>" +
-                                '<button class="btn-Reiniciar" id="btnReiniciar">Reiniciar</button>';
-        document.getElementById("btnReiniciar").addEventListener("click", function() {
-            window.location.href = 'index.html';
-        });
-    });
+        let contenidor = document.getElementById("questionari");
+        // Mostrem els resultats a l'usuari
+        contenidor.innerHTML = `
+            <h2>Resultats</h2>
+            <p>Total preguntes: ${resultat.total}</p>
+            <p>Correctes: ${resultat.correctes}</p>
+            <button class="btn-Reiniciar" id="btnReiniciar">Reiniciar</button>
+            `;
+            // Hem eliminat l'onclick del botó de Reiniciar
+            document.getElementById("btnReiniciar").addEventListener("click", () => {
+                window.location.href = 'index.html';
+            });
+            console.log(resultat);
+        })
 }
-window.mostrarResultats = mostrarResultats;
+window.mostrarResultats = mostrarResultats; //mostrem els resultat a la finestra amb la funcio GLOBAL window.
 
-// Admin: cargar vista principal
+// Funció per carregar la vista d'admin
 function carregarAdmin() {
+    // amaguem els divs de questionari i marcador
     document.getElementById("questionari").style.display = "none";
     document.getElementById("marcador").style.display = "none";
     document.getElementById("crearPregunta").style.display = "none";
     document.getElementById("editarPregunta").style.display = "none";
-    const adminDiv = document.getElementById("admin");
-    adminDiv.style.display = "block";
-
+    // mostrem el div admin on carregarem les preguntes i respostes
+    const llistatAdmin = document.getElementById("admin");
+    llistatAdmin.style.display = "block";
     fetch('../php/admin/llistatPreguntes.php')
-    .then(res => res.json())
-    .then(data => {
-        totesLesPreguntes = data.preguntes;
-        adminDiv.innerHTML = '<button id="btnTornarEnrere" class="btn-tornar">Tornar enrere</button><br>' +
-                             '<button id="btnCrearPregunta" class="btn-crear">Crear nova pregunta</button>' +
-                             '<h2>Llistat complet de preguntes</h2>';
-        for (let i = 0; i < data.preguntes.length; i++) {
-            const p = data.preguntes[i];
-            adminDiv.innerHTML += '<div class="pregunta-admin">' +
-                                  '<h3>' + (i+1) + '. ' + p.pregunta + '</h3>';
-            for (let j = 0; j < p.respostes.length; j++) {
-                adminDiv.innerHTML += "<p>- " + p.respostes[j].resposta + "</p>";
-            }
-            adminDiv.innerHTML += '<button class="btn-eliminar" data-id="' + p.id + '">Eliminar</button>' +
-                                  '<button class="btn-editar" data-id="' + p.id + '">Editar</button></div><hr>';
-        }
+        .then(res => res.json())
+        .then(data => {
+            // Sincronitzem el dataset global amb el que s'està mostrant a la vista d'admin
+            totesLesPreguntes = data.preguntes;
+            // Hem eliminat l'onclick dels botons de l'admin
+            let htmlString = `<button id="btnTornarEnrere" class="btn-tornar">Tornar enrere</button><br>`;
+            // Aquest botó no crida directament, utiltiza event listener que es crida despres
+            htmlString += `<button id="btnCrearPregunta" class="btn-crear">Crear nova pregunta</button>`;
+            htmlString += `<h2>Llistat complet de preguntes</h2>`;
 
-        adminDiv.addEventListener("click", function(e) {
-            const target = e.target;
-            if (target.id === "btnTornarEnrere") window.location.href = 'index.html';
-            else if (target.id === "btnCrearPregunta") mostrarFormCrear();
-            else if (target.classList.contains("btn-eliminar")) eliminarPregunta(target.dataset.id);
-            else if (target.classList.contains("btn-editar")) editarPregunta(target.dataset.id);
+            data.preguntes.forEach((pregunta, indexPregunta) => {
+                htmlString += `<div class="pregunta-admin">
+                                <h3>${indexPregunta + 1}. ${pregunta.pregunta}</h3>`;
+                pregunta.respostes.forEach(resposta => {
+                    htmlString += `<p>- ${resposta.resposta}</p>`;
+                });
+                htmlString += `<button class="btn-eliminar" data-id="${pregunta.id}">Eliminar</button>`;
+                htmlString += `<button class="btn-editar" data-id="${pregunta.id}">Editar</button>`;
+                htmlString += `</div><hr>`;
+            });
+            llistatAdmin.innerHTML = htmlString;
+            
+            // afegim un event listener contenidor per a tota la vista d'admin contenidor id admin
+            llistatAdmin.addEventListener('click', function(e) {
+                const target = e.target;
+                if (target.id === 'btnTornarEnrere') {
+                    window.location.href = 'index.html';
+                } else if (target.id === 'btnCrearPregunta') {
+                    carregarFormulariCrear();
+                } else if (target.classList.contains('btn-eliminar')) {
+                    const id = target.getAttribute('data-id');
+                    eliminarPregunta(id);
+                } else if (target.classList.contains('btn-editar')) {
+                    const id = target.getAttribute('data-id');
+                    editarPregunta(id);
+                }
+            });
+
+            document.getElementById("btnCrearPregunta").addEventListener("click", () => {
+                //amaguem els altres divs
+                document.getElementById("questionari").style.display = "none";
+                document.getElementById("marcador").style.display = "none";
+                document.getElementById("admin").style.display = "none";
+
+                const crearPreguntaDiv = document.getElementById("crearPregunta");
+                crearPreguntaDiv.style.display = "block"; //fem que sigui visible el div crearPRegunta
+
+                crearPreguntaDiv.innerHTML = `
+                    <button id="btnTornarEnrereCrear" class="btn-tornar">Enrere</button>
+                    <h2>Crear Nova Pregunta</h2>
+                    <form id="formCrearPregunta">
+                        <label for="preguntaText">Pregunta:</label><br>
+                        <input type="text" id="preguntaText" name="preguntaText" required><br><br>
+
+                        <label for="imatgeLink">Link Imatge:</label><br>
+                        <input type="text" id="imatgeLink" name="imatgeLink"><br><br>
+
+                        <div id="respostes-container">
+                            <label>Respostes:</label><br>
+                            <input type="text" name="resposta1" required> <label>Correcta: <input type="radio" name="correcta" value="0" required></label><br>
+                            <input type="text" name="resposta2" required> <label>Correcta: <input type="radio" name="correcta" value="1"></label><br>
+                            <input type="text" name="resposta3" required> <label>Correcta: <input type="radio" name="correcta" value="2"></label><br>
+                            <input type="text" name="resposta4" required> <label>Correcta: <input type="radio" name="correcta" value="3"></label><br>
+                        </div>
+
+                        <br>
+                        <button type="button" id="btnGuardarPregunta">Guardar Pregunta</button>
+                    </form>
+                `;
+                // Hem eliminat l'onclick del formulari de creació
+                document.getElementById("btnTornarEnrereCrear").addEventListener("click", carregarAdmin);
+                document.getElementById("btnGuardarPregunta").addEventListener("click", crearPregunta);
+            });
         });
-    });
 }
-window.carregarAdmin = carregarAdmin;
+window.carregarAdmin = carregarAdmin; //fem la funcio carregarAdmin global per poder trucar-la desde qualsevol lloc
 
-// Admin: eliminar pregunta
+//funcio per eliminar una pregunta
 function eliminarPregunta(idPregunta) {
     fetch('../php/admin/eliminarPreguntes.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        // Normalitzem a número per evitar discrepàncies de tipus amb el backend
         body: JSON.stringify({ id: Number(idPregunta) })
     })
     .then(res => res.json())
-    .then(resp => { alert(resp.message); carregarAdmin(); });
+    .then(resp => {
+        // Mostrem el missatge que retorna el PHP (conforme s'ha eliminat)
+        alert(resp.message);
+        //si hem pogut eliminar mostrem el missatge i despres recarreguem la vista d'admin
+        carregarAdmin();
+    });
 }
-window.eliminarPregunta = eliminarPregunta;
+//TODO: No cal fer la funcio eliminarPregunta global, ja que es crida des de dins de carregarAdmin
+window.eliminarPregunta = eliminarPregunta; //fem la funcio eliminarPregunta global per poder trucar-la desde qualsevol lloc
 
-// Admin: mostrar formulario crear pregunta
-function mostrarFormCrear() {
+// creem la funcio CREARPREGUNTA
+function crearPregunta() {
+    const form = document.getElementById("formCrearPregunta"); //agafem en un objecte el formulari creat en la funcio renderCrearPregunta
+    const preguntaText = form.querySelector('#preguntaText').value; //"" agafemdel cormulari la preguta
+    const imatgeLink = form.querySelector('#imatgeLink').value; // "" agafem del fomrulari el link de l'imatge
+    //agafem en un array totes les respostes
+    const respostes = [ 
+        form.querySelector('input[name="resposta1"]').value,
+        form.querySelector('input[name="resposta2"]').value,
+        form.querySelector('input[name="resposta3"]').value,
+        form.querySelector('input[name="resposta4"]').value
+    ];
+    //guardem en un objecte el correct
+    const correctaIndex = form.querySelector('input[name="correcta"]:checked').value;
+
+    // Enviem les dades anteriors al crearPRegunta.php amb fetch
+    fetch('../php/admin/crearPreguntes.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ //passem a string les variables anteriors
+            pregunta: preguntaText,
+            respostes: respostes,
+            correcta: correctaIndex,
+            imatge: imatgeLink
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message); //mostrem el missatge del fitxar crearPreguntes.php i seguit carreguem un altre cop la feed del admin
+        //fem que el div crearPregunta s'amagui
+        document.getElementById("crearPregunta").style.display = "none";
+        carregarAdmin();
+    });
+}
+window.crearPregunta = crearPregunta;
+
+//fem la funcio per editar una pregunta segons quina id li arribi
+function editarPregunta(idPregunta) {
+    //agafem la variable totesLesPreguntes (que es global) i busquem la pregunta que te la id que ens han passat
+    var pregunta = null;
+    const idBuscada = Number(idPregunta); // passem a numero per facilitar els seguents processos
+    for (var i = 0; i < totesLesPreguntes.length; i++) {
+        if (Number(totesLesPreguntes[i].id) === idBuscada) { //si la idbuscada es igual a la id de la pregunta de totes les preguntes
+            pregunta = totesLesPreguntes[i];
+            break;
+            //si trobem la pregunta, sortim del bucle
+        }
+    }
+
+    // Fem que els altres divs s'amaguin
     document.getElementById("questionari").style.display = "none";
     document.getElementById("marcador").style.display = "none";
     document.getElementById("admin").style.display = "none";
 
-    const crearDiv = document.getElementById("crearPregunta");
-    crearDiv.style.display = "block";
-    crearDiv.innerHTML = '<button id="btnTornarEnrereCrear" class="btn-tornar">Enrere</button>' +
-                         '<h2>Crear Nova Pregunta</h2>' +
-                         '<form id="formCrearPregunta">' +
-                         '<label>Pregunta:</label><br><input type="text" id="preguntaText" required><br><br>' +
-                         '<label>Link Imatge:</label><br><input type="text" id="imatgeLink"><br><br>' +
-                         '<input type="text" name="resposta1" required> <label>Correcta: <input type="radio" name="correcta" value="0" required></label><br>' +
-                         '<input type="text" name="resposta2" required> <label>Correcta: <input type="radio" name="correcta" value="1"></label><br>' +
-                         '<input type="text" name="resposta3" required> <label>Correcta: <input type="radio" name="correcta" value="2"></label><br>' +
-                         '<input type="text" name="resposta4" required> <label>Correcta: <input type="radio" name="correcta" value="3"></label><br>' +
-                         '<br><button type="button" id="btnGuardarPregunta">Guardar Pregunta</button></form>';
-
-    document.getElementById("btnTornarEnrereCrear").addEventListener("click", carregarAdmin);
-    document.getElementById("btnGuardarPregunta").addEventListener("click", crearPregunta);
-}
-
-// Admin: crear nueva pregunta
-function crearPregunta() {
-    const form = document.getElementById("formCrearPregunta");
-    const respostes = [];
-    for (let i = 1; i <= 4; i++) respostes.push(form.querySelector('input[name="resposta'+i+'"]').value);
-    const correcta = form.querySelector('input[name="correcta"]:checked').value;
-
-    fetch('../php/admin/crearPreguntes.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            pregunta: form.querySelector("#preguntaText").value,
-            respostes: respostes,
-            correcta: correcta,
-            imatge: form.querySelector("#imatgeLink").value
-        })
-    })
-    .then(res => res.json())
-    .then(data => { alert(data.message); document.getElementById("crearPregunta").style.display = "none"; carregarAdmin(); });
-}
-window.crearPregunta = crearPregunta;
-
-// Admin: editar pregunta
-function editarPregunta(idPregunta) {
-    const pregunta = totesLesPreguntes.find(p => Number(p.id) === Number(idPregunta));
-    if (!pregunta) return;
-
-    ["questionari","marcador","admin"].forEach(id => document.getElementById(id).style.display = "none");
+    // Agafem el div on carrega el formulari d'editar i el mostrem
     const editarDiv = document.getElementById("editarPregunta");
     editarDiv.style.display = "block";
 
-    editarDiv.innerHTML = '<h2>Editar Pregunta</h2>' +
-                          '<form id="formEditarPregunta">' +
-                          '<label>Pregunta:</label><br>' +
-                          '<input type="text" id="editarTextPregunta" value="'+pregunta.pregunta+'"><br><br>' +
-                          '<label>Imatge:</label><br>' +
-                          '<input type="text" id="editarLinkImatge" value="'+pregunta.imatge+'"><br><br>';
+    // Construïm el formulari
+    let htmlString = `
+        <h2>Editar Pregunta</h2>
+        <form id="formEditarPregunta">
+            <label>Pregunta:</label><br>
+            <input type="text" id="editarTextPregunta" value="${pregunta.pregunta}"><br><br>
 
-    for (let i = 0; i < pregunta.respostes.length; i++) {
-        const r = pregunta.respostes[i];
+            <label>Imatge:</label><br>
+            <input type="text" id="editarLinkImatge" value="${pregunta.imatge}"><br><br>
+
+            <label>Respostes:</label><br>`;
+
+    pregunta.respostes.forEach((resposta, index) => {
         let checked = "";
-        if (r.correcta) checked = "checked";
-        editarDiv.innerHTML += '<input type="text" id="resposta'+i+'" value="'+r.resposta+'">' +
-                               '<input type="radio" name="correctaEditar" value="'+i+'" '+checked+'> Correcta<br>';
-    }
+        if (resposta.correcta) {
+            checked = "checked";
+        }
+        htmlString += `
+            <input type="text" id="resposta${index}" value="${resposta.resposta}">
+            <input type="radio" name="correctaEditar" value="${index}" ${checked}> Correcta<br>`;
+    });
 
-    editarDiv.innerHTML += '<br><button type="button" id="btnGuardarCanvis">Guardar Canvis</button>' +
-                           '<button type="button" id="btnCancelarEdicio">Cancelar</button></form>';
+    htmlString += `<br>
+        <button type="button" id="btnGuardarCanvis">Guardar Canvis</button>
+        <button type="button" id="btnCancelarEdicio">Cancelar</button>
+        </form>`;
 
-    document.getElementById("btnGuardarCanvis").addEventListener("click", function() { actualitzarPregunta(idPregunta); });
+    editarDiv.innerHTML = htmlString;
+    // afegim els event listeners dels botons d'editar preguntes
+    document.getElementById("btnGuardarCanvis").addEventListener("click", () => actualitzarPregunta(idPregunta));
     document.getElementById("btnCancelarEdicio").addEventListener("click", carregarAdmin);
 }
 window.editarPregunta = editarPregunta;
 
-// Admin: actualizar pregunta
+//fem la funcio per actualitzar la pregunta segons quina id li arribi
 function actualitzarPregunta(idPregunta) {
+    //agafem els valors dels inputs del formulari (preguntaText i imatgeLink)
     const preguntaText = document.getElementById("editarTextPregunta").value;
     const imatgeLink = document.getElementById("editarLinkImatge").value;
-    const respostes = [];
-    for (let i = 0; i < 4; i++) respostes.push(document.getElementById("resposta"+i).value);
-    const correcta = Number(document.querySelector('input[name="correctaEditar"]:checked').value);
 
+    //fem el mateix per les respostes i les guardem en un array (amb un for)
+    const respostes = [];
+    for (let i = 0; i < 4; i++) {
+        //agafem el valor de cada input de resposta i l'afegim a l'array (amb un push)
+        respostes.push(document.getElementById(`resposta${i}`).value);
+    }
+
+    //agafem l'index de la resposta correcta
+    const correctaIndex = document.querySelector('input[name="correctaEditar"]:checked').value;
+
+    //enviem les dades al fitxer php editarPreguntes.php amb fetch
     fetch('../php/admin/editarPreguntes.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: Number(idPregunta), pregunta: preguntaText, respostes: respostes, correcta: correcta, imatge: imatgeLink })
+        body: JSON.stringify({
+            // Normalitzem a número per evitar errors de tipus al PHP
+            id: Number(idPregunta),
+            pregunta: preguntaText,
+            respostes: respostes,
+            // Ens assegurem que la correcta sigui un número
+            correcta: Number(correctaIndex),
+            imatge: imatgeLink
+        })
     })
-    .then(res => res.json())
-    .then(data => { alert(data.message); document.getElementById('editarPregunta').style.display='none'; carregarAdmin(); });
-}
-window.actualitzarPregunta = actualitzarPregunta;
-
-// Inicialización del DOM
-window.addEventListener('DOMContentLoaded', function() {
-    fetch('../php/getPreguntes.php')
-    .then(res => res.json())
+    .then(response => response.json())
     .then(data => {
-        totesLesPreguntes = data.preguntes;
-        estatDeLaPartida.respostesUsuari = [];
-        for (let i = 0; i < totesLesPreguntes.length; i++) estatDeLaPartida.respostesUsuari.push(undefined);
-        renderTotesLesPreguntes(totesLesPreguntes);
-        actualitzarMarcador();
+        alert(data.message); //mostrem el missatge que retorna el php
+        carregarAdmin(); //recarguem la vista d'admin
+        document.getElementById('editarPregunta').style.display = 'none'; //amaguem el div d'editarPregunta
     });
+}
+window.actualitzarPregunta = actualitzarPregunta; //fem la funcio actualitzarPregunta global per poder trucar-la desde qualsevol lloc
 
+
+// Esperem que el DOM estigui carregat abans d'executar el codi
+window.addEventListener('DOMContentLoaded', (event) => {
+    // FETCH DEL QUESTIONARI
+    fetch('../php/getPreguntes.php')
+        .then(response => response.json()) // Convertim la resposta a objecte JSON
+        .then(data => {
+            totesLesPreguntes = data.preguntes;
+            // Inicialitzem l'array de respostes amb tants elements com preguntes
+            estatDeLaPartida.respostesUsuari = new Array(totesLesPreguntes.length).fill(undefined);
+            renderTotesLesPreguntes(totesLesPreguntes);   // Cridem la funció per renderitzar el joc amb les dades
+            actualitzarMarcador();          // Mostrem el marcador des del principi
+        });
+
+    //CREEM EL BOTÓ D'ADMIN
     const btnAdmin = document.createElement("button");
     btnAdmin.textContent = "Admin";
     btnAdmin.className = "btn-admin";
     btnAdmin.id = "btnAdmin";
     document.getElementById("contenidor-principal").appendChild(btnAdmin);
-    btnAdmin.addEventListener("click", carregarAdmin);
+    document.getElementById("btnAdmin").addEventListener("click", carregarAdmin);
 });

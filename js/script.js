@@ -25,7 +25,7 @@ function esborrarPartida() {
 // Funció que actualitza el marcador de respostes a la pantalla.
 function actualitzarMarcador() {
     const marcador = document.getElementById("marcador");
-    let textMarcador = "Preguntes Respostes:<br>";
+    let textMarcador = "Preguntes:<br>";
 
     for (let i = 0; i < estatDeLaPartida.respostesUsuari.length; i++) {
         let estat;
@@ -34,7 +34,7 @@ function actualitzarMarcador() {
         } else {
             estat = "X";
         }
-        textMarcador += `Pregunta  ${i} : <span class='badge'> ${(estatDeLaPartida.respostesUsuari[i] == undefined ? "O" : "X")} </span><br>`;
+        textMarcador += `Pregunta  ${i+1} : <span class='badge'> ${(estatDeLaPartida.respostesUsuari[i] == undefined ? "O" : "X")} </span><br>`;
     }
     textMarcador += `<div> <button id="btnBorrar">Borrar Partida</button> </div>`;
     marcador.innerHTML = textMarcador;

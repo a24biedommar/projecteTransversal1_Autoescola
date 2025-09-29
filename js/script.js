@@ -450,15 +450,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
     fetch('../php/getPreguntes.php')
         .then(response => response.json()) // Convertim la resposta a objecte JSON
         .then(data => {
+            //guardem les preguntes a la variable global totesLesPreguntes
             totesLesPreguntes = data.preguntes;
-            // Inicialitzem l'array de respostes amb tants elements com preguntes
-            estatDeLaPartida.respostesUsuari = new Array(totesLesPreguntes.length).fill(undefined);
-            renderTotesLesPreguntes(totesLesPreguntes);   // Cridem la funció per renderitzar el joc amb les dades
+            // Si tenim una partida guardada, la carreguem
             if (localStorage.partida) {
                 estatDeLaPartida = JSON.parse(localStorage.getItem("partida"));
-                actualitzarMarcador() // Mostrem el marcador des del principi
+                // Actualitzem el contador de preguntes en funció de les respostes guardades
+                estatDeLaPartida.contadorPreguntes = estatDeLaPartida.respostesUsuari.filter(r => r !== undefined).length;
+            } else {
+                // Si no hi ha partida guardada, inicialitzem l'array de respostes amb undefined
+                estatDeLaPartida.respostesUsuari = new Array(totesLesPreguntes.length).fill(undefined);
+                estatDeLaPartida.contadorPreguntes = 0;
             }
-                     
+
+            renderTotesLesPreguntes(totesLesPreguntes); 
+            actualitzarMarcador();   // Mostrem el marcador correcte al principi                     
         });
 
     //CREEM EL BOTÓ D'ADMIN

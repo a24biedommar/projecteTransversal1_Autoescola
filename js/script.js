@@ -35,7 +35,7 @@ window.marcarRespuesta = marcarResposta;
 // Renderitza totes les preguntes i afegeix els botons de resposta
 function renderTotesLesPreguntes(preguntes) {
     const contenidor = document.getElementById("questionari");
-    contenidor.innerHTML = preguntas.map((pregunta, i) => `
+    contenidor.innerHTML = preguntes.map((pregunta, i) => `
         <h3>Pregunta ${i + 1}: ${pregunta.pregunta}</h3><br>
         <img src="${pregunta.imatge}" alt="Pregunta ${i + 1}"><br>
         ${pregunta.respostes.map((r, j) => `<button class="btn" preg="${i}" resp="${j}">${r.resposta}</button><br>`).join("")}

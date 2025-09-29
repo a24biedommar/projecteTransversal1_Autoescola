@@ -56,6 +56,18 @@ function actualitzarMarcador() {
         }
     }
 
+    // creem una variable btnfinalitzar la qual permet mostrar o el botó finalitzar segons les preguntes que s'han respost
+    const btnFinalitzar = document.getElementById("btnFinalitzar");
+    if (estatDeLaPartida.contadorPreguntes === totesLesPreguntes.length) {
+        if (btnFinalitzar) {
+            btnFinalitzar.style.display = "inline-block";
+        }
+    } else {
+        if (btnFinalitzar) {
+            btnFinalitzar.style.display = "none";
+        }
+    }
+
     // Emmagatzemo l'estat de la partida a localStorage
     localStorage.setItem("partida", JSON.stringify(estatDeLaPartida));
 }

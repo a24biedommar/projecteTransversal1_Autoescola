@@ -1,14 +1,37 @@
 // Aquest objecte guarda l'estat de la partida, incloent el progrés i les respostes de l'usuari.
 let estatDeLaPartida = {
+    preguntaActual: 0,
     contadorPreguntes: 0,
     respostesUsuari: [],
+    tempsRestant: 30
 };
 let totesLesPreguntes = [];
+let idTimer = null;
+
+function esborrarPartida() {
+    localStorage.removeItem("partida");
+    estatDeLaPartida = {
+        preguntaActual: 0,
+        contadorPreguntes: 0,
+        respostesUsuari: new Array(totesLesPreguntes.length).fill(undefined),
+        tempsRestant: 30
+    };
+    if (idTimer) {
+        clearInterval(idTimer);
+        idTimer = null;
+    }
+    actualitzarMarcador();
+}
 
 // Funció que actualitza el marcador de respostes a la pantalla.
 function actualitzarMarcador() {
     const marcador = document.getElementById("marcador");
-    let textMarcador = "Preguntes Respostes:<br>";
+    let textMarcador = `Preguntes respostes ${estatDeLaPartida.contadorPreguntes}/${totesLesPreguntes.length} <br>`;
+    textMarcador += `temps partida ${estatDeLaPartida.tempsRestant}`;
+    textMarcador += `
+    <div class="progress" role="progressbar" aria-valuenow=" ${(estatDeLaPartida.tempsRestant/30)*100}" aria-valuemin="0" aria-valuemax="100">
+      <div class="progress-bar" style="width:  ${(estatDeLaPartida.tempsRestant/30)*100}%"></div>
+    </div>`;
 
     for (let i = 0; i < estatDeLaPartida.respostesUsuari.length; i++) {
         let estat;
@@ -17,9 +40,27 @@ function actualitzarMarcador() {
         } else {
             estat = "X";
         }
-        textMarcador += `Pregunta ${i+1}: ${estat}<br>`;
+        textMarcador += `Pregunta  ${i} : <span class='badge'> ${(estatDeLaPartida.respostesUsuari[i] == undefined ? "O" : "X")} </span><br>`;
     }
     marcador.innerHTML = textMarcador;
+
+    // Elimino tots els "seleccionada" que tingui de darrere endavant per evitar errors
+    let seleccio = document.getElementsByClassName("seleccionada");
+    for (let k = seleccio.length - 1; k >= 0; k--) {
+        seleccio[k].classList.remove("seleccionada");
+    }
+
+    // Anem a marcar les preguntes que ja estan seleccionades
+    for (let i = 0; i < estatDeLaPartida.respostesUsuari.length; i++) {
+        let resposta = estatDeLaPartida.respostesUsuari[i];
+        if (resposta != undefined) {
+            let b = document.getElementById(`${i}_${resposta}`);
+            if (b) b.classList.add("seleccionada");
+        }
+    }
+
+    // Emmagatzemo l'estat de la partida a localStorage
+    localStorage.setItem("partida", JSON.stringify(estatDeLaPartida));
 }
 
 // Funció que marca la resposta de l'usuari i actualitza el comptador de preguntes.
@@ -51,7 +92,7 @@ function renderTotesLesPreguntes(preguntes) {
         htmlString += `<img src="${pregunta.imatge}" alt="Pregunta ${i+1}"><br>`;
         for (let j = 0; j < pregunta.respostes.length; j++) {
             const resposta = pregunta.respostes[j];
-            htmlString += `<button class="btn" data-preg="${i}" data-resp="${j}">${resposta.resposta}</button><br>`;
+            htmlString += `<button id="${i}_${j}" class="btn" data-preg="${i}" data-resp="${j}">${resposta.resposta}</button><br>`;
         }
         htmlString += `<hr>`;
     }
@@ -66,6 +107,17 @@ function renderTotesLesPreguntes(preguntes) {
             marcarResposta(target.dataset.preg, target.dataset.resp);
         }
     });
+
+    // Gestió del timer
+    idTimer = setInterval(function(){
+        if (estatDeLaPartida.tempsRestant>0) {
+            estatDeLaPartida.tempsRestant--;
+        }
+        actualitzarMarcador();
+    },1000);
+
+    // Restaura seleccions si existeixen
+    actualitzarMarcador();
 }
 
 // Funció que envia les respostes al servidor i mostra els resultats finals.
@@ -92,6 +144,12 @@ function mostrarResultats() {
         document.getElementById("btnReiniciar").addEventListener("click", () => {
             window.location.href = 'index.html';
         });
+        // Un cop finalitzat, esborrem la partida guardada
+        localStorage.removeItem('partida');
+        if (idTimer) {
+            clearInterval(idTimer);
+            idTimer = null;
+        }
     });
 }
 
@@ -296,11 +354,18 @@ function actualitzarPregunta(idPregunta) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Carrego de localStorage la informació de la partida quan existeix
+    if (localStorage.partida) {
+        estatDeLaPartida = JSON.parse(localStorage.getItem("partida"));
+    }
+
     fetch('../php/getPreguntes.php')
         .then(response => response.json())
         .then(data => {
             totesLesPreguntes = data.preguntes;
-            estatDeLaPartida.respostesUsuari = new Array(totesLesPreguntes.length).fill(undefined);
+            if (!Array.isArray(estatDeLaPartida.respostesUsuari) || estatDeLaPartida.respostesUsuari.length !== totesLesPreguntes.length) {
+                estatDeLaPartida.respostesUsuari = new Array(totesLesPreguntes.length).fill(undefined);
+            }
             renderTotesLesPreguntes(totesLesPreguntes);
             actualitzarMarcador();
         });

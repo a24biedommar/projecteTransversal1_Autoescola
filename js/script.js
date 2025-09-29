@@ -5,6 +5,19 @@ let estatDeLaPartida = {
 };  
 let totesLesPreguntes = [];
 
+// Funció per guardar l'estat de la partida al localStorage
+function EsborrarPartida() {
+  localStorage.removeItem("partida");
+  estatDeLaPartida = {
+    preguntaActual: 0,
+    contadorPreguntes: 0,
+    respostesUsuari: [], // Aquí anirem guardant les respostes 
+    tempsRestant:30
+  }
+  actualitzarMarcador();
+};
+
+
 // Funció per actualtzar el marcador que es veu en pantalla
 function actualitzarMarcador(){
     let marcador = document.getElementById("marcador");  // Agafem l'element HTML on mostrarem el marcador
@@ -27,6 +40,10 @@ function actualitzarMarcador(){
     }
 
     marcador.innerHTML = textMarcador;
+
+    //EMMAGATZEMO L'ESTAT DE LA PARTIDA A LOCALSTORAGE
+    localStorage.setItem("partida", JSON.stringify(estatDeLaPartida))
+    console.log(estatDeLaPartida)
 }
 
 //Assignem la funcio actualtizarMarcador al objecte global window, per poder trucar-la desde qualsevol lloc
@@ -372,7 +389,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
             // Inicialitzem l'array de respostes amb tants elements com preguntes
             estatDeLaPartida.respostesUsuari = new Array(totesLesPreguntes.length).fill(undefined);
             renderTotesLesPreguntes(totesLesPreguntes);   // Cridem la funció per renderitzar el joc amb les dades
-            actualitzarMarcador();          // Mostrem el marcador des del principi
+            if (localStorage.partida) {
+                estatDeLaPartida = JSON.parse(localStorage.getItem("partida"));
+                actualitzarMarcador() // Mostrem el marcador des del principi
+            }
+                     
         });
 
     //CREEM EL BOTÓ D'ADMIN
@@ -383,3 +404,4 @@ window.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById("contenidor-principal").appendChild(btnAdmin);
     document.getElementById("btnAdmin").addEventListener("click", carregarAdmin);
 });
+

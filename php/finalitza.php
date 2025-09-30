@@ -1,45 +1,69 @@
 <?php 
-
-//iniciem la sessió
 session_start();
 
-// Inclou el fitxer de connexió
 require_once 'connexio.php';
 
-// decodifiquem el fitxer json que ha generat el script de index.html (enviat per petició http)
+//condicional per comprovar la connexio amb la base de dades
+if (!$conn || $conn->connect_error) {
+    die(json_encode(['error' => 'No es pot connectar a la base de dades.']));
+}
+
+//agafem el contingut del json enviat des del JS
 $json_data = file_get_contents('php://input');
-$respostesUsuari = json_decode($json_data, true);
+$respostesUsuari = json_decode($json_data, true) ?? []; // utilizem els ?? per assegurar-nos que sigui un array
 
-//creem les variables seguents:
-$preguntes = $_SESSION['preguntes']; //agafem les preguntes que s'han mostrat a index.html
-$puntuacio = 0; //inicialitzem la puntuació del usuari
+//comprovem que la sessió de preguntes existeixi
+$preguntesSessio = $_SESSION['preguntes'] ?? [];
+//si no existeix, retornem error
+if (empty($preguntesSessio)) {
+    session_destroy();
+    die(json_encode(['error' => 'No hi ha dades de partida a la sessió.']));
+}
 
-// Recorrem les respostes de l'usuari i les comparemm amb les correctes
-foreach ($preguntes as $index => $idPregunta) {
-    // Agafem la resposta de l'usuari per a la pregunta actual
+$puntuacio = 0; 
+
+//fem un foreach per recórrer les preguntes de la sessió
+foreach ($preguntesSessio as $index => $idPregunta) {
+    //si la resposta de l'usuari no existeix, saltem aquesta iteració
+    if ($respostesUsuari[$index]) {
+        continue;
+    }
+    
+    //la variable $respostaUsuari conte l'ID_RESPOSTA escollit pel JS
     $respostaUsuari = $respostesUsuari[$index];
 
-    //Fem la consulta select per agafar la resposta correcta de la BD
+    //fem la consulta per agafar l'ID_RESPOSTA correcta de la pregunta actual
     $sqlCorrecta = "SELECT ID_RESPOSTA FROM RESPOSTES 
                     WHERE ID_PREGUNTA = $idPregunta AND CORRECTA = 1";
-    $res = $conn->query($sqlCorrecta);
-    $row = $res->fetch_assoc();
+    
+    try { // Intentem executar la consulta
+        $res = $conn->query($sqlCorrecta);
+        
+        //comprovem que la consulta s'hagi executat correctament
+        if (!$res) {
+            continue; // Si la consulta falla, saltem la pregunta.
+        }
+        
+        $row = $res->fetch_assoc();
+        
+        // Comprovem si la resposta de l'usuari és correcta (si coincideix amb l'ID_RESPOSTA correcta)
+        if ((int)$respostaUsuari === (int)$row['ID_RESPOSTA']) {
+            $puntuacio++;
+        }
 
-    if ($respostaUsuari == $row['ID_RESPOSTA']) {
-        $puntuacio++;
+    } catch (Throwable $e) {
+        // En cas d'excepció de BD, saltem la pregunta i continuem.
+        continue;
     }
 }
 
-//Guardem en una variable $resultat el total de preguntes i les pregutnes correctes de l'usuari
+// Resultats que enviarem al front
 $resultat = [
-    "total" => count($preguntes),
+    "total" => count($preguntesSessio),
     "correctes" => $puntuacio
 ];
 
-//Eliminem la sessió per poder començar una nova partida
 session_destroy();
 
-//Enviem el fitxer de les respostes de l'usuari en format .json
 header('Content-Type: application/json');
 echo json_encode($resultat);
-?>

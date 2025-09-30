@@ -1,67 +1,89 @@
 <?php 
-//iniciem la sessió
 session_start();
 
-//inicialitzem les variables a 0 per estalbiar-nos errors
+// Inicialització de la sessió
 $_SESSION['index'] = 0;
 $_SESSION['puntuacio'] = 0;
 $_SESSION['preguntes'] = [];
 
-// Inclou el fitxer de connexió
-require_once 'connexio.php';
+require_once 'connexio.php'; 
 
-//creem la variable que ens diu quantes preguntes volem mostrar
-$numPreguntes = 10;
-
-// agafem $numPreguntes preguntes aleatòries de la taula PREGUNTES (index i pregunta)
-$sqlPreguntes = "SELECT * FROM PREGUNTES ORDER BY RAND() LIMIT $numPreguntes";
-$result = $conn->query($sqlPreguntes);
-
-// Inicialitzem l'array on guardarem les preguntes seleccionades
-$preguntesSeleccionades = [];
-
-// Recorrem cada fila del resultat($result) i l'afegim a l'array $preguntesSeleccionades
-while ($row = $result->fetch_assoc()) {
-    $preguntesSeleccionades[] = $row;
+//comprovem la connexió
+if (!$conn || $conn->connect_error) {
+    die(json_encode(['error' => 'Error de connexió a la BD.']));
 }
 
-//declarem la variable (array) on guardarem les preguntes i respostes sense correctIndex
+$numPreguntes = 10;
+$preguntesSeleccionades = [];
 $preguntesNoCorrect = [];
 
-// per cada pregunta seleccionada, busquem les respostes
-foreach($preguntesSeleccionades as $pregunta){
-    // guardem l'id de la pregunta actual
-    $id = $pregunta['ID_PREGUNTA'];
+//fem un select a la taula preguntes per obtenir 10 preguntes aleatories
+$sqlPreguntes = "SELECT ID_PREGUNTA, PREGUNTA, LINK_IMATGE, ID_RESPOSTA_CORRECTA FROM PREGUNTES ORDER BY RAND() LIMIT $numPreguntes";
 
-    // Consultem totes les respostes i els seus camps (id, resposta) per a la pregunta actual
-    $sqlRespostes = "SELECT ID_RESPOSTA, RESPOSTA FROM RESPOSTES WHERE ID_PREGUNTA = $id ORDER BY ID_RESPOSTA";
-    $resResult = $conn->query($sqlRespostes);
+//fem un try catch per capturar errors de la consulta anterior
+try {
+    $result = $conn->query($sqlPreguntes);
 
-    $respostes = [];
-
-    // Aquest bucle recupera totes les respostes per a la pregunta
-    while($r = $resResult->fetch_assoc()){
-        $respostes[] = [
-            'id' => $r['ID_RESPOSTA'],
-            'resposta' => $r['RESPOSTA'],
-        ];
+    //si la consulta ha anat bé, guardem les preguntes en un array
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $preguntesSeleccionades[] = $row;
+        }
+    } else {
+        // En cas d'error de consulta, aturem
+        die(json_encode(['error' => 'Error en obtenir les preguntes.']));
     }
 
-    // Afegim la pregunta completa a l'array final
+} catch (Throwable $e) {
+    die(json_encode(['error' => 'Error de BD al seleccionar preguntes.']));
+}
+
+
+//fem un for each per obtenir les respostes de cada pregunta
+foreach($preguntesSeleccionades as $pregunta){
+    
+    $id = $pregunta['ID_PREGUNTA'];
+
+    $sqlRespostes = "SELECT ID_RESPOSTA, RESPOSTA FROM RESPOSTES WHERE ID_PREGUNTA = $id ORDER BY ID_RESPOSTA";
+    
+    $respostes = [];
+    
+    //fem un try catch per capturar errors de la consulta de respostes
+    try {
+        $resResult = $conn->query($sqlRespostes);
+
+        //si la consulta de repostes ha anat bé, les guardem en un array
+        if ($resResult) {
+            while($r = $resResult->fetch_assoc()){
+                $respostes[] = [
+                    'id' => $r['ID_RESPOSTA'],
+                    'resposta' => $r['RESPOSTA'],
+                ];
+            }
+        } else {
+            //si no ha anat be, saltem aquesta pregunta
+            continue; 
+        }
+
+    } catch (Throwable $e) {
+        //si falla la consulta, saltem aquesta pregunta
+        continue;
+    }
+
+    // Afegim la pregunta completa i guardem l'ID a la sessió
     $preguntesNoCorrect[] = [
         'id' => $pregunta['ID_PREGUNTA'],
         'pregunta' => $pregunta['PREGUNTA'],
         'respostes' => $respostes,
-        'imatge' => $pregunta['LINK_IMATGE']
+        'imatge' => $pregunta['LINK_IMATGE'],
     ];
 
-    // Guardem només l'ID de la pregunta a la sessió per a futures validacions
     $_SESSION['preguntes'][] = $pregunta['ID_PREGUNTA'];
 }
 
-// Creem el fitxer JSON amb les preguntes que mostrarem a l'usuari
+// Creem el fitxer JSON
 header('Content-Type: application/json');
 echo json_encode(['preguntes' => $preguntesNoCorrect]);
-?>
 
-
+// Tanquem connexió
+$conn->close();

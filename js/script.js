@@ -144,7 +144,6 @@ function mostrarResultats() {
 // Funció que gestiona la visibilitat de les vistes (Joc / Admin).
 function amagarVistaAdmin(amagar) {
     const questionari = document.getElementById("questionari");
-    // ELIMINAT: Referència a l'element 'marcador'
     const crearPreguntaDiv = document.getElementById("crearPregunta");
     const editarPreguntaDiv = document.getElementById("editarPregunta");
     const adminDiv = document.getElementById("admin");
@@ -157,6 +156,9 @@ function amagarVistaAdmin(amagar) {
         // Mostrar joc, amagar admin
         questionari.style.display = "block"; 
         adminDiv.style.display = "none";
+        
+        //Actualitzem l'estat visual i el botó Finalitzar quan tornem al joc
+        actualitzarSeleccioVisual();
     }
     //si existeixen els divs de crear i editar pregunta, els amaguem
     if (crearPreguntaDiv) crearPreguntaDiv.style.display = "none";

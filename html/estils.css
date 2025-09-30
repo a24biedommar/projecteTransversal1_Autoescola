@@ -64,22 +64,19 @@ body {
     font-weight: bold;
 }
 
-.btn-resposta{
-    background-color: #F5FFD4;
-    color: #000000;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-}
+
 .btn-resposta, .seleccionada{
     color: #000000;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-    font-weight: bold;
+}
+.btn-resposta{
+    background-color: #F5FFD4;
+}
+.btn-resposta:focus{
+    background-color: #8AD5DE;
 }
 .seleccionada{
     background-color: #8AD5DE;

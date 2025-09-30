@@ -7,54 +7,6 @@ let estatDeLaPartida = {
 };
 let totesLesPreguntes = [];
 
-
-// Funció per mostrar el formulari de login
-function mostrarLogin() {
-    //amaguem tot el contingut
-    const contenidors = ["questionari", "marcador", "admin", "crearPregunta", "editarPregunta", "login"];
-    contenidors.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = "none"; //si existeix l'element, l'amaguem
-    });
-
-    // amaguem també el botó d'admin
-    const btnAdmin = document.getElementById("btnAdmin");
-    if (btnAdmin) btnAdmin.style.display = "none";
-
-    // Mostra el contenidor de login
-    const loginDiv = document.getElementById("login");
-    if (loginDiv) {
-        loginDiv.style.display = "block";
-        loginDiv.innerHTML = `
-            <h2>Inici de Sessió</h2>
-            <form id="formLogin">
-                <label for="nomUsuari">Nom d'Usuari:</label><br>
-                <input type="text" id="nomUsuari" name="nomUsuari" required><br><br>
-                <button type="submit" id="btnEntrar">Entrar</button>
-            </form>
-        `;
-        document.getElementById("formLogin").addEventListener("submit", gestionarLogin);
-    }
-}
-
-// Funció per gestionar l'enviament del formulari de login
-function gestionarLogin(event) {
-    //afegim event.preventDefault() per evitar que es recarregui la pàgina
-    event.preventDefault();
-    const nomUsuari = document.getElementById("nomUsuari").value.trim(); // Agafem el valor i eliminem espais
-
-    if (nomUsuari) { // Si el nom d'usuari no està buit
-        localStorage.setItem("nomUsuari", nomUsuari);
-        renderTotesLesPreguntes(); // Carrega el contingut de l'aplicació
-    } else {
-        alert("Si us plau, introdueix un nom d'usuari.");
-    }
-}
-
-
-
-
-// Funció que esborra la partida guardada i reinicia l'estat de la partida. (localStorage)
 function esborrarPartida() {
     localStorage.removeItem("partida");
     estatDeLaPartida = {
@@ -200,28 +152,24 @@ function mostrarResultats() {
 
 // Funció que gestiona la visibilitat de les vistes de joc i d'administració.
 function amagarVistaAdmin(amagar) {
-    //declarem totes les variables que utilitzarem
     let questionari = document.getElementById("questionari");
     let marcador = document.getElementById("marcador");
     let crearPreguntaDiv = document.getElementById("crearPregunta");
     let editarPreguntaDiv = document.getElementById("editarPregunta");
     let adminDiv = document.getElementById("admin");
-    let btnAdmin = document.getElementById("btnAdmin");
 
-    if (amagar) { //si amagar es true mostrem només l'admin
-        if (questionari) questionari.style.display = "none";
-        if (marcador) marcador.style.display = "none";
-        if (adminDiv) adminDiv.style.display = "block";
-        if (btnAdmin) btnAdmin.style.display = "none"; // Amaga el botó Admin dins l'Admin
-    } else { //si no es ctrue mostrem només el joc
-        if (questionari) questionari.style.display = "none";
-        if (marcador) marcador.style.display = "none";
-        if (adminDiv) adminDiv.style.display = "none";
-        if (btnAdmin) btnAdmin.style.display = "none";
+    if (amagar) {
+        questionari.style.display = "none";
+        marcador.style.display = "none";
+        adminDiv.style.display = "block";
+    } else {
+        questionari.style.display = "none";
+        marcador.style.display = "none";
+        adminDiv.style.display = "none";
     }
 
-    if (crearPreguntaDiv) crearPreguntaDiv.style.display = "none";
-    if (editarPreguntaDiv) editarPreguntaDiv.style.display = "none";
+    crearPreguntaDiv.style.display = "none";
+    editarPreguntaDiv.style.display = "none";
 }
 
 // Funció que carrega la vista d'administració i el llistat de preguntes des del servidor.
@@ -402,44 +350,30 @@ function actualitzarPregunta(idPregunta) {
     });
 }
 
-// Modificació de la crida inicial i la lògica de l'event listener
 document.addEventListener('DOMContentLoaded', () => {
-    // si no tenim nom d'usuari, mostrem el login
-    if (!localStorage.getItem("nomUsuari")) {
-        mostrarLogin();
-    } else {
-        //si ha estat ficat el nom d'usuari, carreguem el contingut principal
-        renderTotesLesPreguntes();
-
-        //carreguem de localStorage l'estat de la partida si existeix
-        if (localStorage.partida) {
-            estatDeLaPartida = JSON.parse(localStorage.getItem("partida"));
-        }
-
-        //carreguem les preguntes fent un fetch i les mostrem
-        fetch('../php/getPreguntes.php')
-            .then(response => response.json())
-            .then(data => {
-                totesLesPreguntes = data.preguntes;
-                if (!Array.isArray(estatDeLaPartida.respostesUsuari) || estatDeLaPartida.respostesUsuari.length !== totesLesPreguntes.length) {
-                    estatDeLaPartida.respostesUsuari = new Array(totesLesPreguntes.length).fill(undefined);
-                }
-                renderTotesLesPreguntes(totesLesPreguntes);
-                actualitzarMarcador();
-            });
-
-        //creem i afegim el botó d'admin
-        const btnAdmin = document.createElement("button");
-        btnAdmin.textContent = "Admin";
-        btnAdmin.className = "btn-admin";
-        btnAdmin.id = "btnAdmin";
-        document.getElementById("contenidor-principal").appendChild(btnAdmin);
-        btnAdmin.addEventListener("click", carregarAdmin);
-        
-        //ens assegurem que el botó d'admin es mostri
-        btnAdmin.style.display = "inline-block";
+    // Carrego de localStorage la informació de la partida quan existeix
+    if (localStorage.partida) {
+        estatDeLaPartida = JSON.parse(localStorage.getItem("partida"));
     }
-    
+
+    fetch('../php/getPreguntes.php')
+        .then(response => response.json())
+        .then(data => {
+            totesLesPreguntes = data.preguntes;
+            if (!Array.isArray(estatDeLaPartida.respostesUsuari) || estatDeLaPartida.respostesUsuari.length !== totesLesPreguntes.length) {
+                estatDeLaPartida.respostesUsuari = new Array(totesLesPreguntes.length).fill(undefined);
+            }
+            renderTotesLesPreguntes(totesLesPreguntes);
+            actualitzarMarcador();
+        });
+
+    const btnAdmin = document.createElement("button");
+    btnAdmin.textContent = "Admin";
+    btnAdmin.className = "btn-admin";
+    btnAdmin.id = "btnAdmin";
+    document.getElementById("contenidor-principal").appendChild(btnAdmin);
+    btnAdmin.addEventListener("click", carregarAdmin);
+
     // Afegim el listener de clics per a l'administració aquí fora de la funció `carregarAdmin`.
     const llistatAdmin = document.getElementById("admin");
     if (llistatAdmin) {
@@ -448,7 +382,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const id = target.getAttribute('data-id');
             if (target.id === 'btnTornarEnrere') {
                 window.location.href = 'index.html';
-                localStorage.removeItem("nomUsuari"); //botó enrera per tornar al login
             } else if (target.id === 'btnCrearPregunta') {
                 carregarFormulariCrear();
             } else if (target.classList.contains('btn-eliminar')) {
@@ -459,3 +392,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+// Fins aquí el codi de l'aplicació principal.

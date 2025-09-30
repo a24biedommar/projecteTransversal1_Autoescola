@@ -9,10 +9,11 @@ let totesLesPreguntes = [];
 // creem una funcio per actualitzar la visibilitat del botó Finalitzar
 function actualitzarBotoFinalitzar() {
     const btnFinalitzar = document.getElementById("btnFinalitzar");
+    const totalPreguntes = totesLesPreguntes.length; // guardem en una variable el total de preguntes
     if (btnFinalitzar) {
         //si totes les preguntes estan contestades, mostrem el botó
         btnFinalitzar.style.display = 
-            estatDeLaPartida.contadorPreguntes === totesLesPreguntes.length ? "inline-block" : "none";
+            estatDeLaPartida.contadorPreguntes === totalPreguntes ? "inline-block" : "none";
     }
 }
 
@@ -38,11 +39,12 @@ function actualitzarMarcador() {
     const marcador = document.getElementById("marcador");
     let textMarcador = "Preguntes:<br>";
 
-    // Generar estat de les preguntes
-    estatDeLaPartida.respostesUsuari.forEach((resposta, i) => {
+    // Recorrem la longitud de totes les preguntes per assegurar que el marcador és complet
+    for (let i = 0; i < totesLesPreguntes.length; i++) {
+        const resposta = estatDeLaPartida.respostesUsuari[i];
         const estat = resposta === undefined ? "O" : "X";
         textMarcador += `Pregunta ${i + 1} : <span class='badge'>${estat}</span><br>`;
-    });
+    }
     
     textMarcador += `<div> <button id="btnBorrar">Borrar Partida</button> </div>`;
     marcador.innerHTML = textMarcador;
@@ -161,12 +163,14 @@ function amagarVistaAdmin(amagar) {
     const adminDiv = document.getElementById("admin");
 
     if (amagar) {
+        // Amagar joc, mostrar admin
         questionari.style.display = "none";
         marcador.style.display = "none";
         adminDiv.style.display = "block";
     } else {
-        questionari.style.display = "none";
-        marcador.style.display = "none";
+        // Mostrar joc, amagar admin
+        questionari.style.display = "block"; 
+        marcador.style.display = "block";   
         adminDiv.style.display = "none";
     }
     //si existeixen els divs de crear i editar pregunta, els amaguem
@@ -374,15 +378,20 @@ document.addEventListener('DOMContentLoaded', () => {
             //Assignem totes les preguntes a la variable global
             totesLesPreguntes = data.preguntes;
             
+            const totalPreguntesBD = totesLesPreguntes.length;
+            
             // Inicialitzar o ajustar l'array de respostes
-            if (!Array.isArray(estatDeLaPartida.respostesUsuari) || estatDeLaPartida.respostesUsuari.length !== totesLesPreguntes.length) {
-                estatDeLaPartida.respostesUsuari = new Array(totesLesPreguntes.length).fill(undefined);
-                estatDeLaPartida.contadorPreguntes = 0;
+            if (!Array.isArray(estatDeLaPartida.respostesUsuari) || estatDeLaPartida.respostesUsuari.length !== totalPreguntesBD) {
+                estatDeLaPartida.respostesUsuari = new Array(totalPreguntesBD).fill(undefined);
+                estatDeLaPartida.contadorPreguntes = 0; // Reiniciar comptador si hi ha desajust
             }
 
             renderTotesLesPreguntes(totesLesPreguntes);
-        })
+            
+            // Mostrar la vista de joc per defecte (si no estem a admin)
+            amagarVistaAdmin(false);
 
+        })
     // Crear i afegir el botó Admin
     const btnAdmin = document.createElement("button");
     btnAdmin.textContent = "Admin";

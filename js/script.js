@@ -87,7 +87,7 @@ function renderTotesLesPreguntes(preguntes) {
         htmlString += `<img src="${pregunta.imatge}" alt="Pregunta ${i + 1}"><br>`;
         
         pregunta.respostes.forEach((resposta, j) => {
-            htmlString += `<button id="${i}_${j}" class="btn" data-preg="${i}" data-resp="${j}">${resposta.resposta}</button><br>`;
+            htmlString += `<button id="${i}_${j}" class="btn-resposta" data-preg="${i}" data-resp="${j}">${resposta.resposta}</button><br>`;
         });
         htmlString += `<hr>`;
     });

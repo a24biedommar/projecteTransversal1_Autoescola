@@ -54,7 +54,7 @@ body {
     display: none;
 }
 
-#btn-finalitzar{
+.btn-finalitzar{
     background: linear-gradient(to right, #F71735, #8B1122);
     color: white;
     border: none;

@@ -1,3 +1,4 @@
+/* --- BLOC 1: ESTILS ESTRUCTURALS (body, contenidor-principal) --- */
 body {
     background: linear-gradient(to right, #92DCE5, #6290BE);
     min-height: 100vh;
@@ -7,7 +8,6 @@ body {
     /* Utilitzem Flexbox per alinear el contenidor principal */
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
 }
 
 #contenidor-principal {
@@ -15,12 +15,8 @@ body {
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
     width: 100%;
-
     flex-grow: 1; 
-
     margin-top: 5%;
-
-    /* No cal un height fix, s'adapta amb Flexbox */
     padding: 2rem;
     box-sizing: border-box;
     /* Flexbox per als elements interns */
@@ -32,13 +28,14 @@ body {
     min-height: 90vh;
 }
 
+/* --- BLOC 2: ESTILS DE CONTENIDOR DE VISTA (#questionari, #admin, etc.) --- */
 #questionari, #marcador, #admin{
     background-color: #ffffff;
     padding: 2rem;
     border-radius: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
 }
+
 #admin{
     display: none;
 }
@@ -54,6 +51,47 @@ body {
     display: none;
 }
 
+/* --- BLOC 3: ESTILS DE DISPOSICIÓ DE PREGUNTA (2 Columnes) --- */
+
+/* Contenidor Principal de la Pregunta: Aplica Flexbox per a les dues columnes */
+#pregunta {
+    display: flex;
+    align-items: stretch; /* Les columnes fills s'estiren a la mateixa alçada */
+    gap: 30px; /* Espai entre la columna de contingut i la de respostes */
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Columna Esquerra: Pregunta i Imatge */
+#pregutna-img {
+    flex: 1 1 58%; 
+    padding-right: 15px;
+}
+
+#pregutna-img img {
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    margin-top: 15px; 
+}
+
+/* Contenidors de Resposta (Columna Dreta) */
+#respostes {
+    flex-grow: 1; 
+    flex-basis: 0; 
+    display: flex;
+    align-items: center; 
+    margin-bottom: 10px; 
+}
+
+/* --- BLOC 4: ESTILS DE BOTONS I INTERACCIÓ --- */
+
 .btn-finalitzar{
     background: linear-gradient(to right, #F71735, #8B1122);
     color: white;
@@ -64,23 +102,36 @@ body {
     font-weight: bold;
 }
 
-
-.btn-resposta, .seleccionada{
+/* Estils Base dels Botons de Resposta */
+.btn-resposta {
     color: #000000;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+    background-color: #F5FFD4; /* Color base (Groc Pàlid) */
+    
+    /* Propietats de disseny de la columna */
+    width: 100%; 
+    height: 100%;
+    font-size: 1.1em;
+    text-align: center;
 }
-.btn-resposta{
-    background-color: #F5FFD4;
+
+/* Estat Focus/Hover */
+.btn-resposta:focus {
+    background-color: #8AD5DE ; /* Blau Cignà (Color del nou codi) */
+    color: #333;
+    outline: none;
 }
-.btn-resposta:focus{
-    background-color: #8AD5DE;
+/* Mantenim l'hover separat per a més claredat */
+.btn-resposta:hover {
+    background-color: #8AD5DE ; 
+    color: #333;
 }
-.seleccionada{
-    background-color: #8AD5DE;
-}
-.btn-resposta{
-    background-color: #F5FFD4;
+
+.seleccionada {
+    background-color: #8AD5DE ;
+    color: #333 ; 
+    font-weight: bold;
 }

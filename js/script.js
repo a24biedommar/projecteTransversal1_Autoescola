@@ -80,16 +80,24 @@ function renderTotesLesPreguntes(preguntes) {
     let htmlString = "";
     
     // Botó Borrar Partida integrat a la vista de Joc
-    htmlString += `<div> <button id="btnBorrar" class="btn-borrar">Borrar Partida</button> </div><hr>`;
+    htmlString += `<div ="preguntas-respostes"> <button id="btnBorrar" class="btn-borrar">Borrar Partida</button> </div><hr>`;
 
     preguntes.forEach((pregunta, i) => {
-        htmlString += `<h3>Pregunta ${i + 1}: ${pregunta.pregunta}</h3><br>`;
-        htmlString += `<img src="${pregunta.imatge}" alt="Pregunta ${i + 1}"><br>`;
+        
+        htmlString += `<div id="pregunta"> 
+                            <div id="pregunta-img">
+                                <h3>Pregunta ${i + 1}: ${pregunta.pregunta}</h3><br>`;
+
+        htmlString += `         <img src="${pregunta.imatge}" alt="Pregunta ${i + 1}">
+                            </div>`;
         
         pregunta.respostes.forEach((resposta, j) => {
-            htmlString += `<button id="${i}_${j}" class="btn-resposta" data-preg="${i}" data-resp="${j}">${resposta.resposta}</button><br>`;
+            htmlString += `<div id="respostes">
+                                <button id="${i}_${j}" class="btn-resposta" data-preg="${i}" data-resp="${j}">${resposta.resposta}</button>
+                            </div>`;
         });
-        htmlString += `<hr>`;
+        htmlString += `</div> 
+                        <hr>`;
     });
 
     // Afegim el botó Finalitzar al final del qüestionari

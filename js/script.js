@@ -45,7 +45,7 @@ function gestionarLogin(event) {
 
     if (nomUsuari) { // Si el nom d'usuari no està buit
         localStorage.setItem("nomUsuari", nomUsuari);
-        carregarContingutPrincipal(); // Carrega el contingut de l'aplicació
+        renderTotesLesPreguntes(); // Carrega el contingut de l'aplicació
     } else {
         alert("Si us plau, introdueix un nom d'usuari.");
     }
@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mostrarLogin();
     } else {
         //si ha estat ficat el nom d'usuari, carreguem el contingut principal
-        carregarContingutPrincipal();
+        renderTotesLesPreguntes();
 
         //carreguem de localStorage l'estat de la partida si existeix
         if (localStorage.partida) {

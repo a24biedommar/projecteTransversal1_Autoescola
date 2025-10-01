@@ -15,11 +15,8 @@ body {
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
     width: 100%;
-
     flex-grow: 1; 
-
     margin-top: 5%;
-
     /* No cal un height fix, s'adapta amb Flexbox */
     padding: 2rem;
     box-sizing: border-box;
@@ -32,14 +29,13 @@ body {
     min-height: 90vh;
 }
 
-
 #questionari, #marcador, #admin{
     background-color: #ffffff;
     padding: 2rem;
     border-radius: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
 }
+
 #admin{
     display: none;
 }
@@ -51,6 +47,7 @@ body {
 #marcador {
     width: 30%;
 }
+
 #editarPregunta{
     display: none;
 }
@@ -65,6 +62,17 @@ body {
     font-weight: bold;
 }
 
+.btn-resposta{
+    background-color: #F5FFD4;
+    color: #000000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+
+
+}
 
 .btn-resposta, .seleccionada{
     color: #000000;
@@ -72,16 +80,14 @@ body {
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: bold;
+
 }
-.btn-resposta{
-    background-color: #F5FFD4;
-}
-.btn-resposta:focus{
-    background-color: #8AD5DE;
-}
+
 .seleccionada{
     background-color: #8AD5DE;
 }
+
 .btn-resposta{
     background-color: #F5FFD4;
 }

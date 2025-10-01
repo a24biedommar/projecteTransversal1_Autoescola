@@ -6,24 +6,45 @@ let estatDeLaPartida = {
 };
 let totesLesPreguntes = [];
 
-// creem una funcio per actualitzar la visibilitat del botó Finalitzar
-function actualitzarBotoFinalitzar() {
+function esborrarPartida() {
+    localStorage.removeItem("partida");
+    estatDeLaPartida = {
+        preguntaActual: 0,
+        contadorPreguntes: 0,
+        respostesUsuari: new Array(totesLesPreguntes.length).fill(undefined),
+    };
+
     const btnFinalitzar = document.getElementById("btnFinalitzar");
-    const totalPreguntes = totesLesPreguntes.length; // guardem en una variable el total de preguntes
     if (btnFinalitzar) {
-        //si totes les preguntes estan contestades, mostrem el botó
-        btnFinalitzar.style.display = 
-            estatDeLaPartida.contadorPreguntes === totalPreguntes ? "inline-block" : "none";
+        btnFinalitzar.style.display = "none";
     }
+
+    actualitzarMarcador();
 }
 
-// NOVA FUNCIÓ: Només s'encarrega d'actualitzar l'estat visual de les respostes i el botó Finalitzar
-function actualitzarSeleccioVisual() {
-    // 1. Netejar seleccions visuals
+// Funció que actualitza el marcador de respostes a la pantalla i la selecció visual.
+function actualitzarMarcador() {
+    const marcador = document.getElementById("marcador");
+    let textMarcador = "Preguntes:<br>";
+
+    // Generar estat de les preguntes
+    estatDeLaPartida.respostesUsuari.forEach((resposta, i) => {
+        const estat = resposta === undefined ? "O" : "X";
+        textMarcador += `Pregunta ${i + 1} : ${estat}<br>`;
+    });
+
+    textMarcador += `<div><button id="btnBorrar">Borrar Partida</button></div>`;
+    marcador.innerHTML = textMarcador;
+
+    const btnBorrar = document.getElementById("btnBorrar");
+    if (btnBorrar) {
+        btnBorrar.addEventListener('click', esborrarPartida);
+    }
+
     //agafem tots els elements amb la classe .seleccionada i eliminem la classe .seleccionada
     document.querySelectorAll(".seleccionada").forEach(el => el.classList.remove("seleccionada"));
 
-    // 2. Marcar les preguntes que ja estan seleccionades
+    // Marcar les preguntes que ja estan seleccionades
     estatDeLaPartida.respostesUsuari.forEach((resposta, i) => {
         if (resposta !== undefined) {
             const boto = document.getElementById(`${i}_${resposta}`);
@@ -31,38 +52,22 @@ function actualitzarSeleccioVisual() {
         }
     });
 
-    // 3. Controlar visibilitat del botó Finalitzar
-    actualitzarBotoFinalitzar();
-    
-    // 4. Emmagatzemar l'estat
-    localStorage.setItem("partida", JSON.stringify(estatDeLaPartida));
-}
-
-
-function esborrarPartida() {
-    localStorage.removeItem("partida");
-    // Assegurem que l'array de respostes tingui la longitud correcta
-    estatDeLaPartida = {
-        preguntaActual: 0,
-        contadorPreguntes: 0,
-        respostesUsuari: new Array(totesLesPreguntes.length).fill(undefined),
-    };
-    
+    // Controlar visibilitat del botó Finalitzar
     const btnFinalitzar = document.getElementById("btnFinalitzar");
     if (btnFinalitzar) {
-        btnFinalitzar.style.display = "none";
+        btnFinalitzar.style.display = 
+            estatDeLaPartida.contadorPreguntes === totesLesPreguntes.length ? "inline-block" : "none";
     }
 
-    // Només actualitzem la visualització de les seleccions
-    actualitzarSeleccioVisual();
+    // Emmagatzemo l'estat de la partida a localStorage
+    localStorage.setItem("partida", JSON.stringify(estatDeLaPartida));
 }
-
 
 // Funció que marca la resposta de l'usuari i actualitza el comptador de preguntes.
 function marcarResposta(numPregunta, numResposta) {
     const preguntaIndex = parseInt(numPregunta);
     const respostaIndex = parseInt(numResposta);
-    
+
     // Si la pregunta no estava contestada, incrementem el comptador
     if (estatDeLaPartida.respostesUsuari[preguntaIndex] === undefined) {
         estatDeLaPartida.contadorPreguntes++;
@@ -70,61 +75,55 @@ function marcarResposta(numPregunta, numResposta) {
 
     estatDeLaPartida.respostesUsuari[preguntaIndex] = respostaIndex;
 
-    // NOMÉS actualitzem la visualització
-    actualitzarSeleccioVisual();
+    actualitzarMarcador();
 }
 
 // Funció que crea i renderitza les preguntes del qüestionari a l'HTML.
 function renderTotesLesPreguntes(preguntes) {
     const contenidor = document.getElementById("questionari");
     let htmlString = "";
-    
-    // Botó Borrar Partida integrat a la vista de Joc
-    htmlString += `<div ="preguntas-respostes"> <button id="btnBorrar" class="btn-borrar">Borrar Partida</button> </div><hr>`;
 
     preguntes.forEach((pregunta, i) => {
-        
-        htmlString += `<div id="pregunta"> 
-                            <div id="pregunta-img">
-                                <h3>Pregunta ${i + 1}: ${pregunta.pregunta}</h3><br>`;
+        htmlString += `<h3>Pregunta ${i + 1}: ${pregunta.pregunta}</h3><br>`;
+        htmlString += `<img src="${pregunta.imatge}" alt="Pregunta ${i + 1}"><br>`;
 
-        htmlString += `         <img src="${pregunta.imatge}" alt="Pregunta ${i + 1}">
-                            </div>`;
-        
         pregunta.respostes.forEach((resposta, j) => {
-            htmlString += `<div id="respostes">
-                                <button id="${i}_${j}" class="btn-resposta" data-preg="${i}" data-resp="${j}">${resposta.resposta}</button>
-                            </div>`;
+            // Nota: Aquí hi havia un botó duplicat, he deixat el segon (btn-resposta) i n'he eliminat un:
+            // htmlString += `<button id="${i}_${j}" class="btn" data-preg="${i}" data-resp="${j}">${resposta.resposta}</button><br>`;
+            htmlString += `<button id="${i}_${j}" class="btn-resposta" data-preg="${i}" data-resp="${j}">${resposta.resposta}</button><br>`;
         });
-        htmlString += `</div> 
-                        <hr>`;
+        htmlString += `<hr>`;
     });
 
-    // Afegim el botó Finalitzar al final del qüestionari
     htmlString += `<button id="btnFinalitzar" class="btn-finalitzar" style="display:none">Finalitzar</button>`;
-    
+
     contenidor.innerHTML = htmlString;
-    
-    // Afegim listeners
-    document.getElementById("btnFinalitzar").addEventListener("click", mostrarResultats);
-    document.getElementById("btnBorrar").addEventListener("click", esborrarPartida);
+
+    const btnFinalitzar = document.getElementById("btnFinalitzar");
+    if (btnFinalitzar) {
+        btnFinalitzar.addEventListener("click", mostrarResultats);
+    }
 
     // Delegació d'esdeveniments per als botons de resposta
     contenidor.addEventListener('click', (e) => {
         const target = e.target;
-        if (target.classList.contains('btn') && target.hasAttribute('data-preg')) {
+        //Si el target que s'ha fet click té un botó com a clase i té un atribut de data-preg
+        if (target.classList.contains('btn-resposta') && target.hasAttribute('data-preg')) {
             marcarResposta(target.dataset.preg, target.dataset.resp);
         }
     });
 
-    //cridem la funcio per actualitzar les seleccions visuals (un cop es renderitzen totes les preguntes)
-    actualitzarSeleccioVisual();
+    // Restaura seleccions si existeixen
+    actualitzarMarcador();
 }
 
 // Funció que envia les respostes al servidor i mostra els resultats finals.
 function mostrarResultats() {
-    // ELIMINAT: El marcador ja no existeix
-    
+    const marcador = document.getElementById("marcador");
+    if (marcador) {
+        marcador.style.display = "none";
+    }
+
     fetch('../php/finalitza.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -139,44 +138,44 @@ function mostrarResultats() {
             <p>Correctes: ${resultat.correctes}</p>
             <button class="btn-Reiniciar" id="btnReiniciar">Reiniciar</button>
         `;
-        
+
         document.getElementById("btnReiniciar").addEventListener("click", () => {
             window.location.href = 'index.html';
         });
-        
+
+        // Un cop finalitzat, esborrem la partida guardada
         localStorage.removeItem('partida');
     })
-    .catch(error => console.error("Error en processar els resultats:", error));
 }
 
 // Funció que gestiona la visibilitat de les vistes (Joc / Admin).
 function amagarVistaAdmin(amagar) {
     const questionari = document.getElementById("questionari");
+    const marcador = document.getElementById("marcador");
     const crearPreguntaDiv = document.getElementById("crearPregunta");
     const editarPreguntaDiv = document.getElementById("editarPregunta");
     const adminDiv = document.getElementById("admin");
 
     if (amagar) {
-        // Amagar joc, mostrar admin
+        // Mostrar vista Admin
         questionari.style.display = "none";
+        marcador.style.display = "none";
         adminDiv.style.display = "block";
     } else {
-        // Mostrar joc, amagar admin
-        questionari.style.display = "block"; 
+        // Amagar totes les vistes
+        questionari.style.display = "none";
+        marcador.style.display = "none";
         adminDiv.style.display = "none";
-        
-        //Actualitzem l'estat visual i el botó Finalitzar quan tornem al joc
-        actualitzarSeleccioVisual();
     }
-    //si existeixen els divs de crear i editar pregunta, els amaguem
-    if (crearPreguntaDiv) crearPreguntaDiv.style.display = "none";
-    if (editarPreguntaDiv) editarPreguntaDiv.style.display = "none";
+
+    crearPreguntaDiv.style.display = "none";
+    editarPreguntaDiv.style.display = "none";
 }
 
 // Funció que carrega la vista d'administració i el llistat de preguntes.
 function carregarAdmin() {
     amagarVistaAdmin(true);
-    
+
     fetch('../php/admin/llistatPreguntes.php')
         .then(res => res.json())
         .then(data => {
@@ -194,10 +193,9 @@ function carregarAdmin() {
                 htmlString += `<button class="btn-eliminar" data-id="${pregunta.id}">Eliminar</button>`;
                 htmlString += `<button class="btn-editar" data-id="${pregunta.id}">Editar</button></div><hr>`;
             });
-            
+
             llistatAdmin.innerHTML = htmlString;
         })
-    .catch(error => console.error("Error carregant l'administració:", error));
 }
 
 // Funció que renderitza el formulari per crear una nova pregunta.
@@ -242,7 +240,6 @@ function eliminarPregunta(idPregunta) {
         alert(resp.message);
         carregarAdmin();
     })
-    .catch(error => console.error("Error eliminant la pregunta:", error));
 }
 
 // Funció que recull les dades del formulari i crea una nova pregunta al servidor.
@@ -250,7 +247,7 @@ function crearPregunta() {
     const form = document.getElementById("formCrearPregunta");
     const preguntaText = form.querySelector('#preguntaText').value;
     const imatgeLink = form.querySelector('#imatgeLink').value;
-    
+
     //Fem un for per recollir els valors dels camps de resposta
     const NOMS_RESPOSTES = ['resposta1', 'resposta2', 'resposta3', 'resposta4'];
     const respostesInputs = [];
@@ -259,7 +256,7 @@ function crearPregunta() {
         const valorResposta = form.querySelector(`input[name="${nomCamp}"]`).value;
         respostesInputs.push(valorResposta);
     }
-    
+
     const radioCorrecta = form.querySelector('input[name="correcta"]:checked');
     if (!radioCorrecta) {
         alert("Si us plau, marca quina és la resposta correcta.");
@@ -284,16 +281,12 @@ function crearPregunta() {
         if (crearDiv) crearDiv.style.display = "none";
         carregarAdmin();
     })
-    .catch(error => console.error("Error al crear la pregunta:", error));
 }
 
 // Funció que carrega el formulari d'edició d'una pregunta amb les seves dades actuals.
 function editarPregunta(idPregunta) {
     const idBuscada = Number(idPregunta);
     const pregunta = totesLesPreguntes.find(p => Number(p.id) === idBuscada);
-    
-    //si no troba la pregunta, sortim de la funció
-    if (!pregunta) return;
 
     amagarVistaAdmin(false);
     document.getElementById("admin").style.display = "none";
@@ -329,13 +322,9 @@ function actualitzarPregunta(idPregunta) {
     const form = document.getElementById("formEditarPregunta");
     const preguntaText = form.querySelector("#editarTextPregunta").value;
     const imatgeLink = form.querySelector("#editarLinkImatge").value;
-    
-    //femun for per recollir els valors dels camps de resposta del formulari
-    const respostes = [];
-    for (let i = 0; i < 4; i++) {
-        respostes.push(form.querySelector(`#resposta${i}`).value);
-    }
-    
+    //no tentenc el .map 
+    const respostes = [0, 1, 2, 3].map(i => form.querySelector(`#resposta${i}`).value);
+
     const radioCorrecta = form.querySelector('input[name="correctaEditar"]:checked');
     if (!radioCorrecta) {
         alert("Si us plau, marca la resposta correcta.");
@@ -361,7 +350,6 @@ function actualitzarPregunta(idPregunta) {
         const editarDiv = document.getElementById('editarPregunta');
         if (editarDiv) editarDiv.style.display = 'none';
     })
-    .catch(error => console.error("Error al actualitzar pregunta:", error));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -374,24 +362,18 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('../php/getPreguntes.php')
         .then(response => response.json())
         .then(data => {
-            //Assignem totes les preguntes a la variable global
             totesLesPreguntes = data.preguntes;
-            
-            const totalPreguntesBD = totesLesPreguntes.length;
-            
+
             // Inicialitzar o ajustar l'array de respostes
-            if (!Array.isArray(estatDeLaPartida.respostesUsuari) || estatDeLaPartida.respostesUsuari.length !== totalPreguntesBD) {
-                estatDeLaPartida.respostesUsuari = new Array(totalPreguntesBD).fill(undefined);
+            if (!Array.isArray(estatDeLaPartida.respostesUsuari) || estatDeLaPartida.respostesUsuari.length !== totesLesPreguntes.length) {
+                estatDeLaPartida.respostesUsuari = new Array(totesLesPreguntes.length).fill(undefined);
                 estatDeLaPartida.contadorPreguntes = 0; // Reiniciar comptador si hi ha desajust
             }
 
-            renderTotesLesPreguntes(totesLesPreguntes);
-            
-            // Mostrar la vista de joc per defecte (si no estem a admin)
-            amagarVistaAdmin(false);
-
+            // Nota: Corregit el botó, veure `renderTotesLesPreguntes`
+            renderTotesLesPreguntes(totesLesPreguntes); 
+            actualitzarMarcador(); // Assegurar que es crida després de carregar les preguntes
         })
-        .catch(error => console.error("Error carregant les dades inicials:", error));
 
     // Crear i afegir el botó Admin
     const btnAdmin = document.createElement("button");
@@ -410,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
         llistatAdmin.addEventListener('click', (e) => {
             const target = e.target;
             const id = target.getAttribute('data-id');
-            
+
             if (target.id === 'btnTornarEnrere') {
                 window.location.href = 'index.html';
             } else if (target.id === 'btnCrearPregunta') {

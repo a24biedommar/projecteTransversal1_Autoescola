@@ -1,24 +1,28 @@
 //-----------------------------
 // VARIABLES GLOBALS!!
 //-----------------------------
+// NO TORNAR A DECLARAR NPREGUNTAS JA QUE ELS AGARRA DIRECTAMENT DE getPreguntes.php
 let estatDeLaPartida = {
     preguntaActual: 0,
     contadorPreguntes: 0,
     respostesUsuari: [],
+    tempsRestant: 30, // Modificat a 30 segons
 };
 // Variable per emmagatzemar el nom de l'usuari
 let nomUsuari = "";
 // Array per emmagatzemar totes les preguntes carregades des del servidor
 let totesLesPreguntes = [];
+// Variable per l'interval del timer
+let idTimer = null; 
 
 //-----------------------------
-//FUNCIONS DE MOSTRAR I GESTIONAR EL JOC I EL LOGIN
+// FUNCIONS DE MOSTRAR I GESTIONAR EL JOC I EL LOGIN
 //-----------------------------
 
 //-------------------------
-//FUNCIO QUE GESTIONA EL MOSTRAR EL LOGIN I EMMAGATZEMA EL NOM DLE USUARI
+// FUNCIO QUE GESTIONA EL MOSTRAR EL LOGIN I EMMAGATZEMA EL NOM DE L'USUARI
 function mostrarLogin() {
-    //1.Amaguem totes les vistes menys el login
+    //1. Amaguem totes les vistes menys el login
     document.getElementById("questionari").style.display = "none";
     document.getElementById("marcador").style.display = "none";
     document.getElementById("admin").style.display = "none";
@@ -27,10 +31,13 @@ function mostrarLogin() {
     
     const loginDiv = document.getElementById("login");
     
-    //2.Netejem l'estat de la partida i el nom d'usuari
+    //2. Netejem l'estat de la partida i el nom d'usuari
     localStorage.removeItem("partida");
     localStorage.removeItem("nomUsuari");
     nomUsuari = "";
+    
+    // Aturem el timer si estava actiu
+    aturarTimer();
 
     //3. Generem el formulari de login
     loginDiv.innerHTML = `
@@ -52,13 +59,17 @@ function mostrarLogin() {
     loginDiv.style.display = "block";
     document.getElementById("missatgeBenvinguda").textContent = "Qüestionari Autoescola";
     
-    //6.Amaguem el botó admin
+    //6. Amaguem el botó admin
     const btnAdmin = document.getElementById("btnAdmin");
     if (btnAdmin) btnAdmin.style.display = "none";
+
+    // Amaguem el temps al login
+    const tempsPartida = document.getElementById("temps");
+    if (tempsPartida) tempsPartida.style.display = "none";
 }
 
 //-------------------------
-//FUNCIO QUE GESTIONA EL LOGIN
+// FUNCIO QUE GESTIONA EL LOGIN
 function gestionarLogin(event) {
     //1. Evitem que el formulari s'envii (evita el refresh de la pàgina)
     event.preventDefault(); 
@@ -79,12 +90,15 @@ function gestionarLogin(event) {
 }
 
 //-------------------------
-//FUNCIO QUE CARREGA EL JOC I EL MOSRA
+// FUNCIO QUE CARREGA EL JOC I EL MOSRA
 function mostrarJoc() {
-    //1.Amaguem el lgoin i mostrem el questionari i el marcador
+    //1. Amaguem el login i mostrem el questionari i el marcador
     document.getElementById("login").style.display = "none";
     document.getElementById("questionari").style.display = "block";
     document.getElementById("marcador").style.display = "block";
+    document.getElementById("admin").style.display = "none";
+    document.getElementById("crearPregunta").style.display = "none";
+    document.getElementById("editarPregunta").style.display = "none";
     
     //2. Mostrem el missatge de benvinguda amb el nom de l'usuari 
     document.getElementById("missatgeBenvinguda").textContent = `Benvingut ${nomUsuari}!`;
@@ -92,23 +106,46 @@ function mostrarJoc() {
     //3. Si existeix el botó admin, el mostrem
     const btnAdmin = document.getElementById("btnAdmin");
     if (btnAdmin) btnAdmin.style.display = "inline-block";
+
+    // Mostrem l'element del temps i l'activem
+    const tempsPartida = document.getElementById("temps");
+    if (tempsPartida) {
+        tempsPartida.style.display = "block";
+        iniciarTimer();
+    }
 }
 
 //-------------------------
-//FUNCIO QUE CARREGA EL JOC
+// FUNCIO QUE CARREGA EL JOC
 function carregarJoc() {
-    //1.Si existeix la partida al localstorage, la carreguem
+    //1. Si existeix la partida al localstorage, la carreguem
     if (localStorage.partida) {
         estatDeLaPartida = JSON.parse(localStorage.getItem("partida"));
+        // Si no té temps restant (per si és una partida antiga), l'inicialitzem
+        if (estatDeLaPartida.tempsRestant === undefined) {
+             estatDeLaPartida.tempsRestant = 30; // Modificat
+        }
+    } else {
+        // Inicialitzem l'estat si no hi ha partida guardada
+         estatDeLaPartida = {
+            preguntaActual: 0,
+            contadorPreguntes: 0,
+            respostesUsuari: [],
+            tempsRestant: 30, // Modificat
+        };
     }
 
-    //2.Carreguem les preguntes fent un fetch al servidor
+    //2. Carreguem les preguntes fent un fetch al servidor
     fetch('../php/getPreguntes.php')
         .then(response => response.json())
         .then(data => {
             totesLesPreguntes = data.preguntes;
+             // Si és la primera càrrega, inicialitzem l'array de respostes
+            if (estatDeLaPartida.respostesUsuari.length !== totesLesPreguntes.length) {
+                estatDeLaPartida.respostesUsuari = new Array(totesLesPreguntes.length).fill(undefined);
+            }
 
-            //3.Truquem a les funcions per renderitzar les preguntes i actualitzar el marcador i per mostrar el joc
+            //3. Truquem a les funcions per renderitzar les preguntes i actualitzar el marcador i per mostrar el joc
             renderTotesLesPreguntes(totesLesPreguntes); 
             actualitzarMarcador(); 
             mostrarJoc();
@@ -116,38 +153,96 @@ function carregarJoc() {
 }
 
 //--------------------------
-//FUNCIONS QUE GESTIONAN EL LOCAL STORAGE
+// FUNCIONS QUE GESTIONAN EL LOCAL STORAGE
 //--------------------------
 
 //-------------------------
-//FUNCIO QUE ESBORRA LA PARTIDA I L'ESTAT
+// FUNCIO QUE ESBORRA LA PARTIDA I L'ESTAT
 function esborrarPartida() {
-    //1.Esborrem la partida i l'estat el reiniciem a 0
+    //1. Esborrem la partida i l'estat el reiniciem a 0
     localStorage.removeItem("partida");
     estatDeLaPartida = {
         preguntaActual: 0,
         contadorPreguntes: 0,
         respostesUsuari: new Array(totesLesPreguntes.length).fill(undefined),
+        tempsRestant: 30, // Reiniciem el temps
     };
 
-    //2.Amaguem el botó finalitzar 
+    //2. Amaguem el botó finalitzar 
     const btnFinalitzar = document.getElementById("btnFinalitzar");
     if (btnFinalitzar) {
         btnFinalitzar.style.display = "none";
     }
+    
+    // Aturem el timer i amaguem l'element
+    aturarTimer();
+    document.getElementById("temps").style.display = "none";
 
-    //3.Redirigim a la pantalla de login
+    //3. Redirigim a la pantalla de login
     mostrarLogin();
 }
 
 //--------------------------
-//FUNCIONS QUE GESTIONEN EL QÜESTIONARI I LES PREGUNTES
+// FUNCIONS QUE GESTIONEN EL TEMPORITZADOR
 //--------------------------
 
-//Funció que actualitza el marcador de respostes a la pantalla i la selecció visual.
+//-------------------------
+// FUNCIÓ QUE FORMATA ELS SEGONS A MM:SS
+function formatTemps(segons) {
+    const minuts = Math.floor(segons / 60);
+    const seg = segons % 60;
+    // Assegura que els minuts i segons tinguin dos dígits (p. ex., 00:30)
+    const formatMinuts = String(minuts).padStart(2, '0');
+    const formatSegons = String(seg).padStart(2, '0');
+    return `${formatMinuts}:${formatSegons}`;
+}
+
+//-------------------------
+// FUNCIÓ PER INICIAR EL TEMPORITZADOR
+function iniciarTimer() {
+    // 1. Netejem qualsevol interval anterior per evitar duplicats
+    aturarTimer();
+
+    // 2. Iniciem el nou interval
+    idTimer = setInterval(function() {
+        if (estatDeLaPartida.tempsRestant > 0) {
+            estatDeLaPartida.tempsRestant--;
+            actualitzarMarcador(); // Actualitza el marcador, que alhora actualitza el temps visual
+        } else {
+            // 3. Quan el temps s'acaba
+            aturarTimer();
+            alert("S'ha acabat el temps!");
+            mostrarResultats(); // Finalitza la partida automàticament
+        }
+    }, 1000);
+}
+
+//-------------------------
+// FUNCIÓ PER ATURAR EL TEMPORITZADOR
+function aturarTimer() {
+    if (idTimer) {
+        clearInterval(idTimer);
+        idTimer = null;
+    }
+}
+
+
+//--------------------------
+// FUNCIONS QUE GESTIONEN EL QÜESTIONARI I LES PREGUNTES
+//--------------------------
+
+//-------------------------
+// Funció que actualitza el marcador de respostes a la pantalla i la selecció visual.
 function actualitzarMarcador() {
     const marcador = document.getElementById("marcador");
+    const totalPreguntes = totesLesPreguntes.length;
     let textMarcador = "Preguntes:<br>";
+
+    // Actualitzem el display del temps a l'element amb id="temps"
+    const tempsPartida = document.getElementById("temps");
+    if (tempsPartida) {
+        tempsPartida.textContent = formatTemps(estatDeLaPartida.tempsRestant);
+    }
 
     // Generar estat de les preguntes
     estatDeLaPartida.respostesUsuari.forEach((resposta, i) => {
@@ -163,7 +258,7 @@ function actualitzarMarcador() {
         btnBorrar.addEventListener('click', esborrarPartida);
     }
 
-    //agafem tots els elements amb la classe .seleccionada i eliminem la classe .seleccionada
+    // agafem tots els elements amb la classe .seleccionada i eliminem la classe .seleccionada
     document.querySelectorAll(".seleccionada").forEach(el => el.classList.remove("seleccionada"));
 
     // Marcar les preguntes que ja estan seleccionades
@@ -178,7 +273,7 @@ function actualitzarMarcador() {
     const btnFinalitzar = document.getElementById("btnFinalitzar");
     if (btnFinalitzar) {
         btnFinalitzar.style.display = 
-            estatDeLaPartida.contadorPreguntes === totesLesPreguntes.length ? "inline-block" : "none";
+            estatDeLaPartida.contadorPreguntes === totalPreguntes ? "inline-block" : "none";
     }
 
     // Emmagatzemo l'estat de la partida a localStorage
@@ -187,6 +282,9 @@ function actualitzarMarcador() {
 
 // Funció que marca la resposta de l'usuari i actualitza el comptador de preguntes.
 function marcarResposta(numPregunta, numResposta) {
+    // Si el temps ha acabat, ignorem les respostes
+    if (estatDeLaPartida.tempsRestant <= 0) return;
+    
     const preguntaIndex = parseInt(numPregunta);
     const respostaIndex = parseInt(numResposta);
 
@@ -195,7 +293,7 @@ function marcarResposta(numPregunta, numResposta) {
         estatDeLaPartida.contadorPreguntes++;
     }
 
-    estatDeLaPartida.respostesUsuari[preguntaIndex] = respostaIndex;
+    estatDeLaPartida.respostesUsuari[preguntaIndex] = numResposta; // Guardem el valor (índex) de la resposta
 
     actualitzarMarcador();
 }
@@ -210,9 +308,7 @@ function renderTotesLesPreguntes(preguntes) {
         htmlString += `<img src="${pregunta.imatge}" alt="Pregunta ${i + 1}"><br>`;
 
         pregunta.respostes.forEach((resposta, j) => {
-            // Nota: Aquí hi havia un botó duplicat, he deixat el segon (btn-resposta) i n'he eliminat un:
-            // htmlString += `<button id="${i}_${j}" class="btn" data-preg="${i}" data-resp="${j}">${resposta.resposta}</button><br>`;
-            htmlString += `<button id="${i}_${j}" class="btn-resposta" data-preg="${i}" data-resp="${j}">${resposta.resposta}</button><br>`;
+            htmlString += `<button id="${i}_${j}" class="btn-resposta" data-preg="${i}" data-resp="${resposta.id}">${resposta.resposta}</button><br>`; // Utilitzem resposta.id com a resp
         });
         htmlString += `<hr>`;
     });
@@ -229,7 +325,7 @@ function renderTotesLesPreguntes(preguntes) {
     // Delegació d'esdeveniments per als botons de resposta
     contenidor.addEventListener('click', (e) => {
         const target = e.target;
-        //Si el target que s'ha fet click té un botó com a clase i té un atribut de data-preg
+        // Si el target que s'ha fet click té un botó com a clase i té un atribut de data-preg
         if (target.classList.contains('btn-resposta') && target.hasAttribute('data-preg')) {
             marcarResposta(target.dataset.preg, target.dataset.resp);
         }
@@ -240,20 +336,26 @@ function renderTotesLesPreguntes(preguntes) {
 }
 
 //--------------------------
-//FUNCIONS QUE GESTIONEN ELS RESULTATS I L'ADMINISTRACIÓ
+// FUNCIONS QUE GESTIONEN ELS RESULTATS I L'ADMINISTRACIÓ
 //--------------------------
 
 //-------------------------
 // Funció que mostra els resultats finals i permet reiniciar la partida.
 function mostrarResultats() {
+    // Aturem el timer
+    aturarTimer();
 
-    //1.Amaguem el marcador si existeix
+    //1. Amaguem el marcador si existeix
     const marcador = document.getElementById("marcador");
     if (marcador) {
         marcador.style.display = "none";
     }
+    
+    // Amaguem l'element del temps
+    const tempsPartida = document.getElementById("temps");
+    if (tempsPartida) tempsPartida.style.display = "none";
 
-    //2.Enviem les respostes de l'usuari al servidor per obtenir els resultats
+    //2. Enviem les respostes de l'usuari al servidor per obtenir els resultats
     fetch('../php/finalitza.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -262,7 +364,7 @@ function mostrarResultats() {
     .then(response => response.json())
     .then(resultat => {
 
-        //3.Mostrem els resultats a la pantalla al div questionari
+        //3. Mostrem els resultats a la pantalla al div questionari
         const contenidor = document.getElementById("questionari");
         contenidor.innerHTML = `
             <h2>Resultats</h2>
@@ -271,14 +373,14 @@ function mostrarResultats() {
             <button class="btn-Reiniciar" id="btnReiniciar">Reiniciar</button>
         `;
 
-        //4.Afegim l'event listener al botó reiniciar
+        //4. Afegim l'event listener al botó reiniciar
         document.getElementById("btnReiniciar").addEventListener("click", () => {
             // Un cop finalitzat, esborrem la partida guardada i tornem al login
             localStorage.removeItem('partida');
             mostrarLogin();
         });
 
-        //5.Si existeix el botó admin, l'amaguem i reiniciem el missatge de benvinguda
+        //5. Si existeix el botó admin, l'amaguem i reiniciem el missatge de benvinguda
         const btnAdmin = document.getElementById("btnAdmin");
         if (btnAdmin) btnAdmin.style.display = "none";
         document.getElementById("missatgeBenvinguda").textContent = "";
@@ -287,22 +389,28 @@ function mostrarResultats() {
 
 // Funció que gestiona la visibilitat de les vistes (Joc / Admin).
 function amagarVistaAdmin(amagar) {
+    // Aturem el timer quan entrem a l'administració
+    aturarTimer();
+
     const questionari = document.getElementById("questionari");
     const marcador = document.getElementById("marcador");
     const crearPreguntaDiv = document.getElementById("crearPregunta");
     const editarPreguntaDiv = document.getElementById("editarPregunta");
     const adminDiv = document.getElementById("admin");
+    const tempsPartida = document.getElementById("temps");
 
     if (amagar) {
         // Mostrar vista Admin
         questionari.style.display = "none";
         marcador.style.display = "none";
         adminDiv.style.display = "block";
+        if (tempsPartida) tempsPartida.style.display = "none"; // Amaguem el temps
     } else {
         // Amagar totes les vistes
         questionari.style.display = "none";
         marcador.style.display = "none";
         adminDiv.style.display = "none";
+        if (tempsPartida) tempsPartida.style.display = "none"; // Amaguem el temps
     }
 
     crearPreguntaDiv.style.display = "none";
@@ -313,6 +421,8 @@ function amagarVistaAdmin(amagar) {
 function carregarAdmin() {
     amagarVistaAdmin(true);
 
+    document.getElementById("missatgeBenvinguda").textContent = "Mode Administració";
+    
     fetch('../php/admin/llistatPreguntes.php')
         .then(res => res.json())
         .then(data => {
@@ -385,15 +495,10 @@ function crearPregunta() {
     const preguntaText = form.querySelector('#preguntaText').value;
     const imatgeLink = form.querySelector('#imatgeLink').value;
 
-    //Fem un for per recollir els valors dels camps de resposta
+    // Fem un .map per recollir els valors dels camps de resposta
     const NOMS_RESPOSTES = ['resposta1', 'resposta2', 'resposta3', 'resposta4'];
-    const respostesInputs = [];
-    for (let i = 0; i < NOMS_RESPOSTES.length; i++) {
-        const nomCamp = NOMS_RESPOSTES[i];
-        const valorResposta = form.querySelector(`input[name="${nomCamp}"]`).value;
-        respostesInputs.push(valorResposta);
-    }
-
+    const respostesInputs = NOMS_RESPOSTES.map(nomCamp => form.querySelector(`input[name="${nomCamp}"]`).value);
+    
     const radioCorrecta = form.querySelector('input[name="correcta"]:checked');
     if (!radioCorrecta) {
         alert("Si us plau, marca quina és la resposta correcta.");
@@ -424,6 +529,7 @@ function crearPregunta() {
 function editarPregunta(idPregunta) {
     const idBuscada = Number(idPregunta);
     const pregunta = totesLesPreguntes.find(p => Number(p.id) === idBuscada);
+    if (!pregunta) return;
 
     amagarVistaAdmin(false);
     document.getElementById("admin").style.display = "none";
@@ -431,6 +537,7 @@ function editarPregunta(idPregunta) {
     editarDiv.style.display = "block";
 
     let htmlString = `
+        <button type="button" id="btnCancelarEdicio" class="btn-tornar">Cancelar</button>
         <h2>Editar Pregunta</h2>
         <form id="formEditarPregunta">
             <label>Pregunta:</label><br>
@@ -439,15 +546,19 @@ function editarPregunta(idPregunta) {
             <input type="text" id="editarLinkImatge" value="${pregunta.imatge}"><br><br>
             <label>Respostes:</label><br>
     `;
-    //for each per a cada resposta, si la resposta és la correcta estara checked si no estarà normal
+    
+    const preguntaCompleta = totesLesPreguntes.find(p => Number(p.id) === idBuscada);
+    // Assumim l'índex 0 com a valor inicial si no podem determinar la correcta sense un altre fetch.
+    const indexCorrecta = 0; 
+    
     pregunta.respostes.forEach((resposta, i) => {
-        const checked = resposta.correcta ? "checked" : "";
+        const checked = (i === indexCorrecta) ? "checked" : ""; 
         htmlString += `<input type="text" id="resposta${i}" value="${resposta.resposta}">`;
         htmlString += `<input type="radio" name="correctaEditar" value="${i}" ${checked}> Correcta<br>`;
     });
 
     htmlString += `<br><button type="button" id="btnGuardarCanvis">Guardar Canvis</button>`;
-    htmlString += `<button type="button" id="btnCancelarEdicio">Cancelar</button></form>`;
+    htmlString += `</form>`;
     editarDiv.innerHTML = htmlString;
 
     document.getElementById("btnGuardarCanvis").addEventListener("click", () => actualitzarPregunta(idPregunta));
@@ -459,7 +570,8 @@ function actualitzarPregunta(idPregunta) {
     const form = document.getElementById("formEditarPregunta");
     const preguntaText = form.querySelector("#editarTextPregunta").value;
     const imatgeLink = form.querySelector("#editarLinkImatge").value;
-    //no tentenc el .map 
+    
+    // Recollim les respostes
     const respostes = [0, 1, 2, 3].map(i => form.querySelector(`#resposta${i}`).value);
 
     const radioCorrecta = form.querySelector('input[name="correctaEditar"]:checked');
@@ -490,24 +602,24 @@ function actualitzarPregunta(idPregunta) {
 }
 
 //--------------------------
-//CARREGUEM EL DOM I ELS LISTENERS
+// CARREGUEM EL DOM I ELS LISTENERS
 //--------------------------
 document.addEventListener('DOMContentLoaded', () => {
-    //1.Creem el botó admin (amagat inicialment)
+    // 1. Creem el botó admin (amagat inicialment)
     const btnAdmin = document.createElement("button");
     btnAdmin.textContent = "Admin";
     btnAdmin.className = "btn-admin";
     btnAdmin.id = "btnAdmin";
     btnAdmin.style.display = "none";
     
-    //2.Afegim el botó admin al contenidor principal i carreguem l'event listener
+    // 2. Afegim el botó admin al contenidor principal i carreguem l'event listener
     const contenidorPrincipal = document.getElementById("contenidor-principal");
     if (contenidorPrincipal) {
         contenidorPrincipal.appendChild(btnAdmin);
     }
     btnAdmin.addEventListener("click", carregarAdmin);
 
-    //3. Comprovem si hi ha alguna sessió guardada (nom usuari i localstorage)
+    // 3. Comprovem si hi ha alguna sessió guardada (nom usuari i localstorage)
     const nomGuardat = localStorage.getItem("nomUsuari");
     //--> si hi ha sessió carreguem el joc
     if (nomGuardat) {

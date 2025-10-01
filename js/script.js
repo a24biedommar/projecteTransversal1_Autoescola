@@ -16,7 +16,7 @@ let totesLesPreguntes = [];
 //-----------------------------
 
 //-------------------------
-//1.FUNCIO QUE GESTIONA EL MOSTRAR EL LOGIN I EMMAGATZEMA EL NOM DLE USUARI
+//FUNCIO QUE GESTIONA EL MOSTRAR EL LOGIN I EMMAGATZEMA EL NOM DLE USUARI
 function mostrarLogin() {
     //1.Amaguem totes les vistes menys el login
     document.getElementById("questionari").style.display = "none";
@@ -58,7 +58,7 @@ function mostrarLogin() {
 }
 
 //-------------------------
-//2.FUNCIO QUE GESTIONA EL LOGIN
+//FUNCIO QUE GESTIONA EL LOGIN
 function gestionarLogin(event) {
     //1. Evitem que el formulari s'envii (evita el refresh de la pàgina)
     event.preventDefault(); 
@@ -79,7 +79,7 @@ function gestionarLogin(event) {
 }
 
 //-------------------------
-//3.FUNCIO QUE CARREGA EL JOC I EL MOSRA
+//FUNCIO QUE CARREGA EL JOC I EL MOSRA
 function mostrarJoc() {
     //1.Amaguem el lgoin i mostrem el questionari i el marcador
     document.getElementById("login").style.display = "none";
@@ -95,7 +95,7 @@ function mostrarJoc() {
 }
 
 //-------------------------
-//4.FUNCIO QUE CARREGA EL JOC
+//FUNCIO QUE CARREGA EL JOC
 function carregarJoc() {
     //1.Si existeix la partida al localstorage, la carreguem
     if (localStorage.partida) {
@@ -120,7 +120,7 @@ function carregarJoc() {
 //--------------------------
 
 //-------------------------
-//1.FUNCIO QUE ESBORRA LA PARTIDA I L'ESTAT
+//FUNCIO QUE ESBORRA LA PARTIDA I L'ESTAT
 function esborrarPartida() {
     //1.Esborrem la partida i l'estat el reiniciem a 0
     localStorage.removeItem("partida");
@@ -140,7 +140,11 @@ function esborrarPartida() {
     mostrarLogin();
 }
 
-// Funció que actualitza el marcador de respostes a la pantalla i la selecció visual.
+//--------------------------
+//FUNCIONS QUE GESTIONEN EL QÜESTIONARI I LES PREGUNTES
+//--------------------------
+
+//Funció que actualitza el marcador de respostes a la pantalla i la selecció visual.
 function actualitzarMarcador() {
     const marcador = document.getElementById("marcador");
     let textMarcador = "Preguntes:<br>";

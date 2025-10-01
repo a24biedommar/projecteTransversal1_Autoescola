@@ -1,18 +1,17 @@
 //-----------------------------
 // VARIABLES GLOBALS!!
 //-----------------------------
-// NO TORNAR A DECLARAR NPREGUNTAS JA QUE ELS AGARRA DIRECTAMENT DE getPreguntes.php
 let estatDeLaPartida = {
     preguntaActual: 0,
     contadorPreguntes: 0,
     respostesUsuari: [],
     tempsRestant: 30, // Modificat a 30 segons
 };
-// Variable per emmagatzemar el nom de l'usuari
+// Variable per emmagatzemar el nom de l'usuari inicialment buida
 let nomUsuari = "";
 // Array per emmagatzemar totes les preguntes carregades des del servidor
 let totesLesPreguntes = [];
-// Variable per l'interval del timer
+// Variable per l'interval del timer inicialment null
 let idTimer = null; 
 
 //-----------------------------
@@ -22,7 +21,7 @@ let idTimer = null;
 //-------------------------
 // FUNCIO QUE GESTIONA EL MOSTRAR EL LOGIN I EMMAGATZEMA EL NOM DE L'USUARI
 function mostrarLogin() {
-    //1. Amaguem totes les vistes menys el login
+    //1. Amaguem totes les vistes menys la del login
     document.getElementById("questionari").style.display = "none";
     document.getElementById("marcador").style.display = "none";
     document.getElementById("admin").style.display = "none";
@@ -63,7 +62,7 @@ function mostrarLogin() {
     const btnAdmin = document.getElementById("btnAdmin");
     if (btnAdmin) btnAdmin.style.display = "none";
 
-    // Amaguem el temps al login
+    // Amaguem el temps a la login page
     const tempsPartida = document.getElementById("temps");
     if (tempsPartida) tempsPartida.style.display = "none";
 }
@@ -71,7 +70,7 @@ function mostrarLogin() {
 //-------------------------
 // FUNCIO QUE GESTIONA EL LOGIN
 function gestionarLogin(event) {
-    //1. Evitem que el formulari s'envii (evita el refresh de la pàgina)
+    //1. Evitem que el formulari s'envii (evita el refresh de la pagina)
     event.preventDefault(); 
     
     //2. Agafem el nom introduït al formulari 
@@ -90,7 +89,7 @@ function gestionarLogin(event) {
 }
 
 //-------------------------
-// FUNCIO QUE CARREGA EL JOC I EL MOSRA
+// FUNCIO QUE CARREGA EL JOC I EL MOSTRA
 function mostrarJoc() {
     //1. Amaguem el login i mostrem el questionari i el marcador
     document.getElementById("login").style.display = "none";
@@ -121,17 +120,13 @@ function carregarJoc() {
     //1. Si existeix la partida al localstorage, la carreguem
     if (localStorage.partida) {
         estatDeLaPartida = JSON.parse(localStorage.getItem("partida"));
-        // Si no té temps restant (per si és una partida antiga), l'inicialitzem
-        if (estatDeLaPartida.tempsRestant === undefined) {
-             estatDeLaPartida.tempsRestant = 30; // Modificat
-        }
     } else {
-        // Inicialitzem l'estat si no hi ha partida guardada
+        // Si no hi ha partida, inicialitzem l'estat de la partida
          estatDeLaPartida = {
             preguntaActual: 0,
             contadorPreguntes: 0,
             respostesUsuari: [],
-            tempsRestant: 30, // Modificat
+            tempsRestant: 30,
         };
     }
 
@@ -140,7 +135,7 @@ function carregarJoc() {
         .then(response => response.json())
         .then(data => {
             totesLesPreguntes = data.preguntes;
-             // Si és la primera càrrega, inicialitzem l'array de respostes
+             // si es el primer cop que carreguem la partida, inicialitzem l'array de respostes amb undefined
             if (estatDeLaPartida.respostesUsuari.length !== totesLesPreguntes.length) {
                 estatDeLaPartida.respostesUsuari = new Array(totesLesPreguntes.length).fill(undefined);
             }
@@ -153,7 +148,7 @@ function carregarJoc() {
 }
 
 //--------------------------
-// FUNCIONS QUE GESTIONAN EL LOCAL STORAGE
+// FUNCIONS QUE GESTIONEN EL LOCAL STORAGE
 //--------------------------
 
 //-------------------------
@@ -164,8 +159,8 @@ function esborrarPartida() {
     estatDeLaPartida = {
         preguntaActual: 0,
         contadorPreguntes: 0,
-        respostesUsuari: new Array(totesLesPreguntes.length).fill(undefined),
-        tempsRestant: 30, // Reiniciem el temps
+        respostesUsuari: [],
+        tempsRestant: 30,
     };
 
     //2. Amaguem el botó finalitzar 
@@ -211,7 +206,6 @@ function iniciarTimer() {
         } else {
             // 3. Quan el temps s'acaba
             aturarTimer();
-            alert("S'ha acabat el temps!");
             mostrarResultats(); // Finalitza la partida automàticament
         }
     }, 1000);
@@ -220,6 +214,7 @@ function iniciarTimer() {
 //-------------------------
 // FUNCIÓ PER ATURAR EL TEMPORITZADOR
 function aturarTimer() {
+    //1.Si existeix el timer el netegem i el posem a null
     if (idTimer) {
         clearInterval(idTimer);
         idTimer = null;

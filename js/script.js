@@ -431,6 +431,8 @@ function carregarAdmin() {
 
             data.preguntes.forEach((pregunta, i) => {
                 htmlString += `<div class="pregunta-admin"><h3>${i + 1}. ${pregunta.pregunta}</h3>`;
+                htmlString += `<img src="../${pregunta.imatge}" alt="Imatge de la pregunta"><br>`;
+
                 pregunta.respostes.forEach(resposta => {
                     htmlString += `<p>- ${resposta.resposta}</p>`;
                 });
@@ -546,7 +548,7 @@ function crearPregunta() {
 function editarPregunta(idPregunta) {
     const idBuscada = Number(idPregunta);
     const pregunta = totesLesPreguntes.find(p => Number(p.id) === idBuscada);
-    if (!pregunta) return;
+    if (!pregunta) return;   
 
     amagarVistaAdmin(false);
     document.getElementById("admin").style.display = "none";

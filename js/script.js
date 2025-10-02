@@ -57,10 +57,6 @@ function mostrarLogin() {
     //5. Mostrem el div del login
     loginDiv.style.display = "block";
     document.getElementById("missatgeBenvinguda").textContent = "Qüestionari Autoescola";
-    
-    //6. Amaguem el botó admin
-    const btnAdmin = document.getElementById("btnAdmin");
-    if (btnAdmin) btnAdmin.style.display = "none";
 
     // Amaguem el temps a la login page
     const tempsPartida = document.getElementById("temps");
@@ -77,14 +73,30 @@ function gestionarLogin(event) {
     const inputNom = document.getElementById("username");
     const nomIntroduit = inputNom.value;
     
-    //3. Si s'ha introduït un nom, l'emmagatzemem al localstorage i amaguem el login
+    //Netejem el nom introduït (tot a minuscules)
+    const nomNet = nomIntroduit.toLowerCase();
+    
+    // Definim les paraules clau simplificades
+    const ES_ADMIN = nomNet === 'admin' || nomNet === 'administrador' || nomNet === 'administradora';
+
+    //3. comprovem si es admin o un usuari normal
     if (nomIntroduit) {
-        nomUsuari = nomIntroduit;
-        localStorage.setItem("nomUsuari", nomUsuari);
-        
-        //4. Amaguem el formulari del login i mostrem el joc
-        document.getElementById("login").style.display = "none";
-        carregarJoc();
+        // Cas ADMIN
+        if (ES_ADMIN) {
+            //si es admin posem el nom d'usuari a "Admin"
+            document.getElementById("login").style.display = "none";
+            carregarAdmin();
+            
+        // Cas Usuari Normal
+        } else {
+            //si es usuari normal, guardem el nom a la variable global i al localstorage
+            nomUsuari = nomIntroduit;
+            localStorage.setItem("nomUsuari", nomUsuari);
+            
+            // Amaguem el formulari del login i mostrem el joc
+            document.getElementById("login").style.display = "none";
+            carregarJoc();
+        }
     }
 }
 
@@ -342,7 +354,7 @@ function marcarResposta(numPregunta, numResposta) {
 }
 
 //-------------------------
-// NOVA FUNCIÓ: Renderitza la pregunta que toca mostrar (Substitueix renderTotesLesPreguntes)
+//Renderitza la pregunta que toca mostrar
 function renderPreguntaActual() {
     //1. Agafem el contenidor i la pregunta actual (el seu index)
     const contenidor = document.getElementById("questionari");
@@ -769,32 +781,19 @@ function actualitzarPregunta(idPregunta) {
 // CARREGUEM EL DOM I ELS LISTENERS
 //--------------------------
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Creem el botó admin (amagat inicialment)
-    const btnAdmin = document.createElement("button");
-    btnAdmin.textContent = "Admin";
-    btnAdmin.className = "btn-admin";
-    btnAdmin.id = "btnAdmin";
-    btnAdmin.style.display = "none";
-    
-    // 2. Afegim el botó admin al contenidor principal i carreguem l'event listener
-    const contenidorPrincipal = document.getElementById("contenidor-principal");
-    if (contenidorPrincipal) {
-        contenidorPrincipal.appendChild(btnAdmin);
-    }
-    btnAdmin.addEventListener("click", carregarAdmin);
-
-    // 3. Comprovem si hi ha alguna sessió guardada (nom usuari i localstorage)
+    // 1. Comprovem si hi ha alguna sessió guardada (nom usuari i localstorage)
     const nomGuardat = localStorage.getItem("nomUsuari");
-    //--> si hi ha sessió carreguem el joc
+    
+    // Si hi ha sessió (nom guardat), carreguem el joc
     if (nomGuardat) {
         nomUsuari = nomGuardat;
         carregarJoc();
-    //--> si no hi ha sessió, mostrem el login
+    // Si no hi ha sessió, mostrem el login
     } else {
         mostrarLogin();
     }
     
-    // 4. Generem tots els listeners de clicks per les funcions d'administrador (editar/tornar/eliminar/crear 
+    // 2. Generem tots els listeners de clicks per les funcions d'administrador (delegació d'esdeveniments)
     const llistatAdmin = document.getElementById("admin");
     if (llistatAdmin) {
         llistatAdmin.addEventListener('click', (e) => {

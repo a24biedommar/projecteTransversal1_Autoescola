@@ -13,7 +13,7 @@ $respostes = json_decode($respostesStr, true);
 
 // 2. Declarem les variables de l'imatge (directori objectiu i ruta a la BD)
 $imatgeRutaBD = '';
-$targetDir = "../imatges/";
+$targetDir = "../../imatges/";
 $fitxer = $_FILES['imatge'] ?? null;
 
 //3. Si hi ha fitxer, el processem
@@ -50,8 +50,14 @@ foreach ($respostes as $index => $resposta) {
         $isCorrecta = 1;
     }
     
+    //Convertim la resposta a string per evitar errors
+    $respostaString = (string)$resposta;
+
+    //convertim els caràcters especials per evitar errors en la consulta SQL 
+    $respostaNeta = addslashes($respostaString);
+
     //A. Contruim la query d'inserció
-    $sqlResposta = "INSERT INTO RESPOSTES (ID_PREGUNTA, RESPOSTA, CORRECTA) VALUES ('$id_pregunta', '$resEsc', '$isCorrecta')";
+    $sqlResposta = "INSERT INTO RESPOSTES (ID_PREGUNTA, RESPOSTA, CORRECTA) VALUES ('$id_pregunta', '$respostaNeta', '$isCorrecta')";
     
     //B. Executem la query si falla mostrem error
     $conn->query($sqlResposta) or die("Error en la consulta de resposta: " . mysqli_error($conn));

@@ -225,6 +225,43 @@ function aturarTimer() {
 }
 
 //--------------------------
+// FUNCIONS QUE GESTIONEN LA PREVISUALITZACIÓ DE LA IMATGE
+//--------------------------
+
+//-------------------------
+// FUNCIÓ QUE CREA UNA PREVISUALITZACIÓ DE LA IMATGE SELECCIONADA
+function previsualitzarImatge(event, indexPregunta) {
+    //1. Agafem l'input i el contenidor de la previsualització
+    const input = event.target;
+    const previewContainer = document.getElementById('preview-container');
+    
+    previewContainer.innerHTML = ''; 
+
+    //2. Si hi ha un fitxer seleccionat, el processem
+    if (input.files && input.files[0]) {
+        const fitxer = input.files[0];
+
+        // 3. Creem una URL (de l'imatge) per a la previsualització
+        const imageUrl = URL.createObjectURL(fitxer);
+        
+        // 3. Creem l'element <img>
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.alt = `Fotografia Pregunta ${indexPregunta}`; //alt per accessibilitat
+
+        // 4. Afegim la imatge al contenidor
+        previewContainer.appendChild(img);
+        
+        //Un cop s'ha carregat la imatge, alliberem la URL per evitar massa carrega de memòria
+        img.onload = () => {
+            URL.revokeObjectURL(imageUrl);
+        };
+    }
+}
+
+
+
+//--------------------------
 // FUNCIONS QUE GESTIONEN EL QÜESTIONARI I LES PREGUNTES
 //--------------------------
 
@@ -459,6 +496,9 @@ function carregarFormulariCrear() {
             <input type="text" id="preguntaText" name="preguntaText" required><br><br>
             <label for="imatgeFitxer">Pujar Imatge</label><br>
             <input type="file" id="imatgeFitxer" name="imatgeFitxer" accept="image/*"><br><br>
+
+            <div id="preview-container"></div>
+
             <div id="respostes-container">
                 <label>Respostes:</label><br>
                 <input type="text" name="resposta1" required> <label>Correcta: <input type="radio" name="correcta" value="0" required></label><br>
@@ -470,8 +510,12 @@ function carregarFormulariCrear() {
             <button type="button" id="btnGuardarPregunta">Guardar Pregunta</button>
         </form>
     `;
+    //afegim els event listeners als botons
     document.getElementById("btnTornarEnrereCrear").addEventListener("click", carregarAdmin);
     document.getElementById("btnGuardarPregunta").addEventListener("click", crearPregunta);
+    // Afegim event listener per la previsualització de la imatge (aquest crida a la funció previsualitzarImatge)
+    document.getElementById('imatgeFitxer').addEventListener('change', (e) => previsualitzarImatge(e, 'Nova'));
+
 }
 
 // Funció que envia una petició per eliminar una pregunta.
@@ -562,7 +606,7 @@ function editarPregunta(idPregunta) {
             <label>Pregunta:</label><br>
             <input type="text" id="editarTextPregunta" value="${pregunta.pregunta}"><br><br>
             <label>Imatge Actual:</label><br>
-            <img src="../${pregunta.imatge}" alt="Imatge de la pregunta"><br>;
+            <img src="../${pregunta.imatge}" alt="Imatge de la pregunta"><br>
             <label for="imatgeFitxerEditar">Pujar Nova Imatge:</label><br>
             <input type="file" id="imatgeFitxerEditar" name="imatgeFitxerEditar" accept="image/*"><br><br>
             <label>Respostes:</label><br>

@@ -30,7 +30,7 @@ foreach($preguntesSeleccionades as $pregunta){
     $id = $pregunta['ID_PREGUNTA'];
 
     // Consultem totes les respostes i els seus camps (id, resposta) per a la pregunta actual
-    $sqlRespostes = "SELECT ID_RESPOSTA, RESPOSTA FROM RESPOSTES WHERE ID_PREGUNTA = $id ORDER BY ID_RESPOSTA";
+    $sqlRespostes = "SELECT ID_RESPOSTA, RESPOSTA FROM RESPOSTES WHERE ID_PREGUNTA = $id ORDER BY RAND()";
     $resResult = $conn->query($sqlRespostes);
 
     $respostes = [];

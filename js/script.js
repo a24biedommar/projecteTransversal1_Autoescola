@@ -328,8 +328,6 @@ function renderTotesLesPreguntes(preguntes) {
         }
     });
 
-    // Restaura seleccions si existeixen
-    actualitzarMarcador();
 }
 
 //--------------------------

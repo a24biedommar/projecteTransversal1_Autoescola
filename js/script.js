@@ -302,7 +302,7 @@ function renderTotesLesPreguntes(preguntes) {
 
     preguntes.forEach((pregunta, i) => {
         htmlString += `<h3>Pregunta ${i + 1}: ${pregunta.pregunta}</h3><br>`;
-        htmlString += `<img src="${pregunta.imatge}" alt="Pregunta ${i + 1}"><br>`;
+        htmlString += `<img src="../${pregunta.imatge}" alt="Pregunta ${i + 1}"><br>`; 
 
         pregunta.respostes.forEach((resposta, j) => {
             htmlString += `<button id="${i}_${j}" class="btn-resposta" data-preg="${i}" data-resp="${resposta.id}">${resposta.resposta}</button><br>`; // Utilitzem resposta.id com a resp

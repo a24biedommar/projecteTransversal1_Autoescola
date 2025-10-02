@@ -328,6 +328,8 @@ function renderTotesLesPreguntes(preguntes) {
         }
     });
 
+    // Restaura seleccions si existeixen
+    actualitzarMarcador();
 }
 
 //--------------------------
@@ -453,8 +455,8 @@ function carregarFormulariCrear() {
         <form id="formCrearPregunta">
             <label for="preguntaText">Pregunta:</label><br>
             <input type="text" id="preguntaText" name="preguntaText" required><br><br>
-            <label for="imatgeLink">Link Imatge:</label><br>
-            <input type="text" id="imatgeLink" name="imatgeLink"><br><br>
+            <label for="imatgeFitxer">Pujar Imatge</label><br>
+            <input type="file" id="imatgeFitxer" name="imatgeFitxer" accept="image/*"><br><br>
             <div id="respostes-container">
                 <label>Respostes:</label><br>
                 <input type="text" name="resposta1" required> <label>Correcta: <input type="radio" name="correcta" value="0" required></label><br>
@@ -487,13 +489,24 @@ function eliminarPregunta(idPregunta) {
 // Funció que recull les dades del formulari i crea una nova pregunta al servidor.
 function crearPregunta() {
     const form = document.getElementById("formCrearPregunta");
-    const preguntaText = form.querySelector('#preguntaText').value;
-    const imatgeLink = form.querySelector('#imatgeLink').value;
-
-    // Fem un .map per recollir els valors dels camps de resposta
-    const NOMS_RESPOSTES = ['resposta1', 'resposta2', 'resposta3', 'resposta4'];
-    const respostesInputs = NOMS_RESPOSTES.map(nomCamp => form.querySelector(`input[name="${nomCamp}"]`).value);
     
+    //1. Creem un objecte FormData per enviar les dades
+    const formData = new FormData();
+
+    const preguntaText = form.querySelector('#preguntaText').value;
+    
+    // 2. Recolim la imatge 
+    const inputImatge = form.querySelector('#imatgeFitxer');
+    const fitxerImatge = inputImatge.files[0];
+
+    // 3. Recollim les respostes i la correcta
+    const respostesInputs = []; 
+    for (let i = 1; i <= 4; i++) {
+        const valorResposta = form.querySelector(`input[name="resposta${i}"]`).value;
+        respostesInputs.push(valorResposta); //afegim la resposta a l'array
+    }
+    
+    //4. Recollim quina és la resposta correcta
     const radioCorrecta = form.querySelector('input[name="correcta"]:checked');
     if (!radioCorrecta) {
         alert("Si us plau, marca quina és la resposta correcta.");
@@ -501,15 +514,24 @@ function crearPregunta() {
     }
     const correctaIndex = radioCorrecta.value;
 
+    // 4. Afegim totes les dades al FormData
+    formData.append('pregunta', preguntaText);
+    formData.append('correcta', correctaIndex);
+    
+    // Enviarem les respostes com un string JSON
+    formData.append('respostes', JSON.stringify(respostesInputs)); 
+    
+    //Si no hi ha fitxer d'imatges, enviem un valor buit //TO DO: no permetre enviar un valor buit
+    if (fitxerImatge) {
+        formData.append('imatge', fitxerImatge);
+    } else {
+        formData.append('imatge', '');
+    }
+
+    // 5. Enviem les dades al servidor amb fetch
     fetch('../php/admin/crearPreguntes.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            pregunta: preguntaText,
-            respostes: respostesInputs,
-            correcta: correctaIndex,
-            imatge: imatgeLink
-        })
+        body: formData
     })
     .then(response => response.json())
     .then(data => {
@@ -517,7 +539,7 @@ function crearPregunta() {
         const crearDiv = document.getElementById("crearPregunta");
         if (crearDiv) crearDiv.style.display = "none";
         carregarAdmin();
-    })
+    });
 }
 
 // Funció que carrega el formulari d'edició d'una pregunta amb les seves dades actuals.

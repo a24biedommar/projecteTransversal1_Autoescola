@@ -463,20 +463,33 @@ function mostrarResultats() {
             <h2>Resultats</h2>
             <p>Total preguntes: ${resultat.total}</p>
             <p>Correctes: ${resultat.correctes}</p>
+            
             <button class="btn-Reiniciar" id="btnReiniciar">Reiniciar</button>
+            <button class="btn-Sortir" id="btnSortir">Sortir</button>
         `;
 
-        //4. Afegim l'event listener al botó reiniciar
+        //4. Afegim els Event Listeners als nous botons:
+        
+        // Botó reiniciar (comença una nova partida amb el mateix usuari)
         document.getElementById("btnReiniciar").addEventListener("click", () => {
-            // Un cop finalitzat, esborrem la partida guardada i tornem al login
+            // Esborrem l'estat de la partida
             localStorage.removeItem('partida');
-            mostrarLogin();
+            // Recarreguem el joc amb el mateix nom d'usuari
+            carregarJoc(); 
+        });
+        
+        // Botó SORTIR (Tancar sessió i anar al Login)
+        document.getElementById("btnSortir").addEventListener("click", () => {
+            // Esborrem l'estat de la partida i la sessió d'usuari
+            localStorage.removeItem('partida');
+            localStorage.removeItem('nomUsuari');
+            // Anem a la pantalla de login
+            mostrarLogin(); 
         });
 
-        //5. Si existeix el botó admin, l'amaguem i reiniciem el missatge de benvinguda
+        //5. Si existeix el botó admin, l'amaguem 
         const btnAdmin = document.getElementById("btnAdmin");
         if (btnAdmin) btnAdmin.style.display = "none";
-        document.getElementById("missatgeBenvinguda").textContent = "";
     })
 }
 

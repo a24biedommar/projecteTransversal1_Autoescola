@@ -229,36 +229,48 @@ function aturarTimer() {
 //--------------------------
 
 //-------------------------
-// FUNCIÓ QUE CREA UNA PREVISUALITZACIÓ DE LA IMATGE SELECCIONADA
-function previsualitzarImatge(event, indexPregunta) {
-    //1. Agafem l'input i el contenidor de la previsualització
+//FUNCIO QUE PREVISUALITZA LA IMATGE SELECCIONADA
+function previsualitzarImatge(event, idImatgeAntiga) {
     const input = event.target;
-    const previewContainer = document.getElementById('preview-container');
+    // Agafem el contenidor (si estem ediitant seria nova-preview-container si no sera preview-container)
+    const previewContainer = document.getElementById('preview-container') || 
+                             document.getElementById('nova-preview-container');
     
-    previewContainer.innerHTML = ''; 
+    // Si estem en edició, capturem la imatge antiga
+    const imatgeAntiga = idImatgeAntiga ? document.getElementById(idImatgeAntiga) : null;
 
-    //2. Si hi ha un fitxer seleccionat, el processem
+    previewContainer.innerHTML = ''; 
+    
+    // Si s'ha seleccionat un fitxer, processar
     if (input.files && input.files[0]) {
         const fitxer = input.files[0];
 
-        // 3. Creem una URL (de l'imatge) per a la previsualització
+        // Amaguem la imatge antiga si existeix
+        if (imatgeAntiga) {
+            imatgeAntiga.style.display = 'none'; 
+        }
+
+        // Creem la URL i l'element <img>
         const imageUrl = URL.createObjectURL(fitxer);
         
-        // 3. Creem l'element <img>
         const img = document.createElement('img');
         img.src = imageUrl;
-        img.alt = `Fotografia Pregunta ${indexPregunta}`; //alt per accessibilitat
-
-        // 4. Afegim la imatge al contenidor
+        img.alt = 'Imatge previsualitzada'; 
+        
+        // Afegim la nova imatge al contenidor
         previewContainer.appendChild(img);
         
-        //Un cop s'ha carregat la imatge, alliberem la URL per evitar massa carrega de memòria
+        // Netejem la memoria de la web un cop la imatge s'ha carregat
         img.onload = () => {
             URL.revokeObjectURL(imageUrl);
         };
+    } else {
+        // si l'usuari ha retirat la imatge, netegem el contenidor i mostrem l'antiga si existeix
+        if (imatgeAntiga) {
+            imatgeAntiga.style.display = 'block';
+        }
     }
 }
-
 
 
 //--------------------------
@@ -514,8 +526,7 @@ function carregarFormulariCrear() {
     document.getElementById("btnTornarEnrereCrear").addEventListener("click", carregarAdmin);
     document.getElementById("btnGuardarPregunta").addEventListener("click", crearPregunta);
     // Afegim event listener per la previsualització de la imatge (aquest crida a la funció previsualitzarImatge)
-    document.getElementById('imatgeFitxer').addEventListener('change', (e) => previsualitzarImatge(e, 'Nova'));
-
+    document.getElementById('imatgeFitxer').addEventListener('change', (e) => previsualitzarImatge(e, null)); 
 }
 
 // Funció que envia una petició per eliminar una pregunta.
@@ -590,30 +601,36 @@ function crearPregunta() {
 
 // Funció que carrega el formulari d'edició d'una pregunta amb les seves dades actuals.
 function editarPregunta(idPregunta) {
+    //1. Declarem les variables i busquem la pregunta a editar
     const idBuscada = Number(idPregunta);
     const pregunta = totesLesPreguntes.find(p => Number(p.id) === idBuscada);
-    if (!pregunta) return;   
-
+    if (!pregunta) return;
+    //2. Amaguem la vista admin i mostrem el formulari d'edició
     amagarVistaAdmin(false);
     document.getElementById("admin").style.display = "none";
     const editarDiv = document.getElementById("editarPregunta");
     editarDiv.style.display = "block";
 
+    //3. Generem el HTML del formulari amb les dades de la pregunta
     let htmlString = `
         <button type="button" id="btnCancelarEdicio" class="btn-tornar">Cancelar</button>
         <h2>Editar Pregunta</h2>
         <form id="formEditarPregunta">
             <label>Pregunta:</label><br>
             <input type="text" id="editarTextPregunta" value="${pregunta.pregunta}"><br><br>
+            
             <label>Imatge Actual:</label><br>
-            <img src="../${pregunta.imatge}" alt="Imatge de la pregunta"><br>
+            <img src="../${pregunta.imatge}" id="imatgeActualPreview" alt="Imatge actual"><br> 
+            
             <label for="imatgeFitxerEditar">Pujar Nova Imatge:</label><br>
             <input type="file" id="imatgeFitxerEditar" name="imatgeFitxerEditar" accept="image/*"><br><br>
+            
+            <div id="nova-preview-container"></div>
+            
             <label>Respostes:</label><br>
     `;
     
-    const preguntaCompleta = totesLesPreguntes.find(p => Number(p.id) === idBuscada);
-    // Assumim l'índex 0 com a valor inicial si no podem determinar la correcta sense un altre fetch.
+    // 4. Lògica per omplir les respostes (tenint en compte la correcta)
     const indexCorrecta = 0; 
     
     pregunta.respostes.forEach((resposta, i) => {
@@ -626,8 +643,12 @@ function editarPregunta(idPregunta) {
     htmlString += `</form>`;
     editarDiv.innerHTML = htmlString;
 
+    // 5. Afegim els Event Listeners
     document.getElementById("btnGuardarCanvis").addEventListener("click", () => actualitzarPregunta(idPregunta));
     document.getElementById("btnCancelarEdicio").addEventListener("click", carregarAdmin);
+    
+    //6. Afegim event listener per la previsualització de la nova imatge (aquest crida a la funció previsualitzarImatge)
+document.getElementById('imatgeFitxerEditar').addEventListener('change', (e) => previsualitzarImatge(e, 'imatgeActualPreview'));
 }
 
 // Funció que envia les dades actualitzades d'una pregunta al servidor.

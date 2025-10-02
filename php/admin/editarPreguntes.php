@@ -1,69 +1,69 @@
 <?php
 session_start();
 require_once '../connexio.php';
+
 header('Content-Type: application/json');
 
-// 1. Recollim les dades del formulari si no hi ha valor posem un valor per defecte
+// 1. recollim les dades del formulari
 $idPregunta    = (int)($_POST['id'] ?? 0);
 $preguntaText  = $_POST['pregunta'] ?? '';
 $respostesStr  = $_POST['respostes'] ?? '[]';
 $correctaIndex = (int)($_POST['correcta'] ?? -1);
 
+// Descodifiquem l'string JSON de respostes
 $respostes = json_decode($respostesStr, true);
 
-// 2. Declarem les variables de l'imatge (directori objectiu i ruta a la BD)
+// 2. GESTIÓ DE LA PUJADA DEL NOU FITXER
 $imatgeRutaBD = ''; 
-$targetDir = "../imatges/"; // Carpeta de destinació
+//fiquem la ruta i el fitxer, si no hi ha fitxer serà null
+$targetDir = "../../imatges/"; 
 $fitxer = $_FILES['imatge'] ?? null;
 
 if ($fitxer) {
-    // guardem el nom original del fitxer i la ruta completa
+    // Utilitzem el nom original del fitxer (simplicitat màxima)
     $nomOriginal = $fitxer['name'];
     $targetFilePath = $targetDir . $nomOriginal;
 
     // Movem el fitxer
     move_uploaded_file($fitxer['tmp_name'], $targetFilePath);
     
-    // si s'ha pujat una imatge, preparem la ruta per a la BD
     $imatgeRutaBD = 'imatges/' . $nomOriginal;
 }
 
-// 3. ACTUALITZACIÓ DE LA TAULA PREGUNTES
-$sqlPregunta = "UPDATE PREGUNTES 
-                SET PREGUNTA = '$preguntaTextEsc'"; // Afegim el camp PREGUNTA a l'UPDATE
-
+// 3. ACTUALITZACIÓ DE LA TAULA PREGUNTES (Sentència COMPLETA)
 if (!empty($imatgeRutaBD)) {
-    // si hi ha imatge nova, actualitzem també el camp LINK_IMATGE
+    //S'ha pujat una imatge nova -> Actualitzem PREGUNTA I LINK_IMATGE
     $sqlPregunta = "UPDATE PREGUNTES 
                     SET PREGUNTA = '$preguntaTextEsc', 
                         LINK_IMATGE = '$imatgeRutaBD' 
                     WHERE ID_PREGUNTA = '$idPregunta'";
 } else {
-    //si no hi ha imatge nova, només actualitzem la pregunta
+    //NO s'ha pujat imatge nova -> Només actualitzem PREGUNTA
     $sqlPregunta = "UPDATE PREGUNTES 
                     SET PREGUNTA = '$preguntaTextEsc' 
                     WHERE ID_PREGUNTA = '$idPregunta'";
 }
+$conn->query($sqlPregunta);
 
+// 4. ACTUALITZACIÓ DE RESPOSTES
+$conn->query("DELETE FROM RESPOSTES WHERE ID_PREGUNTA = '$idPregunta'"); // Esborrem les respostes antigues
 
-//4. ACTUALITZACIÓ DE RESPOSTES
-$conn->query("DELETE FROM RESPOSTES WHERE ID_PREGUNTA = '$idPregunta'");
-
-//recorrem totes les preguntes i les inserim de nou (actualitzant també la correcta)
+//Recorrem totes les respostes del fitxer script.js i les inserim una a una
 foreach ($respostes as $index => $resposta) {
     if ($index == $correctaIndex) {
         $isCorrecta = 1;
     } else {
         $isCorrecta = 0;
     }
-        
+    
+    //Apliquem addslashes per evitar errors 
+    $respostaNeta = addslashes($resposta);
+
     //inserim la resposta a la base de dades
     $sqlInsert = "INSERT INTO RESPOSTES (ID_PREGUNTA, RESPOSTA, CORRECTA) 
-                  VALUES ('$idPregunta', '$resposta', '$isCorrecta')";
+                  VALUES ('$idPregunta', '$respostaNeta', '$isCorrecta')";
     $conn->query($sqlInsert);
 }
 
-//fem encode per enviarli al script la informació
+// fem encode per tornar a enviar-li l'informació final al script.js
 echo json_encode(['success' => true, 'message' => 'Pregunta i respostes actualitzades correctament']);
-
-

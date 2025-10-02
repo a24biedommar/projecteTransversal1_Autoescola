@@ -559,8 +559,10 @@ function editarPregunta(idPregunta) {
         <form id="formEditarPregunta">
             <label>Pregunta:</label><br>
             <input type="text" id="editarTextPregunta" value="${pregunta.pregunta}"><br><br>
-            <label>Imatge:</label><br>
-            <input type="text" id="editarLinkImatge" value="${pregunta.imatge}"><br><br>
+            <label>Imatge Actual:</label><br>
+            <img src="../imatges/${pregunta.imatge}" alt="Imatge actual"><br>
+            <label for="imatgeFitxerEditar">Pujar Nova Imatge:</label><br>
+            <input type="file" id="imatgeFitxerEditar" name="imatgeFitxerEditar" accept="image/*"><br><br>
             <label>Respostes:</label><br>
     `;
     
@@ -584,13 +586,22 @@ function editarPregunta(idPregunta) {
 
 // Funció que envia les dades actualitzades d'una pregunta al servidor.
 function actualitzarPregunta(idPregunta) {
+    //1.Declarem les variables i recollim les dades del formulari
     const form = document.getElementById("formEditarPregunta");
+    const formData = new FormData();
     const preguntaText = form.querySelector("#editarTextPregunta").value;
-    const imatgeLink = form.querySelector("#editarLinkImatge").value;
     
-    // Recollim les respostes
-    const respostes = [0, 1, 2, 3].map(i => form.querySelector(`#resposta${i}`).value);
-
+    // 2.Recollim la imatge nova si s'ha seleccionat
+    const inputImatge = form.querySelector('#imatgeFitxerEditar');
+    const fitxerImatge = inputImatge.files[0];
+    
+    // 3. Recollim les respostes i les guardem en un array (incloent la correcta)
+    const respostes = []; 
+    for (let i = 0; i <= 3; i++) {
+        const valorResposta = form.querySelector(`#resposta${i}`).value; 
+        respostes.push(valorResposta); 
+    }
+    // 4. Recollim quina és la resposta correcta
     const radioCorrecta = form.querySelector('input[name="correctaEditar"]:checked');
     if (!radioCorrecta) {
         alert("Si us plau, marca la resposta correcta.");
@@ -598,16 +609,25 @@ function actualitzarPregunta(idPregunta) {
     }
     const correctaIndex = radioCorrecta.value;
 
+    // 5. Afegim totes les dades al FormData
+    formData.append('id', Number(idPregunta));
+    formData.append('pregunta', preguntaText);
+    formData.append('correcta', Number(correctaIndex));
+    //Enviem les respostes com un string JSON dins de l'objecte FormData
+    formData.append('respostes', JSON.stringify(respostes)); 
+    
+    //Nomes afegim la imatge si s'ha seleccionat una nova
+    if (fitxerImatge) {
+        formData.append('imatge', fitxerImatge);
+    } else {
+        //Enviem un valor buit si no s'ha seleccionat cap imatge nova
+        formData.append('imatge', '');
+    }
+    
+    // 4. Enviament amb fetch
     fetch('../php/admin/editarPreguntes.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            id: Number(idPregunta),
-            pregunta: preguntaText,
-            respostes: respostes,
-            correcta: Number(correctaIndex),
-            imatge: imatgeLink
-        })
+        body: formData // Enviem l'objecte FormData
     })
     .then(response => response.json())
     .then(data => {

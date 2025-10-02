@@ -182,32 +182,35 @@ function esborrarPartida() {
 //--------------------------
 
 //-------------------------
-// FUNCIÓ QUE FORMATA ELS SEGONS A MM:SS
+//FUNCIO QUE MODIFICA EL TEMPS PER MOSTRARLO EN FORMAT 00:SS
 function formatTemps(segons) {
-    const minuts = Math.floor(segons / 60);
-    const seg = segons % 60;
-    // Assegura que els minuts i segons tinguin dos dígits (p. ex., 00:30)
-    const formatMinuts = String(minuts).padStart(2, '0');
-    const formatSegons = String(seg).padStart(2, '0');
-    return `${formatMinuts}:${formatSegons}`;
+    //1. Retorna el temps en format 00:SS
+    //*Si el temps es inferior a 10 segons, afegeix un 0 davant*
+    return '00:' + (segons < 10 ? '0' + segons : segons);
 }
 
 //-------------------------
 // FUNCIÓ PER INICIAR EL TEMPORITZADOR
 function iniciarTimer() {
-    // 1. Netejem qualsevol interval anterior per evitar duplicats
+    //1. Aturem qualsevol timer que estigui actiu abans d'iniciar un de nou
     aturarTimer();
 
-    // 2. Iniciem el nou interval
+    // 2. Iniciem un nou timer que es decrementa cada segon
     idTimer = setInterval(function() {
+        console.log(estatDeLaPartida.tempsRestant);
         if (estatDeLaPartida.tempsRestant > 0) {
             estatDeLaPartida.tempsRestant--;
-            actualitzarMarcador(); // Actualitza el marcador, que alhora actualitza el temps visual
-        } else {
-            // 3. Quan el temps s'acaba
-            aturarTimer();
-            mostrarResultats(); // Finalitza la partida automàticament
         }
+
+        // 3. Actualitzem el marcador
+        actualitzarMarcador(); 
+        
+        //4. Si el temps arriba a 0, aturem el timer i mostrem els resultats
+        if (estatDeLaPartida.tempsRestant <= 0) {
+             aturarTimer();
+             mostrarResultats(); 
+        }
+        
     }, 1000);
 }
 
@@ -220,7 +223,6 @@ function aturarTimer() {
         idTimer = null;
     }
 }
-
 
 //--------------------------
 // FUNCIONS QUE GESTIONEN EL QÜESTIONARI I LES PREGUNTES
@@ -399,13 +401,13 @@ function amagarVistaAdmin(amagar) {
         questionari.style.display = "none";
         marcador.style.display = "none";
         adminDiv.style.display = "block";
-        if (tempsPartida) tempsPartida.style.display = "none"; // Amaguem el temps
+        if (tempsPartida) tempsPartida.style.display = "none"; 
     } else {
         // Amagar totes les vistes
         questionari.style.display = "none";
         marcador.style.display = "none";
         adminDiv.style.display = "none";
-        if (tempsPartida) tempsPartida.style.display = "none"; // Amaguem el temps
+        if (tempsPartida) tempsPartida.style.display = "none";
     }
 
     crearPreguntaDiv.style.display = "none";

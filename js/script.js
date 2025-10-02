@@ -562,7 +562,7 @@ function editarPregunta(idPregunta) {
             <label>Pregunta:</label><br>
             <input type="text" id="editarTextPregunta" value="${pregunta.pregunta}"><br><br>
             <label>Imatge Actual:</label><br>
-            <img src="../imatges/${pregunta.imatge}" alt="Imatge actual"><br>
+            <img src="../${pregunta.imatge}" alt="Imatge de la pregunta"><br>;
             <label for="imatgeFitxerEditar">Pujar Nova Imatge:</label><br>
             <input type="file" id="imatgeFitxerEditar" name="imatgeFitxerEditar" accept="image/*"><br><br>
             <label>Respostes:</label><br>

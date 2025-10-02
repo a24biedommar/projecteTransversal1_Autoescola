@@ -21,7 +21,7 @@ let idTimer = null;
 //-------------------------
 // FUNCIO QUE GESTIONA EL MOSTRAR EL LOGIN I EMMAGATZEMA EL NOM DE L'USUARI
 function mostrarLogin() {
-    //1. Amaguem totes les vistes menys la del login
+    // 1. Amaguem totes les vistes menys la del login
     document.getElementById("questionari").style.display = "none";
     document.getElementById("marcador").style.display = "none";
     document.getElementById("admin").style.display = "none";
@@ -30,15 +30,19 @@ function mostrarLogin() {
     
     const loginDiv = document.getElementById("login");
     
-    //2. Netejem l'estat de la partida i el nom d'usuari
+    // 2. Netejem l'estat de la partida i el nom d'usuari
     localStorage.removeItem("partida");
     localStorage.removeItem("nomUsuari");
     nomUsuari = "";
     
     // Aturem el timer si estava actiu
     aturarTimer();
+    
+    // 3. Amaguem el botó de Sortir global
+    const btnSortirGlobal = document.getElementById("btn-sortir");
+    if (btnSortirGlobal) btnSortirGlobal.style.display = "none";
 
-    //3. Generem el formulari de login
+    // 4. Generem el formulari de login
     loginDiv.innerHTML = `
         <h2>Inici de Sessió</h2>
         <form id="loginForm">
@@ -48,16 +52,16 @@ function mostrarLogin() {
         </form>
     `;
     
-    //4. Afegim l'event listener al formulari (botó entrar)
+    // 5. Afegim l'event listener al formulari (botó entrar)
     const formLogin = document.getElementById("loginForm");
     if (formLogin) {
         formLogin.addEventListener("submit", gestionarLogin);
     }
     
-    //5. Mostrem el div del login
+    // 6. Mostrem el div del login
     loginDiv.style.display = "block";
     document.getElementById("missatgeBenvinguda").textContent = "Qüestionari Autoescola";
-
+    
     // Amaguem el temps a la login page
     const tempsPartida = document.getElementById("temps");
     if (tempsPartida) tempsPartida.style.display = "none";
@@ -73,23 +77,20 @@ function gestionarLogin(event) {
     const inputNom = document.getElementById("username");
     const nomIntroduit = inputNom.value;
     
-    //Netejem el nom introduït (tot a minuscules)
-    const nomNet = nomIntroduit.toLowerCase();
+    //Netejem l'input (les mayuscules) i la guardem en una variable
+    const nomNet = nomIntroduit.toLowerCase(); 
     
-    // Definim les paraules clau simplificades
     const ES_ADMIN = nomNet === 'admin' || nomNet === 'administrador' || nomNet === 'administradora';
 
-    //3. comprovem si es admin o un usuari normal
+    //3. Comprovem si és Admin o usuari normal
     if (nomIntroduit) {
         // Cas ADMIN
         if (ES_ADMIN) {
-            //si es admin posem el nom d'usuari a "Admin"
             document.getElementById("login").style.display = "none";
-            carregarAdmin();
+            carregarAdmin(); // Entrem directament a l'Admin
             
         // Cas Usuari Normal
         } else {
-            //si es usuari normal, guardem el nom a la variable global i al localstorage
             nomUsuari = nomIntroduit;
             localStorage.setItem("nomUsuari", nomUsuari);
             
@@ -103,7 +104,7 @@ function gestionarLogin(event) {
 //-------------------------
 // FUNCIO QUE CARREGA EL JOC I EL MOSTRA
 function mostrarJoc() {
-    //1. Amaguem el login i mostrem el questionari i el marcador
+    // 1. Amaguem el login i mostrem el questionari i el marcador
     document.getElementById("login").style.display = "none";
     document.getElementById("questionari").style.display = "block";
     document.getElementById("marcador").style.display = "block";
@@ -111,14 +112,13 @@ function mostrarJoc() {
     document.getElementById("crearPregunta").style.display = "none";
     document.getElementById("editarPregunta").style.display = "none";
     
-    //2. Mostrem el missatge de benvinguda amb el nom de l'usuari 
+    // 2. Mostrem el missatge de benvinguda i mostrem el botó de Sortir 
     document.getElementById("missatgeBenvinguda").textContent = `Benvingut ${nomUsuari}!`;
-    
-    //3. Si existeix el botó admin, el mostrem
-    const btnAdmin = document.getElementById("btnAdmin");
-    if (btnAdmin) btnAdmin.style.display = "inline-block";
 
-    // Mostrem l'element del temps i l'activem
+    const btnSortirGlobal = document.getElementById("btn-sortir");
+    if (btnSortirGlobal) btnSortirGlobal.style.display = "block";
+
+    // 3. Mostrem l'element del temps i l'activem
     const tempsPartida = document.getElementById("temps");
     if (tempsPartida) {
         tempsPartida.style.display = "block";
@@ -505,30 +505,35 @@ function mostrarResultats() {
     })
 }
 
+//-------------------------
 // Funció que gestiona la visibilitat de les vistes (Joc / Admin).
 function amagarVistaAdmin(amagar) {
-    // Aturem el timer quan entrem a l'administració
+    // 1. Aturem el timer i carreguem tots els elements
     aturarTimer();
-
     const questionari = document.getElementById("questionari");
     const marcador = document.getElementById("marcador");
     const crearPreguntaDiv = document.getElementById("crearPregunta");
     const editarPreguntaDiv = document.getElementById("editarPregunta");
     const adminDiv = document.getElementById("admin");
     const tempsPartida = document.getElementById("temps");
+    
+    const btnSortirGlobal = document.getElementById("btn-sortir");
 
+    // 2. Lògica per mostrar/amagar els contenidors segons el mode
     if (amagar) {
         // Mostrar vista Admin
         questionari.style.display = "none";
         marcador.style.display = "none";
         adminDiv.style.display = "block";
         if (tempsPartida) tempsPartida.style.display = "none"; 
+        if (btnSortirGlobal) btnSortirGlobal.style.display = "block";
     } else {
         // Amagar totes les vistes
         questionari.style.display = "none";
         marcador.style.display = "none";
         adminDiv.style.display = "none";
         if (tempsPartida) tempsPartida.style.display = "none";
+        if (btnSortirGlobal) btnSortirGlobal.style.display = "block"; 
     }
 
     crearPreguntaDiv.style.display = "none";
@@ -546,7 +551,7 @@ function carregarAdmin() {
         .then(data => {
             totesLesPreguntes = data.preguntes;
             const llistatAdmin = document.getElementById("admin");
-            let htmlString = `<button id="btnTornarEnrere" class="btn-tornar">Tornar enrere</button><br>`;
+            let htmlString = `<button id="btnTornarEnrere" class="btn-tornar">Sortir</button><br>`;
             htmlString += `<button id="btnCrearPregunta" class="btn-crear">Crear nova pregunta</button>`;
             htmlString += `<h2>Llistat complet de preguntes</h2>`;
 

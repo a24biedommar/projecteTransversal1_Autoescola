@@ -355,7 +355,7 @@ function renderPreguntaActual() {
     
     //2.Mostrem les dades de la pregutna actual (imatges, i les seves respostes)
     htmlString += `<h3>Pregunta ${index + 1}: ${pregunta.pregunta}</h3><br>`;
-    htmlString += `<img src="..${pregunta.imatge}" alt="Pregunta ${index + 1}"><br>`; 
+    htmlString += `<img src="../${pregunta.imatge}" alt="Pregunta ${index + 1}"><br>`; 
 
     pregunta.respostes.forEach((resposta, j) => {
         const idResposta = `${index}_${resposta.id}`; 

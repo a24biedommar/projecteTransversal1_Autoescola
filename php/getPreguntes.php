@@ -1,20 +1,16 @@
 <?php 
-//iniciem la sessió
+
 session_start();
+
+require_once 'connexio.php';
 
 //inicialitzem les variables a 0 per estalbiar-nos errors
 $_SESSION['index'] = 0;
 $_SESSION['puntuacio'] = 0;
 $_SESSION['preguntes'] = [];
 
-// Inclou el fitxer de connexió
-require_once 'connexio.php';
-
-//creem la variable que ens diu quantes preguntes volem mostrar
-$numPreguntes = 10;
-
-// agafem $numPreguntes preguntes aleatòries de la taula PREGUNTES (index i pregunta)
-$sqlPreguntes = "SELECT * FROM PREGUNTES ORDER BY RAND() LIMIT $numPreguntes";
+// Consultem totes les preguntes de la base de dades i les barregem aleatòriament
+$sqlPreguntes = "SELECT * FROM PREGUNTES ORDER BY RAND()"; 
 $result = $conn->query($sqlPreguntes);
 
 // Inicialitzem l'array on guardarem les preguntes seleccionades
@@ -39,7 +35,7 @@ foreach($preguntesSeleccionades as $pregunta){
 
     $respostes = [];
 
-    // Aquest bucle recupera totes les respostes per a la pregunta
+    //fem un bucle per guardar les respostes de la pregunta actual
     while($r = $resResult->fetch_assoc()){
         $respostes[] = [
             'id' => $r['ID_RESPOSTA'],
@@ -47,7 +43,7 @@ foreach($preguntesSeleccionades as $pregunta){
         ];
     }
 
-    // Afegim la pregunta completa a l'array final
+    // Afegim la pregunta completa (tots els seus atributs) a l'array final
     $preguntesNoCorrect[] = [
         'id' => $pregunta['ID_PREGUNTA'],
         'pregunta' => $pregunta['PREGUNTA'],
@@ -62,6 +58,3 @@ foreach($preguntesSeleccionades as $pregunta){
 // Creem el fitxer JSON amb les preguntes que mostrarem a l'usuari
 header('Content-Type: application/json');
 echo json_encode(['preguntes' => $preguntesNoCorrect]);
-
-
-

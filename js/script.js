@@ -2,7 +2,7 @@
 // VARIABLES GLOBALS!!
 //-----------------------------
 let estatDeLaPartida = {
-    preguntaActual: 0,
+    preguntaActualIndex: 0,
     contadorPreguntes: 0,
     respostesUsuari: [],
     tempsRestant: 30, // Modificat a 30 segons
@@ -120,10 +120,14 @@ function carregarJoc() {
     //1. Si existeix la partida al localstorage, la carreguem
     if (localStorage.partida) {
         estatDeLaPartida = JSON.parse(localStorage.getItem("partida"));
+         // Si és una partida antiga, assegurem que l'índex actual estigui definit
+        if (estatDeLaPartida.preguntaActualIndex === undefined) {
+             estatDeLaPartida.preguntaActualIndex = 0;
+        }
     } else {
         // Si no hi ha partida, inicialitzem l'estat de la partida
          estatDeLaPartida = {
-            preguntaActual: 0,
+            preguntaActualIndex: 0,
             contadorPreguntes: 0,
             respostesUsuari: [],
             tempsRestant: 30,
@@ -140,8 +144,8 @@ function carregarJoc() {
                 estatDeLaPartida.respostesUsuari = new Array(totesLesPreguntes.length).fill(undefined);
             }
 
-            //3. Truquem a les funcions per renderitzar les preguntes i actualitzar el marcador i per mostrar el joc
-            renderTotesLesPreguntes(totesLesPreguntes); 
+            //3. Truquem a les funcions per renderitzar la pregunta actual i mostrar el joc
+            renderPreguntaActual();
             actualitzarMarcador(); 
             mostrarJoc();
         });
@@ -278,24 +282,21 @@ function previsualitzarImatge(event, idImatgeAntiga) {
 //--------------------------
 
 //-------------------------
-// Funció que actualitza el marcador de respostes a la pantalla i la selecció visual.
+// Funció que actualitza el marcador (Simplificada per Navegació)
 function actualitzarMarcador() {
     const marcador = document.getElementById("marcador");
     const totalPreguntes = totesLesPreguntes.length;
-    let textMarcador = "Preguntes:<br>";
-
-    // Actualitzem el display del temps a l'element amb id="temps"
+    
+    //1. Mostrem el número de pregunta actual i el total de preguntes
+    let textMarcador = `Pregunta: ${estatDeLaPartida.preguntaActualIndex + 1} / ${totalPreguntes}<br>`;
+    
+    //2. actualitzem el temps restant
     const tempsPartida = document.getElementById("temps");
     if (tempsPartida) {
         tempsPartida.textContent = formatTemps(estatDeLaPartida.tempsRestant);
     }
 
-    // Generar estat de les preguntes
-    estatDeLaPartida.respostesUsuari.forEach((resposta, i) => {
-        const estat = resposta === undefined ? "O" : "X";
-        textMarcador += `Pregunta ${i + 1} : ${estat}<br>`;
-    });
-
+    //3. carreguem el botó per esborrar la partida i el seu event listener
     textMarcador += `<div><button id="btnBorrar">Borrar Partida</button></div>`;
     marcador.innerHTML = textMarcador;
 
@@ -304,81 +305,127 @@ function actualitzarMarcador() {
         btnBorrar.addEventListener('click', esborrarPartida);
     }
 
-    // agafem tots els elements amb la classe .seleccionada i eliminem la classe .seleccionada
+    // Netejar la selecció visual (de la pregunta seleccionada) de qualsevol pregunta anterior
     document.querySelectorAll(".seleccionada").forEach(el => el.classList.remove("seleccionada"));
-
-    // Marcar les preguntes que ja estan seleccionades
-    estatDeLaPartida.respostesUsuari.forEach((resposta, i) => {
-        if (resposta !== undefined) {
-            const boto = document.getElementById(`${i}_${resposta}`);
-            if (boto) boto.classList.add("seleccionada");
-        }
-    });
-
-    // Controlar visibilitat del botó Finalitzar
-    const btnFinalitzar = document.getElementById("btnFinalitzar");
-    if (btnFinalitzar) {
-        btnFinalitzar.style.display = 
-            estatDeLaPartida.contadorPreguntes === totalPreguntes ? "inline-block" : "none";
+    
+    //4. Si l'usuari ja ha seleccionat una resposta per la pregunta actual, la marquem
+    const respostaActual = estatDeLaPartida.respostesUsuari[estatDeLaPartida.preguntaActualIndex];
+    if (respostaActual !== undefined) {
+         // Utilitzem l'índex de la pregunta actual per trobar l'ID del botó
+         const boto = document.getElementById(`${estatDeLaPartida.preguntaActualIndex}_${respostaActual}`);
+         if (boto) boto.classList.add("seleccionada");
     }
 
     // Emmagatzemo l'estat de la partida a localStorage
     localStorage.setItem("partida", JSON.stringify(estatDeLaPartida));
 }
 
+//-------------------------
 // Funció que marca la resposta de l'usuari i actualitza el comptador de preguntes.
 function marcarResposta(numPregunta, numResposta) {
-    // Si el temps ha acabat, ignorem les respostes
+    //1. Si el temps ha arribat a 0, no permetem marcar respostes
     if (estatDeLaPartida.tempsRestant <= 0) return;
     
+    //2. Convertim els valors a enters (de la pregunta i la resposta (els index))
     const preguntaIndex = parseInt(numPregunta);
     const respostaIndex = parseInt(numResposta);
 
-    // Si la pregunta no estava contestada, incrementem el comptador
+    //3. Si la pregunta no estava contestada, incrementem el comptador
     if (estatDeLaPartida.respostesUsuari[preguntaIndex] === undefined) {
         estatDeLaPartida.contadorPreguntes++;
     }
 
-    estatDeLaPartida.respostesUsuari[preguntaIndex] = numResposta; // Guardem el valor (índex) de la resposta
+    //4. Guardem la resposta utilitzant l'índex de la pregunta que es veu i per ultim actualitzem el marcador
+    estatDeLaPartida.respostesUsuari[preguntaIndex] = numResposta;
 
     actualitzarMarcador();
 }
 
-// Funció que crea i renderitza les preguntes del qüestionari a l'HTML.
-function renderTotesLesPreguntes(preguntes) {
+//-------------------------
+// NOVA FUNCIÓ: Renderitza la pregunta que toca mostrar (Substitueix renderTotesLesPreguntes)
+function renderPreguntaActual() {
+    //1. Agafem el contenidor i la pregunta actual (el seu index)
     const contenidor = document.getElementById("questionari");
+    const index = estatDeLaPartida.preguntaActualIndex;
+    const pregunta = totesLesPreguntes[index];
+
+    if (!pregunta) return; 
+    
     let htmlString = "";
+    
+    //2.Mostrem les dades de la pregutna actual (imatges, i les seves respostes)
+    htmlString += `<h3>Pregunta ${index + 1}: ${pregunta.pregunta}</h3><br>`;
+    htmlString += `<img src="../imatges/${pregunta.imatge}" alt="Pregunta ${index + 1}"><br>`; 
 
-    preguntes.forEach((pregunta, i) => {
-        htmlString += `<h3>Pregunta ${i + 1}: ${pregunta.pregunta}</h3><br>`;
-        htmlString += `<img src="../${pregunta.imatge}" alt="Pregunta ${i + 1}"><br>`; 
-
-        pregunta.respostes.forEach((resposta, j) => {
-            htmlString += `<button id="${i}_${j}" class="btn-resposta" data-preg="${i}" data-resp="${resposta.id}">${resposta.resposta}</button><br>`; // Utilitzem resposta.id com a resp
-        });
-        htmlString += `<hr>`;
+    pregunta.respostes.forEach((resposta, j) => {
+        const idResposta = `${index}_${resposta.id}`; 
+        htmlString += `<button id="${idResposta}" class="btn-resposta" data-preg="${index}" data-resp="${resposta.id}">${resposta.resposta}</button><br>`; 
     });
+    
+    htmlString += `<hr>`;
 
-    htmlString += `<button id="btnFinalitzar" class="btn-finalitzar" style="display:none">Finalitzar</button>`;
+    // 3. Botons de Navegació
+    const totalPreguntes = totesLesPreguntes.length;
+    
+    // Botó ENRERA (No es mostra a la Pregunta 1)
+    const btnEnrera = (index > 0) ? 
+                      `<button id="btnEnrera" class="btn-navegacio">Enrera</button>` : 
+                      '';
+    
+    // Botó SEGÜENT (Si no som a l'última pregunta)
+    const btnSeguent = (index < totalPreguntes - 1) ? 
+                       `<button id="btnSeguent" class="btn-navegacio">Següent</button>` : 
+                       '';
+    
+    // Botó FINALITZAR (Si som a l'última pregunta)
+    const btnFinalitzar = (index === totalPreguntes - 1) ? 
+                          `<button id="btnFinalitzar" class="btn-finalitzar">Finalitzar</button>` : 
+                          '';
 
+    htmlString += `<div class="navegacio-buttons">${btnEnrera} ${btnSeguent} ${btnFinalitzar}</div>`;
+    
     contenidor.innerHTML = htmlString;
-
-    const btnFinalitzar = document.getElementById("btnFinalitzar");
-    if (btnFinalitzar) {
-        btnFinalitzar.addEventListener("click", mostrarResultats);
+    
+    // 3. Afegim Event Listeners
+    //click botó enrera 
+    if (document.getElementById("btnEnrera")) {
+        document.getElementById("btnEnrera").addEventListener("click", () => canviarPregunta(-1));
     }
-
-    // Delegació d'esdeveniments per als botons de resposta
+    //click botó seguent
+    if (document.getElementById("btnSeguent")) {
+        document.getElementById("btnSeguent").addEventListener("click", () => canviarPregunta(1));
+    }
+    //click botó finalitzar
+    if (document.getElementById("btnFinalitzar")) {
+        document.getElementById("btnFinalitzar").addEventListener("click", mostrarResultats);
+    }
+    
+    // 4. Afegim l'escolta d'esdeveniments per marcar la resposta
     contenidor.addEventListener('click', (e) => {
         const target = e.target;
-        // Si el target que s'ha fet click té un botó com a clase i té un atribut de data-preg
         if (target.classList.contains('btn-resposta') && target.hasAttribute('data-preg')) {
             marcarResposta(target.dataset.preg, target.dataset.resp);
         }
     });
+    
+    // 5. Actualitzem el marcador i la selecció visual
+    actualitzarMarcador(); 
+}
 
-    // Restaura seleccions si existeixen
-    actualitzarMarcador();
+//-------------------------
+//Gestiona la navegació entre preguntes (Següent/Enrera)
+function canviarPregunta(direccio) {
+    const nouIndex = estatDeLaPartida.preguntaActualIndex + direccio;
+    const total = totesLesPreguntes.length;
+
+    // Comprovem que el nou índex sigui vàlid (no surti dels límits de l'array)
+    if (nouIndex >= 0 && nouIndex < total) {
+        // 1. Actualitzem l'índex de la pregunta que s'està mirant
+        estatDeLaPartida.preguntaActualIndex = nouIndex;
+        
+        // 2. Redibuixem la pantalla per mostrar la nova pregunta
+        renderPreguntaActual(); 
+    }
 }
 
 //--------------------------

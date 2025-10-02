@@ -513,8 +513,7 @@ function carregarAdmin() {
         .then(data => {
             totesLesPreguntes = data.preguntes;
             const llistatAdmin = document.getElementById("admin");
-            let htmlString = `<button id="btnTornarEnrere" class="btn-tornar">Sortir</button><br>`;
-            htmlString += `<button id="btnCrearPregunta" class="btn-crear">Crear nova pregunta</button>`;
+            let htmlString = `<button id="btnCrearPregunta" class="btn-crear">Crear nova pregunta</button>`;
             htmlString += `<h2>Llistat complet de preguntes</h2>`;
 
             data.preguntes.forEach((pregunta, i) => {

@@ -316,7 +316,7 @@ function marcarResposta(numPregunta, numResposta) {
 }
 
 //-------------------------
-//Renderitza la pregunta que toca mostrar
+//Funció que renderitza la pregunta que toca mostrar
 function renderPreguntaActual() {
     //1. Agafem el contenidor i la pregunta actual (el seu index)
     const contenidor = document.getElementById("questionari");
@@ -409,6 +409,9 @@ function canviarPregunta(direccio) {
 //-------------------------
 // Funció que mostra els resultats finals i permet reiniciar la partida.
 function mostrarResultats() {
+    // Fem que el missatge de benvinguda canvii el benvingut per resultats
+    document.getElementById("missatgeBenvinguda").textContent = `Resultats ${nomUsuari}!`;
+    
     // Aturem el timer
     aturarTimer();
 
@@ -421,6 +424,10 @@ function mostrarResultats() {
     // Amaguem l'element del temps
     const tempsPartida = document.getElementById("temps");
     if (tempsPartida) tempsPartida.style.display = "none";
+
+    //Amaguem el botó sortir si existeix
+    const btnSortirGlobal = document.getElementById("btn-sortir");
+    if (btnSortirGlobal) btnSortirGlobal.style.display = "none";
 
     //2. Enviem les respostes de l'usuari al servidor per obtenir els resultats
     fetch('../php/finalitza.php', {

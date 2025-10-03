@@ -102,6 +102,7 @@ function gestionarLogin(event) {
 // Funció que mostra la vista de joc i amaga les altres
 function mostrarJoc() {
     // 1. Amaguem el login i la vista d'admin, mostrem el questionari
+    document.getElementById("questionari").style.display = "block";
     document.getElementById("login").style.display = "none";
     document.getElementById("admin").style.display = "none";
     document.getElementById("crearPregunta").style.display = "none";

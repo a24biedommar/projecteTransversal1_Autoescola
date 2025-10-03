@@ -23,7 +23,6 @@ let idTimer = null;
 function mostrarLogin() {
     // 1. Amaguem totes les vistes
     document.getElementById("questionari").style.display = "none";
-    document.getElementById("marcador").style.display = "none";
     document.getElementById("admin").style.display = "none";
     document.getElementById("crearPregunta").style.display = "none";
     document.getElementById("editarPregunta").style.display = "none";
@@ -102,10 +101,8 @@ function gestionarLogin(event) {
 //-------------------------
 // Funció que mostra la vista de joc i amaga les altres
 function mostrarJoc() {
-    // 1. Amaguem el login i la vista d'admin, mostrem el questionari i el marcador
+    // 1. Amaguem el login i la vista d'admin, mostrem el questionari
     document.getElementById("login").style.display = "none";
-    document.getElementById("questionari").style.display = "block";
-    document.getElementById("marcador").style.display = "block";
     document.getElementById("admin").style.display = "none";
     document.getElementById("crearPregunta").style.display = "none";
     document.getElementById("editarPregunta").style.display = "none";
@@ -156,7 +153,7 @@ function carregarJoc() {
 
             //3. Truquem a les funcions per renderitzar la pregunta actual i mostrar el joc
             renderPreguntaActual();
-            actualitzarMarcador(); 
+            actualitzarEstatPartida(); 
             mostrarJoc();
         });
 }
@@ -186,8 +183,8 @@ function iniciarTimer() {
             estatDeLaPartida.tempsRestant--;
         }
 
-        // 3. Actualitzem el marcador
-        actualitzarMarcador(); 
+        // 3. Actualitzem l'estat de la partida
+        actualitzarEstatPartida(); 
         
         //4. Si el temps arriba a 0, aturem el timer i mostrem els resultats
         if (estatDeLaPartida.tempsRestant <= 0) {
@@ -262,23 +259,16 @@ function previsualitzarImatge(event, idImatgeAntiga) {
 //--------------------------
 
 //-------------------------
-// Funció que actualitza el marcador, el temps i la selecció visual
-function actualitzarMarcador() {
-    // 1. declarem com a variables el marcador i el total de les preguntes
-    const marcador = document.getElementById("marcador");
+// Funció que actualitza l'estat de la partida, el temps i la selecció visual
+function actualitzarEstatPartida() {
+    // 1. declarem com a variable el total de les preguntes
     const totalPreguntes = totesLesPreguntes.length;
     
-    // 2. Mostrem el número de pregunta actual
-    let textMarcador = `Pregunta: ${estatDeLaPartida.preguntaActualIndex + 1} / ${totalPreguntes}<br>`;
-    
-    // 3. Actualitzem el temps restant
+    // 2. Actualitzem el temps restant
     const tempsPartida = document.getElementById("temps");
     if (tempsPartida) {
         tempsPartida.textContent = formatTemps(estatDeLaPartida.tempsRestant);
     }
-
-    // 4. mostrem el html del marcador
-    marcador.innerHTML = textMarcador;
 
     // 5. desmarquem les respostes amb la classe .seleccionada (de la anterior seleccio)
     document.querySelectorAll(".seleccionada").forEach(el => el.classList.remove("seleccionada"));
@@ -309,10 +299,10 @@ function marcarResposta(numPregunta, numResposta) {
         estatDeLaPartida.contadorPreguntes++;
     }
 
-    //4. Guardem la resposta utilitzant l'índex de la pregunta que es veu i per ultim actualitzem el marcador
+    //4. Guardem la resposta utilitzant l'índex de la pregunta que es veu i per ultim actualitzem l'estat de la partida
     estatDeLaPartida.respostesUsuari[preguntaIndex] = numResposta;
 
-    actualitzarMarcador();
+    actualitzarEstatPartida();
 }
 
 //-------------------------
@@ -382,8 +372,8 @@ function renderPreguntaActual() {
         }
     });
     
-    // 5. Actualitzem el marcador i la selecció visual
-    actualitzarMarcador(); 
+    // 5. Actualitzem l'estat de la partida i la selecció visual
+    actualitzarEstatPartida(); 
 }
 
 //-------------------------
@@ -414,12 +404,6 @@ function mostrarResultats() {
     
     // Aturem el timer
     aturarTimer();
-
-    //1. Amaguem el marcador si existeix
-    const marcador = document.getElementById("marcador");
-    if (marcador) {
-        marcador.style.display = "none";
-    }
     
     // Amaguem l'element del temps
     const tempsPartida = document.getElementById("temps");
@@ -429,7 +413,7 @@ function mostrarResultats() {
     const btnSortirGlobal = document.getElementById("btn-sortir");
     if (btnSortirGlobal) btnSortirGlobal.style.display = "none";
 
-    //2. Enviem les respostes de l'usuari al servidor per obtenir els resultats
+    //1. Enviem les respostes de l'usuari al servidor per obtenir els resultats
     fetch('../php/finalitza.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -438,7 +422,7 @@ function mostrarResultats() {
     .then(response => response.json())
     .then(resultat => {
 
-        //3. Mostrem els resultats a la pantalla al div questionari
+        //2. Mostrem els resultats a la pantalla al div questionari
         const contenidor = document.getElementById("questionari");
         contenidor.innerHTML = `
             <h2>Resultats</h2>
@@ -449,7 +433,7 @@ function mostrarResultats() {
             <button class="btn-Sortir" id="btnSortir">Sortir</button>
         `;
 
-        //4. Afegim els Event Listeners als nous botons:
+        //3. Afegim els Event Listeners als nous botons:
         
         // Botó reiniciar (comença una nova partida amb el mateix usuari)
         document.getElementById("btnReiniciar").addEventListener("click", () => {
@@ -468,7 +452,7 @@ function mostrarResultats() {
             mostrarLogin(); 
         });
 
-        //5. Si existeix el botó admin, l'amaguem 
+        //4. Si existeix el botó admin, l'amaguem 
         const btnAdmin = document.getElementById("btnAdmin");
         if (btnAdmin) btnAdmin.style.display = "none";
     })
@@ -480,7 +464,6 @@ function amagarVistaAdmin(amagar) {
     // 1. Aturem el timer i carreguem tots els elements
     aturarTimer();
     const questionari = document.getElementById("questionari");
-    const marcador = document.getElementById("marcador");
     const crearPreguntaDiv = document.getElementById("crearPregunta");
     const editarPreguntaDiv = document.getElementById("editarPregunta");
     const adminDiv = document.getElementById("admin");
@@ -492,14 +475,12 @@ function amagarVistaAdmin(amagar) {
     if (amagar) {
         // Mostrar vista Admin
         questionari.style.display = "none";
-        marcador.style.display = "none";
         adminDiv.style.display = "block";
         if (tempsPartida) tempsPartida.style.display = "none"; 
         if (btnSortirGlobal) btnSortirGlobal.style.display = "block";
     } else {
         // Amagar totes les vistes
         questionari.style.display = "none";
-        marcador.style.display = "none";
         adminDiv.style.display = "none";
         if (tempsPartida) tempsPartida.style.display = "none";
         if (btnSortirGlobal) btnSortirGlobal.style.display = "block"; 

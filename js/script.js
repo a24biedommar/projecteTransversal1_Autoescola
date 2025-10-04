@@ -321,7 +321,7 @@ function renderPreguntaActual() {
     //2. Creem l'estructura del layout amb flexbox
     htmlString += `<div class="question-content">`;
     htmlString += `<div class="question-left">`;
-    htmlString += `<h3>Pregunta ${index + 1}: ${pregunta.pregunta}</h3>`;
+    htmlString += `<h3>${pregunta.pregunta}</h3>`;
     htmlString += `<img src="../${pregunta.imatge}" alt="Pregunta ${index + 1}">`;
     htmlString += `</div>`;
     

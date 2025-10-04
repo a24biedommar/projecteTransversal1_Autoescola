@@ -171,6 +171,7 @@ main {
     display: flex;
     flex-direction: column;
     gap: 30px;
+    align-items: stretch;
 }
 
 #questionari h3 {
@@ -196,6 +197,7 @@ main {
     flex-direction: column;
     gap: 18px;
     justify-content: flex-start;
+    align-items: stretch;
 }
 
 /* Botons de resposta */
@@ -242,9 +244,7 @@ main {
 .navegacio-buttons {
     display: flex;
     justify-content: space-between;
-    margin-top: auto;
-    padding-top: 60px;
-    padding-bottom: 40px;
+    margin-top: 30px;
     gap: 20px;
 }
 

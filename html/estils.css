@@ -200,7 +200,8 @@ main {
     justify-content: flex-start;
 }
 
-.option-button {
+/* Botons de resposta */
+.btn-resposta {
     width: 100%;
     padding: 18px 24px;
     border: none;
@@ -214,31 +215,34 @@ main {
     background: #fff8dc;
     color: #333;
     border: 2px solid transparent;
+    margin-bottom: 18px;
+    display: block;
 }
 
-.option-button:hover {
+.btn-resposta:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.option-button.selected {
+.btn-resposta.seleccionada {
     background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
     color: white;
     border-color: #4682B4;
     font-weight: 700;
 }
 
-.option-button.correct {
+.btn-resposta.correct {
     background: linear-gradient(135deg, #90EE90 0%, #3CB371 100%);
     color: white;
 }
 
-.option-button.incorrect {
+.btn-resposta.incorrect {
     background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
     color: white;
 }
 
-.question-navigation {
+/* Botons de navegació */
+.navegacio-buttons {
     display: flex;
     justify-content: space-between;
     margin-top: auto;
@@ -246,11 +250,11 @@ main {
     gap: 20px;
 }
 
-.question-navigation .nav-button:only-child {
+.navegacio-buttons .btn-navegacio:only-child {
     margin-left: auto;
 }
 
-.nav-button {
+.btn-navegacio {
     padding: 18px 35px;
     border: none;
     border-radius: 15px;
@@ -259,27 +263,47 @@ main {
     font-family: 'Poppins', sans-serif;
     cursor: pointer;
     transition: all 0.3s ease;
-}
-
-.nav-button.back {
-    background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
-    color: white;
-}
-
-.nav-button.next {
     background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
     color: white;
 }
 
-.nav-button:hover {
+.btn-navegacio:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-.nav-button:disabled {
+/* Estil específic per al botó Enrera */
+#btnEnrera {
+    background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+}
+
+/* Estil específic per al botó Següent */
+#btnSeguent {
+    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+}
+
+.btn-navegacio:disabled {
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
+}
+
+.btn-finalitzar {
+    padding: 18px 35px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #90EE90 0%, #3CB371 100%);
+    color: white;
+}
+
+.btn-finalitzar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(60, 179, 113, 0.3);
 }
 
 /* Ocultar otros contenedores por defecto */

@@ -563,6 +563,7 @@ function carregarAdmin() {
                 pregunta.respostes.forEach((resposta, j) => {
                     const isCorrect = resposta.correcta === 1;
                     const className = isCorrect ? "admin-option-button correct" : "admin-option-button";
+                    console.log(`Resposta ${j}: "${resposta.resposta}", correcta: ${resposta.correcta}, isCorrect: ${isCorrect}, className: ${className}`);
                     htmlString += `<div class="${className}">${resposta.resposta}</div>`;
                 });
                 htmlString += `</div>`;

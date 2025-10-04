@@ -379,11 +379,11 @@ main {
 }
 
 .admin-option-button.correct {
-    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
-    color: white;
-    font-weight: 700;
-    border: 2px solid #4682B4;
-    box-shadow: 0 0 10px rgba(70, 130, 180, 0.3);
+    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%) !important;
+    color: white !important;
+    font-weight: 700 !important;
+    border: 2px solid #4682B4 !important;
+    box-shadow: 0 0 10px rgba(70, 130, 180, 0.3) !important;
 }
 
 .admin-question-actions {

@@ -5,16 +5,16 @@ require_once '../connexio.php';
 header('Content-Type: application/json');
 
 // 1. Recollim les dades del formulari de tipo text, si no hi ha valor posem un valor per defecte
-$preguntaText = $_POST['pregunta'] ?? '';
-$respostesStr = $_POST['respostes'] ?? '[]'; 
-$correctaIndex = (int)($_POST['correcta'] ?? -1);
+$preguntaText = $_POST['pregunta'];
+$respostesStr = $_POST['respostes']; 
+$correctaIndex = (int)($_POST['correcta']);
 
 $respostes = json_decode($respostesStr, true);
 
 // 2. Declarem les variables de l'imatge (directori objectiu i ruta a la BD)
 $imatgeRutaBD = '';
 $targetDir = "../../imatges/";
-$fitxer = $_FILES['imatge'] ?? null;
+$fitxer = $_FILES['imatge'] ?? null; //si no s'ha pujat cap fitxer, $fitxer serà null
 
 //3. Si hi ha fitxer, el processem
 if ($fitxer) {
@@ -38,30 +38,28 @@ $result = $conn->query($sqlId);
 $row = $result->fetch_row();
 $id_pregunta = $row[0];
 
-//B. Inserim la pregunta a la taula 'PREGUNTES'
-$sqlPregunta = "INSERT INTO PREGUNTES (ID_PREGUNTA, PREGUNTA, LINK_IMATGE) VALUES ('$id_pregunta','$preguntaText', '$imatgeRutaBD')";
-$conn->query($sqlPregunta);
+//B. Inserim la pregunta a la taula 'PREGUNTES' amb prepared statements
+$stmtPregunta = $conn->prepare("INSERT INTO PREGUNTES (ID_PREGUNTA, PREGUNTA, LINK_IMATGE) VALUES (?, ?, ?)");
+//iss -> integer, string, string
+$stmtPregunta->bind_param("iss", $id_pregunta, $preguntaText, $imatgeRutaBD);
+$stmtPregunta->execute();
+$stmtPregunta->close();
 
+//Prepem el statement (que inserta a la taula respostes) fora del bucle per no estar preparant-lo en cada iteració
+$stmtRespostes = $conn->prepare("INSERT INTO RESPOSTES (ID_PREGUNTA, RESPOSTA, CORRECTA) VALUES (?, ?, ?)");
 
 //Inserim les respostes a la taula 'RESPOSTES'
 foreach ($respostes as $index => $resposta) {
-    $isCorrecta = 0;
-    if ($index == $correctaIndex) {
-        $isCorrecta = 1;
-    }
+    //si la resposta és correcta 1 o no 0
+    $isCorrecta = ($index == $correctaIndex) ? 1 : 0;
     
-    //Convertim la resposta a string per evitar errors
-    $respostaString = (string)$resposta;
-
-    //convertim els caràcters especials per evitar errors en la consulta SQL 
-    $respostaNeta = addslashes($respostaString);
-
-    //A. Contruim la query d'inserció
-    $sqlResposta = "INSERT INTO RESPOSTES (ID_PREGUNTA, RESPOSTA, CORRECTA) VALUES ('$id_pregunta', '$respostaNeta', '$isCorrecta')";
-    
-    //B. Executem la query si falla mostrem error
-    $conn->query($sqlResposta) or die("Error en la consulta de resposta: " . mysqli_error($conn));
+    //vinculem els parametres al statement i l'executem
+    //isi -> integer, string, integer
+    $stmtRespostes->bind_param("isi", $id_pregunta, $resposta, $isCorrecta);
+    $stmtRespostes->execute();
 }
+
+$stmtRespostes->close();
 
 // 5. Retornem una resposta JSON d'èxit
 echo json_encode(['success' => true, 'message' => 'Pregunta i respostes creades correctament']);

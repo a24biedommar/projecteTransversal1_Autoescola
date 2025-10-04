@@ -4,7 +4,7 @@ require_once '../connexio.php';
 
 header('Content-Type: application/json');
 
-// 1. recollim les dades del formulari
+// 1. Recollim les dades del formulari
 $idPregunta    = (int)($_POST['id'] ?? 0);
 $preguntaText  = $_POST['pregunta'] ?? '';
 $respostesStr  = $_POST['respostes'] ?? '[]';
@@ -15,55 +15,57 @@ $respostes = json_decode($respostesStr, true);
 
 // 2. GESTIÓ DE LA PUJADA DEL NOU FITXER
 $imatgeRutaBD = ''; 
-//fiquem la ruta i el fitxer, si no hi ha fitxer serà null
 $targetDir = "../../imatges/"; 
 $fitxer = $_FILES['imatge'] ?? null;
 
-if ($fitxer) {
-    // Utilitzem el nom original del fitxer (simplicitat màxima)
-    $nomOriginal = $fitxer['name'];
+if ($fitxer && $fitxer['error'] == 0) {
+    $nomOriginal = basename($fitxer['name']);
     $targetFilePath = $targetDir . $nomOriginal;
 
-    // Movem el fitxer
-    move_uploaded_file($fitxer['tmp_name'], $targetFilePath);
-    
-    $imatgeRutaBD = 'imatges/' . $nomOriginal;
-}
-
-// 3. ACTUALITZACIÓ DE LA TAULA PREGUNTES (Sentència COMPLETA)
-if (!empty($imatgeRutaBD)) {
-    //S'ha pujat una imatge nova -> Actualitzem PREGUNTA I LINK_IMATGE
-    $sqlPregunta = "UPDATE PREGUNTES 
-                    SET PREGUNTA = '$preguntaTextEsc', 
-                        LINK_IMATGE = '$imatgeRutaBD' 
-                    WHERE ID_PREGUNTA = '$idPregunta'";
-} else {
-    //NO s'ha pujat imatge nova -> Només actualitzem PREGUNTA
-    $sqlPregunta = "UPDATE PREGUNTES 
-                    SET PREGUNTA = '$preguntaTextEsc' 
-                    WHERE ID_PREGUNTA = '$idPregunta'";
-}
-$conn->query($sqlPregunta);
-
-// 4. ACTUALITZACIÓ DE RESPOSTES
-$conn->query("DELETE FROM RESPOSTES WHERE ID_PREGUNTA = '$idPregunta'"); // Esborrem les respostes antigues
-
-//Recorrem totes les respostes del fitxer script.js i les inserim una a una
-foreach ($respostes as $index => $resposta) {
-    if ($index == $correctaIndex) {
-        $isCorrecta = 1;
-    } else {
-        $isCorrecta = 0;
+    if (move_uploaded_file($fitxer['tmp_name'], $targetFilePath)) {
+        $imatgeRutaBD = 'imatges/' . $nomOriginal;
     }
-    
-    //Apliquem addslashes per evitar errors 
-    $respostaNeta = addslashes($resposta);
-
-    //inserim la resposta a la base de dades
-    $sqlInsert = "INSERT INTO RESPOSTES (ID_PREGUNTA, RESPOSTA, CORRECTA) 
-                  VALUES ('$idPregunta', '$respostaNeta', '$isCorrecta')";
-    $conn->query($sqlInsert);
 }
 
-// fem encode per tornar a enviar-li l'informació final al script.js
+// 3. ACTUALITZACIÓ SEGURA DE LA TAULA PREGUNTES
+if (!empty($imatgeRutaBD)) {
+    //preparem el statement per actualitzar PREGUNTA i LINK_IMATGE (si s'ha pujat una imatge nova)
+    $stmtUpdate = $conn->prepare("UPDATE PREGUNTES SET PREGUNTA = ?, LINK_IMATGE = ? WHERE ID_PREGUNTA = ?");
+    //ssi: string, string, integer
+    $stmtUpdate->bind_param("ssi", $preguntaText, $imatgeRutaBD, $idPregunta);
+} else {
+    //si no s'ha pujat imatge, només actualitzem la PREGUNTA
+    $stmtUpdate = $conn->prepare("UPDATE PREGUNTES SET PREGUNTA = ? WHERE ID_PREGUNTA = ?");
+    //si: string, integer
+    $stmtUpdate->bind_param("si", $preguntaText, $idPregunta);
+}
+$stmtUpdate->execute();
+$stmtUpdate->close();
+
+
+// 4. ACTUALITZACIÓ SEGURA DE LES RESPOSTES
+// A. Esborrem les respostes antigues de forma segura
+$stmtDelete = $conn->prepare("DELETE FROM RESPOSTES WHERE ID_PREGUNTA = ?");
+//i: integer
+$stmtDelete->bind_param("i", $idPregunta);
+$stmtDelete->execute();
+$stmtDelete->close();
+
+
+// B. Inserim les noves respostes de forma segura
+//preparem el statement fora del bucle per no preparar-lo repetidament
+$stmtInsert = $conn->prepare("INSERT INTO RESPOSTES (ID_PREGUNTA, RESPOSTA, CORRECTA) VALUES (?, ?, ?)");
+
+foreach ($respostes as $index => $resposta) {
+    //si la pregunta es la correcta, CORRECTA=1, sinó 0
+    $isCorrecta = ($index == $correctaIndex) ? 1 : 0;
+    
+    //isi: integer, string, integer
+    $stmtInsert->bind_param("isi", $idPregunta, $resposta, $isCorrecta);
+    $stmtInsert->execute();
+}
+$stmtInsert->close();
+
+// Retornem el missatge d'èxit
 echo json_encode(['success' => true, 'message' => 'Pregunta i respostes actualitzades correctament']);
+

@@ -14,17 +14,21 @@ $respostesUsuari = json_decode($json_data, true);
 $preguntes = $_SESSION['preguntes']; //agafem les preguntes que s'han mostrat a index.html
 $puntuacio = 0; //inicialitzem la puntuació del usuari
 
+//preparem el statement fora del bucle per no estar preparant-lo en cada iteració
+$stmt = $conn->prepare("SELECT ID_RESPOSTA FROM RESPOSTES WHERE ID_PREGUNTA = ? AND CORRECTA = 1");
+
 // Recorrem les respostes de l'usuari i les comparemm amb les correctes
 foreach ($preguntes as $index => $idPregunta) {
     // Agafem la resposta de l'usuari per a la pregunta actual
     $respostaUsuari = $respostesUsuari[$index];
 
-    //Fem la consulta select per agafar la resposta correcta de la BD
-    $sqlCorrecta = "SELECT ID_RESPOSTA FROM RESPOSTES 
-                    WHERE ID_PREGUNTA = $idPregunta AND CORRECTA = 1";
-    $res = $conn->query($sqlCorrecta);
+    //executem el statement per cada pregunta (agafem l'id de la pregunta correcte)
+    $stmt->bind_param("i", $idPregunta);
+    $stmt->execute();
+    $res = $stmt->get_result();
     $row = $res->fetch_assoc();
 
+    // Comprovem si la resposta de l'usuari és correcta
     if ($respostaUsuari == $row['ID_RESPOSTA']) {
         $puntuacio++;
     }

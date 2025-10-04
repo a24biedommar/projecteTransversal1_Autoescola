@@ -12,13 +12,18 @@ $result = $conn->query($sqlPreguntes);
 // Declarem l'array on guardarem les preguntes i respostes juntes
 $preguntes = [];
 
+// 1.preparem la consulta fora del bucle per optimitzar (consulta que agafa les respostes d'una pregunta concreta)
+$stmtRespostes = $conn->prepare("SELECT ID_RESPOSTA, RESPOSTA FROM RESPOSTES WHERE ID_PREGUNTA = ? ORDER BY ID_RESPOSTA");
+
 while ($row = $result->fetch_assoc()) {
     // Agafem l'id de la pregunta actual
     $idPregunta = $row['ID_PREGUNTA'];
 
-    // Agafem totes les respostes de la pregunta actual
-    $sqlRespostes = "SELECT ID_RESPOSTA, RESPOSTA FROM RESPOSTES WHERE ID_PREGUNTA = $idPregunta ORDER BY ID_RESPOSTA";
-    $resResult = $conn->query($sqlRespostes);
+    //2.executem la consulta preparada anteriorment per agafar les respostes de la pregunta actual
+    //i: integer
+    $stmtRespostes->bind_param("i", $idPregunta);
+    $stmtRespostes->execute();
+    $resResult = $stmtRespostes->get_result();
 
     // Declarem l'array on guardarem les respostes de la pregunta actual
     $respostes = [];
@@ -29,7 +34,7 @@ while ($row = $result->fetch_assoc()) {
         ];
     }
 
-    // Afegim la pregunta i les seves respostes a l'array principal (on guardem les preguntes i respostes juntes)
+    // Afegim la pregunta i les seves respostes a l'array principal
     $preguntes[] = [
         'id' => $idPregunta,
         'pregunta' => $row['PREGUNTA'],
@@ -37,6 +42,9 @@ while ($row = $result->fetch_assoc()) {
         'imatge' => $row['LINK_IMATGE']
     ];
 }
+
+//3.tanquem el prepared statement
+$stmtRespostes->close();
 
 // Retornem JSON
 header('Content-Type: application/json');

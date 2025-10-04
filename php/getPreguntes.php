@@ -29,9 +29,12 @@ foreach($preguntesSeleccionades as $pregunta){
     // guardem l'id de la pregunta actual
     $id = $pregunta['ID_PREGUNTA'];
 
-    // Consultem totes les respostes i els seus camps (id, resposta) per a la pregunta actual
-    $sqlRespostes = "SELECT ID_RESPOSTA, RESPOSTA FROM RESPOSTES WHERE ID_PREGUNTA = $id ORDER BY RAND()";
-    $resResult = $conn->query($sqlRespostes);
+    //Per evitar errors de vulnerabilitat fem servir prepared statements
+    
+    $stmt = $conn->prepare("SELECT ID_RESPOSTA, RESPOSTA FROM RESPOSTES WHERE ID_PREGUNTA = ? ORDER BY RAND()");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $resResult = $stmt->get_result();
 
     $respostes = [];
 

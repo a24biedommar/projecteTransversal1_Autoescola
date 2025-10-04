@@ -318,16 +318,20 @@ function renderPreguntaActual() {
     
     let htmlString = "";
     
-    //2.Mostrem les dades de la pregutna actual (imatges, i les seves respostes)
-    htmlString += `<h3>Pregunta ${index + 1}: ${pregunta.pregunta}</h3><br>`;
-    htmlString += `<img src="../${pregunta.imatge}" alt="Pregunta ${index + 1}"><br>`; 
-
+    //2. Creem l'estructura del layout amb flexbox
+    htmlString += `<div class="question-content">`;
+    htmlString += `<div class="question-left">`;
+    htmlString += `<h3>Pregunta ${index + 1}: ${pregunta.pregunta}</h3>`;
+    htmlString += `<img src="../${pregunta.imatge}" alt="Pregunta ${index + 1}">`;
+    htmlString += `</div>`;
+    
+    htmlString += `<div class="question-options">`;
     pregunta.respostes.forEach((resposta, j) => {
         const idResposta = `${index}_${resposta.id}`; 
-        htmlString += `<button id="${idResposta}" class="btn-resposta" data-preg="${index}" data-resp="${resposta.id}">${resposta.resposta}</button><br>`; 
+        htmlString += `<button id="${idResposta}" class="btn-resposta" data-preg="${index}" data-resp="${resposta.id}">${resposta.resposta}</button>`; 
     });
-    
-    htmlString += `<hr>`;
+    htmlString += `</div>`;
+    htmlString += `</div>`;
 
     // 3. Botons de Navegació
     const totalPreguntes = totesLesPreguntes.length;

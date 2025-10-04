@@ -174,7 +174,7 @@ main {
     gap: 30px;
 }
 
-#questionari h2 {
+#questionari h3 {
     color: #333;
     font-size: 1.8rem;
     font-weight: 700;
@@ -183,13 +183,9 @@ main {
     line-height: 1.4;
 }
 
-.question-image {
+#questionari img {
     width: 100%;
     max-width: 350px;
-}
-
-.question-image img {
-    width: 100%;
     height: 200px;
     object-fit: cover;
     border-radius: 15px;

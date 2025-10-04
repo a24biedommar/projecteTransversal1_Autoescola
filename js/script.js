@@ -240,7 +240,8 @@ function previsualitzarImatge(event, idImatgeAntiga) {
         
         const img = document.createElement('img');
         img.src = imageUrl;
-        img.alt = 'Imatge previsualitzada'; 
+        img.alt = 'Imatge previsualitzada';
+        img.className = 'imatge-previsualitzada';
         
         // Afegim la nova imatge al contenidor
         previewContainer.appendChild(img);

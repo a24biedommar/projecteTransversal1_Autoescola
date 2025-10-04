@@ -635,6 +635,31 @@ main {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
+/* Previsualització d'imatges als formularis */
+#preview-container, #nova-preview-container {
+    margin-top: 15px;
+}
+
+.imatge-previsualitzada {
+    width: 100% !important;
+    max-width: 450px !important;
+    height: 280px !important;
+    object-fit: cover !important;
+    border-radius: 15px !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+    display: block !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+}
+
+/* Assegurar que els contenidors de previsualització no interfereixin */
+#preview-container, #nova-preview-container {
+    margin-top: 15px;
+    width: 100%;
+    max-width: 450px;
+    overflow: hidden;
+}
+
 /* Ocultar otros contenedores por defecto */
 #questionari, #admin, #crearPregunta, #editarPregunta {
     display: none;

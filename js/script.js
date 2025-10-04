@@ -745,8 +745,8 @@ function editarPregunta(idPregunta) {
                 </div>
                 <div class="form-section">
                     <h3>Imatge</h3>
-                    <img src="../${pregunta.imatge}" id="imatgeActualPreview" alt="Imatge actual" style="width: 100%; max-width: 400px; height: 200px; object-fit: cover; border-radius: 15px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); margin-bottom: 15px;">
                     <input type="file" class="form-input" id="imatgeFitxerEditar" accept="image/*">
+                    <img src="../${pregunta.imatge}" id="imatgeActualPreview" alt="Imatge actual" class="imatge-previsualitzada">
                     <div id="nova-preview-container"></div>
                 </div>
             </div>

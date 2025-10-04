@@ -156,8 +156,8 @@ main {
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 40px 40px 120px 40px;
-    position: relative;
+    padding: 40px;
+    overflow: hidden;
 }
 
 .question-content {
@@ -245,10 +245,7 @@ main {
 .navegacio-buttons {
     display: flex;
     justify-content: space-between;
-    position: absolute;
-    bottom: 40px;
-    left: 40px;
-    right: 40px;
+    margin-top: 30px;
     gap: 20px;
 }
 
@@ -306,6 +303,151 @@ main {
 .btn-finalitzar:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(60, 179, 113, 0.3);
+}
+
+/* Vista d'Administració */
+#admin {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.admin-question {
+    margin-bottom: 30px;
+}
+
+.admin-question h3 {
+    color: #333;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    text-align: left;
+    line-height: 1.4;
+}
+
+.admin-question-content {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.admin-question-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: stretch;
+}
+
+.admin-question img {
+    width: 100%;
+    max-width: 450px;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.admin-question-options {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+.admin-option-button {
+    width: 100%;
+    padding: 18px 24px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: default;
+    text-align: left;
+    background: #fff8dc;
+    color: #333;
+    border: 2px solid transparent;
+    margin-bottom: 0;
+    display: block;
+}
+
+.admin-option-button.correct {
+    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+    color: white;
+    font-weight: 700;
+}
+
+.admin-question-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.admin-btn-editar {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #90EE90 0%, #3CB371 100%);
+    color: white;
+}
+
+.admin-btn-eliminar {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+    color: white;
+}
+
+.admin-btn-editar:hover, .admin-btn-eliminar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Separador entre preguntes */
+.admin-hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, #87CEEB 20%, #4682B4 50%, #87CEEB 80%, transparent 100%);
+    margin: 30px 0;
+    border-radius: 1px;
+}
+
+/* Botó Crear Pregunta al header */
+#btnCrearPregunta {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#btnCrearPregunta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
 }
 
 /* Ocultar otros contenedores por defecto */

@@ -499,25 +499,50 @@ function amagarVistaAdmin(amagar) {
 function carregarAdmin() {
     amagarVistaAdmin(true);
 
-    document.getElementById("missatgeBenvinguda").textContent = "Mode Administració";
+    document.getElementById("missatgeBenvinguda").textContent = "Administració";
+    
+    // Afegir botó Crear Pregunta al header (on estava el timer)
+    const tempsElement = document.getElementById("temps");
+    if (tempsElement) {
+        tempsElement.innerHTML = '<button id="btnCrearPregunta">Crear Pregunta</button>';
+        document.getElementById("btnCrearPregunta").addEventListener("click", carregarFormulariCrear);
+    }
     
     fetch('../php/admin/llistatPreguntes.php')
         .then(res => res.json())
         .then(data => {
             totesLesPreguntes = data.preguntes;
             const llistatAdmin = document.getElementById("admin");
-            let htmlString = `<button id="btnCrearPregunta" class="btn-crear">Crear nova pregunta</button>`;
-            htmlString += `<h2>Llistat complet de preguntes</h2>`;
+            let htmlString = "";
 
             data.preguntes.forEach((pregunta, i) => {
-                htmlString += `<div class="pregunta-admin"><h3>${i + 1}. ${pregunta.pregunta}</h3>`;
-                htmlString += `<img src="../${pregunta.imatge}" alt="Imatge de la pregunta"><br>`;
-
-                pregunta.respostes.forEach(resposta => {
-                    htmlString += `<p>- ${resposta.resposta}</p>`;
+                htmlString += `<div class="admin-question">`;
+                htmlString += `<h3>${i + 1}. ${pregunta.pregunta}</h3>`;
+                
+                htmlString += `<div class="admin-question-content">`;
+                htmlString += `<div class="admin-question-left">`;
+                htmlString += `<img src="../${pregunta.imatge}" alt="Imatge de la pregunta">`;
+                htmlString += `</div>`;
+                
+                htmlString += `<div class="admin-question-options">`;
+                pregunta.respostes.forEach((resposta, j) => {
+                    const isCorrect = resposta.correcta === 1;
+                    const className = isCorrect ? "admin-option-button correct" : "admin-option-button";
+                    htmlString += `<div class="${className}">${resposta.resposta}</div>`;
                 });
-                htmlString += `<button class="btn-eliminar" data-id="${pregunta.id}">Eliminar</button>`;
-                htmlString += `<button class="btn-editar" data-id="${pregunta.id}">Editar</button></div><hr>`;
+                htmlString += `</div>`;
+                htmlString += `</div>`;
+                
+                htmlString += `<div class="admin-question-actions">`;
+                htmlString += `<button class="admin-btn-editar" data-id="${pregunta.id}">Editar</button>`;
+                htmlString += `<button class="admin-btn-eliminar" data-id="${pregunta.id}">Eliminar</button>`;
+                htmlString += `</div>`;
+                htmlString += `</div>`;
+                
+                // Afegir separador si no és l'última pregunta
+                if (i < data.preguntes.length - 1) {
+                    htmlString += `<hr class="admin-hr">`;
+                }
             });
 
             llistatAdmin.innerHTML = htmlString;
@@ -800,11 +825,9 @@ document.addEventListener('DOMContentLoaded', () => {
         llistatAdmin.addEventListener('click', (e) => {
             const target = e.target;
             const id = target.getAttribute('data-id');
-            if (target.id === 'btnCrearPregunta') {
-                carregarFormulariCrear();
-            } else if (target.classList.contains('btn-eliminar') && id) {
+            if (target.classList.contains('admin-btn-eliminar') && id) {
                 eliminarPregunta(id);
-            } else if (target.classList.contains('btn-editar') && id) {
+            } else if (target.classList.contains('admin-btn-editar') && id) {
                 editarPregunta(id);
             }
         });

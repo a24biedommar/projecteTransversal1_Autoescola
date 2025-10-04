@@ -382,6 +382,8 @@ main {
     background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
     color: white;
     font-weight: 700;
+    border: 2px solid #4682B4;
+    box-shadow: 0 0 10px rgba(70, 130, 180, 0.3);
 }
 
 .admin-question-actions {
@@ -449,6 +451,188 @@ main {
 #btnCrearPregunta:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+}
+
+/* Formulari de creació/edició de preguntes */
+#crearPregunta, #editarPregunta {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.form-content {
+    display: flex;
+    gap: 40px;
+    flex: 1;
+    align-items: flex-start;
+}
+
+.form-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.form-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.form-section h3 {
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    text-align: left;
+}
+
+.form-input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 15px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    background: #f9f9f9;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #4682B4;
+    background: white;
+    box-shadow: 0 0 10px rgba(70, 130, 180, 0.1);
+}
+
+.form-input::placeholder {
+    color: #999;
+}
+
+.form-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 15px 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 15px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    background: #f9f9f9;
+    transition: all 0.3s ease;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: #4682B4;
+    background: white;
+    box-shadow: 0 0 10px rgba(70, 130, 180, 0.1);
+}
+
+.form-textarea::placeholder {
+    color: #999;
+}
+
+.answer-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.answer-input {
+    flex: 1;
+    padding: 15px 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 15px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    background: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.answer-input:focus {
+    outline: none;
+    border-color: #4682B4;
+    background: white;
+    box-shadow: 0 0 10px rgba(70, 130, 180, 0.1);
+}
+
+.answer-input::placeholder {
+    color: #999;
+}
+
+.radio-button {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.radio-button:checked {
+    border-color: #4682B4;
+    background: #4682B4;
+}
+
+.radio-button:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.form-btn-cancelar {
+    padding: 18px 35px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+    color: white;
+}
+
+.form-btn-guardar {
+    padding: 18px 35px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #90EE90 0%, #3CB371 100%);
+    color: white;
+}
+
+.form-btn-cancelar:hover, .form-btn-guardar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Ocultar otros contenedores por defecto */

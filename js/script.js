@@ -591,31 +591,51 @@ function carregarFormulariCrear() {
     crearPreguntaDiv.style.display = "block";
 
     crearPreguntaDiv.innerHTML = `
-        <button id="btnTornarEnrereCrear" class="btn-tornar">Enrere</button>
-        <h2>Crear Nova Pregunta</h2>
-        <form id="formCrearPregunta">
-            <label for="preguntaText">Pregunta:</label><br>
-            <input type="text" id="preguntaText" name="preguntaText" required><br><br>
-            <label for="imatgeFitxer">Pujar Imatge</label><br>
-            <input type="file" id="imatgeFitxer" name="imatgeFitxer" accept="image/*"><br><br>
-
-            <div id="preview-container"></div>
-
-            <div id="respostes-container">
-                <label>Respostes:</label><br>
-                <input type="text" name="resposta1" required> <label>Correcta: <input type="radio" name="correcta" value="0" required></label><br>
-                <input type="text" name="resposta2" required> <label>Correcta: <input type="radio" name="correcta" value="1"></label><br>
-                <input type="text" name="resposta3" required> <label>Correcta: <input type="radio" name="correcta" value="2"></label><br>
-                <input type="text" name="resposta4" required> <label>Correcta: <input type="radio" name="correcta" value="3"></label><br>
+        <div class="form-content">
+            <div class="form-left">
+                <div class="form-section">
+                    <h3>Pregunta</h3>
+                    <input type="text" class="form-input" id="preguntaText" placeholder="Introdueix la Pregunta" required>
+                </div>
+                <div class="form-section">
+                    <h3>Imatge</h3>
+                    <input type="file" class="form-input" id="imatgeFitxer" accept="image/*">
+                    <div id="preview-container"></div>
+                </div>
             </div>
-            <br>
-            <button type="button" id="btnGuardarPregunta">Guardar Pregunta</button>
-        </form>
+            
+            <div class="form-right">
+                <div class="form-section">
+                    <h3>Respostes</h3>
+                    <div class="answer-container">
+                        <input type="text" class="answer-input" name="resposta1" placeholder="Introdueix la resposta" required>
+                        <input type="radio" class="radio-button" name="correcta" value="0" required>
+                    </div>
+                    <div class="answer-container">
+                        <input type="text" class="answer-input" name="resposta2" placeholder="Introdueix la resposta" required>
+                        <input type="radio" class="radio-button" name="correcta" value="1">
+                    </div>
+                    <div class="answer-container">
+                        <input type="text" class="answer-input" name="resposta3" placeholder="Introdueix la resposta" required>
+                        <input type="radio" class="radio-button" name="correcta" value="2">
+                    </div>
+                    <div class="answer-container">
+                        <input type="text" class="answer-input" name="resposta4" placeholder="Introdueix la resposta" required>
+                        <input type="radio" class="radio-button" name="correcta" value="3">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="button" class="form-btn-cancelar" id="btnTornarEnrereCrear">Cancelar</button>
+            <button type="button" class="form-btn-guardar" id="btnGuardarPregunta">Guardar</button>
+        </div>
     `;
-    //afegim els event listeners als botons
+    
+    // Afegir event listeners
     document.getElementById("btnTornarEnrereCrear").addEventListener("click", carregarAdmin);
     document.getElementById("btnGuardarPregunta").addEventListener("click", crearPregunta);
-    // Afegim event listener per la previsualització de la imatge (aquest crida a la funció previsualitzarImatge)
     document.getElementById('imatgeFitxer').addEventListener('change', (e) => previsualitzarImatge(e, null)); 
 }
 
@@ -635,20 +655,17 @@ function eliminarPregunta(idPregunta) {
 
 // Funció que recull les dades del formulari i crea una nova pregunta al servidor.
 function crearPregunta() {
-    //creem la const form per agafar els elements del formulari
-    const form = document.getElementById("formCrearPregunta");
-
     //fem tots els chekers perque no es pugin enviar dades vuides als codis .php
 
     //validem que hi haigi una pregunta 
-    const preguntaText = form.querySelector('#preguntaText').value;
+    const preguntaText = document.getElementById('preguntaText').value;
     if (preguntaText.trim() === '') {
         alert("Has de ficar el text per la pregunta.");
         return;
     }
 
     //validem que hi haigi una imatge
-    const inputImatge = form.querySelector('#imatgeFitxer');
+    const inputImatge = document.getElementById('imatgeFitxer');
     if (inputImatge.files.length === 0) {
         alert("Has de ficar la imatge per pregunta.");
         return;
@@ -658,7 +675,7 @@ function crearPregunta() {
     //validem que hi hagi les 4 respostes
     const respostesInputs = [];
     for (let i = 1; i <= 4; i++) {
-        const respostaInput = form.querySelector(`input[name="resposta${i}"]`);
+        const respostaInput = document.querySelector(`input[name="resposta${i}"]`);
         if (respostaInput.value.trim() === '') {
             alert("Has d'omplir tots els camps de les respostes.");
             return;
@@ -667,7 +684,7 @@ function crearPregunta() {
     }
     
     //validem que s'ha marcat quina es la resposta correcta
-    const radioCorrecta = form.querySelector('input[name="correcta"]:checked');
+    const radioCorrecta = document.querySelector('input[name="correcta"]:checked');
     if (!radioCorrecta) {
         alert("Si us plau, marca quina és la resposta correcta.");
         return;
@@ -707,60 +724,64 @@ function editarPregunta(idPregunta) {
     const idBuscada = Number(idPregunta);
     const pregunta = totesLesPreguntes.find(p => Number(p.id) === idBuscada);
     if (!pregunta) return;
+    
     //2. Amaguem la vista admin i mostrem el formulari d'edició
     amagarVistaAdmin(false);
     document.getElementById("admin").style.display = "none";
     const editarDiv = document.getElementById("editarPregunta");
     editarDiv.style.display = "block";
 
-    //3. Generem el HTML del formulari amb les dades de la pregunta
-    let htmlString = `
-        <button type="button" id="btnCancelarEdicio" class="btn-tornar">Cancelar</button>
-        <h2>Editar Pregunta</h2>
-        <form id="formEditarPregunta">
-            <label>Pregunta:</label><br>
-            <input type="text" id="editarTextPregunta" value="${pregunta.pregunta}"><br><br>
-            
-            <label>Imatge Actual:</label><br>
-            <img src="../${pregunta.imatge}" id="imatgeActualPreview" alt="Imatge actual"><br> 
-            
-            <label for="imatgeFitxerEditar">Pujar Nova Imatge:</label><br>
-            <input type="file" id="imatgeFitxerEditar" name="imatgeFitxerEditar" accept="image/*"><br><br>
-            
-            <div id="nova-preview-container"></div>
-            
-            <label>Respostes:</label><br>
-    `;
-    
-    // 4. Lògica per omplir les respostes (tenint en compte la correcta)
-    const indexCorrecta = 0; 
-    
-    pregunta.respostes.forEach((resposta, i) => {
-        const checked = (i === indexCorrecta) ? "checked" : ""; 
-        htmlString += `<input type="text" id="resposta${i}" value="${resposta.resposta}">`;
-        htmlString += `<input type="radio" name="correctaEditar" value="${i}" ${checked}> Correcta<br>`;
-    });
+    //3. Trobar l'índex de la resposta correcta
+    const indexCorrecta = pregunta.respostes.findIndex(resposta => resposta.correcta === 1);
 
-    htmlString += `<br><button type="button" id="btnGuardarCanvis">Guardar Canvis</button>`;
-    htmlString += `</form>`;
-    editarDiv.innerHTML = htmlString;
+    //4. Generem el HTML del formulari amb les dades de la pregunta
+    editarDiv.innerHTML = `
+        <div class="form-content">
+            <div class="form-left">
+                <div class="form-section">
+                    <h3>Pregunta</h3>
+                    <input type="text" class="form-input" id="editarTextPregunta" value="${pregunta.pregunta}" required>
+                </div>
+                <div class="form-section">
+                    <h3>Imatge</h3>
+                    <img src="../${pregunta.imatge}" id="imatgeActualPreview" alt="Imatge actual" style="width: 100%; max-width: 400px; height: 200px; object-fit: cover; border-radius: 15px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); margin-bottom: 15px;">
+                    <input type="file" class="form-input" id="imatgeFitxerEditar" accept="image/*">
+                    <div id="nova-preview-container"></div>
+                </div>
+            </div>
+            
+            <div class="form-right">
+                <div class="form-section">
+                    <h3>Respostes</h3>
+                    ${pregunta.respostes.map((resposta, i) => `
+                        <div class="answer-container">
+                            <input type="text" class="answer-input" id="resposta${i}" value="${resposta.resposta}" required>
+                            <input type="radio" class="radio-button" name="correctaEditar" value="${i}" ${i === indexCorrecta ? 'checked' : ''}>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="button" class="form-btn-cancelar" id="btnCancelarEdicio">Cancelar</button>
+            <button type="button" class="form-btn-guardar" id="btnGuardarCanvis">Guardar</button>
+        </div>
+    `;
 
     // 5. Afegim els Event Listeners
     document.getElementById("btnGuardarCanvis").addEventListener("click", () => actualitzarPregunta(idPregunta));
     document.getElementById("btnCancelarEdicio").addEventListener("click", carregarAdmin);
     
-    //6. Afegim event listener per la previsualització de la nova imatge (aquest crida a la funció previsualitzarImatge)
-document.getElementById('imatgeFitxerEditar').addEventListener('change', (e) => previsualitzarImatge(e, 'imatgeActualPreview'));
+    //6. Afegim event listener per la previsualització de la nova imatge
+    document.getElementById('imatgeFitxerEditar').addEventListener('change', (e) => previsualitzarImatge(e, 'imatgeActualPreview'));
 }
 
 // Funció que envia les dades actualitzades d'una pregunta al servidor.
 function actualitzarPregunta(idPregunta) {
-    //creem la const form per agafar els elements del formulari
-    const form = document.getElementById("formEditarPregunta"); 
-
     //creem els validadors abans d'enviar les dades al servidor
     //validem que el text de la pregunta no estigui buit
-    const preguntaText = form.querySelector("#editarTextPregunta").value;
+    const preguntaText = document.getElementById("editarTextPregunta").value;
     if (preguntaText.trim() === '') {
         alert("El text de la pregunta no pot estar buit.");
         return;
@@ -770,7 +791,7 @@ function actualitzarPregunta(idPregunta) {
     const respostes = [];
     let respostesValides = true;
     for (let i = 0; i <= 3; i++) {
-        const valorResposta = form.querySelector(`#resposta${i}`).value;
+        const valorResposta = document.getElementById(`resposta${i}`).value;
         if (valorResposta.trim() === '') {
             respostesValides = false;
             break;
@@ -784,7 +805,7 @@ function actualitzarPregunta(idPregunta) {
     }
 
     //validem que s'ha marcat quina es la resposta correcta
-    const radioCorrecta = form.querySelector('input[name="correctaEditar"]:checked');
+    const radioCorrecta = document.querySelector('input[name="correctaEditar"]:checked');
     if (!radioCorrecta) {
         alert("Si us plau, marca la resposta correcta.");
         return;
@@ -795,7 +816,7 @@ function actualitzarPregunta(idPregunta) {
     const formData = new FormData();
     
     // 2. Recollim la imatge nova si s'ha seleccionat
-    const inputImatge = form.querySelector('#imatgeFitxerEditar');
+    const inputImatge = document.getElementById('imatgeFitxerEditar');
     const fitxerImatge = inputImatge.files[0];
     
     // 3. Afegim totes les dades al FormData

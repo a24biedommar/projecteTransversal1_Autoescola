@@ -1,96 +1,148 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-
-body {
-    background: linear-gradient(to right, #92DCE5, #6290BE);
-    min-height: 100vh;
-    font-family: 'Poppins', sans-serif;
+/* Reset y configuración base */
+* {
     margin: 0;
     padding: 0;
-    /* Utilitzem Flexbox per alinear el contenidor principal */
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
-#contenidor-principal {
-    background-color: #F8F7F9;
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
+/* Header */
+header {
     width: 100%;
-    flex-grow: 1; 
-    margin-top: 5%;
-    /* No cal un height fix, s'adapta amb Flexbox */
-    padding: 2rem;
-    box-sizing: border-box;
-    /* Flexbox per als elements interns */
+    max-width: 600px;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    color: #333;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+/* Main container - Tarjeta blanca principal */
+main {
+    background: white;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    min-height: 500px;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 2rem;
-    /* Aquesta alçada mínima assegura que es vegi gran */
-    min-height: 90vh;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    position: relative;
 }
 
-#questionari, #marcador, #admin{
-    background-color: #ffffff;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+/* Contenidor principal - invisible pero centrado */
+#contenidor-principal {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Este contenedor es invisible pero mantiene el centrado */
 }
 
-#admin{
-    display: none;
+/* Formulario de login */
+#login {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
 }
 
-#questionari, #admin {
-    flex-grow: 1;
+#login h2 {
+    color: #333;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
 }
 
-#marcador {
-    width: 30%;
+#login label {
+    color: #666;
+    font-size: 1rem;
+    font-weight: 400;
+    display: block;
+    margin-bottom: 10px;
 }
 
-#editarPregunta{
-    display: none;
+#login input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 20px;
+    background: #f9f9f9;
+    transition: all 0.3s ease;
 }
 
-.btn-finalitzar{
-    background: linear-gradient(to right, #F71735, #8B1122);
+#login input:focus {
+    outline: none;
+    border-color: #4682B4;
+    background: white;
+    box-shadow: 0 0 10px rgba(70, 130, 180, 0.1);
+}
+
+#login button {
+    width: 100%;
+    padding: 15px 30px;
+    background: linear-gradient(135deg, #90EE90 0%, #3CB371 100%);
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
     cursor: pointer;
-    font-weight: bold;
+    transition: all 0.3s ease;
 }
 
-.btn-resposta{
-    background-color: #F5FFD4;
-    color: #000000;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-
-
+#login button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(60, 179, 113, 0.3);
 }
 
-.btn-resposta, .seleccionada{
-    color: #000000;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-
+#login button:active {
+    transform: translateY(0);
 }
 
-.seleccionada{
-    background-color: #8AD5DE;
+/* Ocultar otros contenedores por defecto */
+#questionari, #admin, #crearPregunta, #editarPregunta {
+    display: none;
 }
 
-.btn-resposta{
-    background-color: #F5FFD4;
+/* Responsive */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    main {
+        padding: 30px 20px;
+    }
+    
+    #login h2 {
+        font-size: 1.5rem;
+    }
 }
+

@@ -36,9 +36,12 @@ function mostrarLogin() {
     
     aturarTimer();
 
-    // 3. Amaguem el botó sortir si existeix
+    // 3. Amaguem el botó sortir i crear pregunta si existeixen
     const btnSortirGlobal = document.getElementById("btn-sortir");
     if (btnSortirGlobal) btnSortirGlobal.style.display = "none";
+    
+    const btnCrearPregunta = document.getElementById("btnCrearPregunta");
+    if (btnCrearPregunta) btnCrearPregunta.style.display = "none";
 
     // 4. Generem el formulari de login
     loginDiv.innerHTML = `
@@ -473,6 +476,7 @@ function amagarVistaAdmin(amagar) {
     const editarPreguntaDiv = document.getElementById("editarPregunta");
     const adminDiv = document.getElementById("admin");
     const tempsPartida = document.getElementById("temps");
+    const btnCrearPregunta = document.getElementById("btnCrearPregunta");
     
     const btnSortirGlobal = document.getElementById("btn-sortir");
 
@@ -483,12 +487,14 @@ function amagarVistaAdmin(amagar) {
         adminDiv.style.display = "block";
         if (tempsPartida) tempsPartida.style.display = "none"; 
         if (btnSortirGlobal) btnSortirGlobal.style.display = "block";
+        if (btnCrearPregunta) btnCrearPregunta.style.display = "block";
     } else {
         // Amagar totes les vistes
         questionari.style.display = "none";
         adminDiv.style.display = "none";
         if (tempsPartida) tempsPartida.style.display = "none";
         if (btnSortirGlobal) btnSortirGlobal.style.display = "block"; 
+        if (btnCrearPregunta) btnCrearPregunta.style.display = "none";
     }
 
     crearPreguntaDiv.style.display = "none";
@@ -501,11 +507,39 @@ function carregarAdmin() {
 
     document.getElementById("missatgeBenvinguda").textContent = "Administració";
     
-    // Afegir botó Crear Pregunta al header (on estava el timer)
+    // Mostrar botó Sortir
+    const btnSortirGlobal = document.getElementById("btn-sortir");
+    if (btnSortirGlobal) {
+        btnSortirGlobal.style.display = "block";
+        btnSortirGlobal.textContent = "Sortir";
+    }
+    
+    // Crear i afegir botó Crear Pregunta al header
+    const header = document.querySelector("header");
+    let btnCrearPregunta = document.getElementById("btnCrearPregunta");
+    
+    if (!btnCrearPregunta) {
+        btnCrearPregunta = document.createElement("button");
+        btnCrearPregunta.id = "btnCrearPregunta";
+        btnCrearPregunta.textContent = "Crear Pregunta";
+        
+        // Inserir entre missatgeBenvinguda i btn-sortir
+        const missatgeBenvinguda = document.getElementById("missatgeBenvinguda");
+        const btnSortir = document.getElementById("btn-sortir");
+        
+        header.insertBefore(btnCrearPregunta, btnSortir);
+        
+        // Afegir event listener
+        btnCrearPregunta.addEventListener("click", carregarFormulariCrear);
+    }
+    
+    // Mostrar el botó
+    btnCrearPregunta.style.display = "block";
+    
+    // Amagar temps si existeix
     const tempsElement = document.getElementById("temps");
     if (tempsElement) {
-        tempsElement.innerHTML = '<button id="btnCrearPregunta">Crear Pregunta</button>';
-        document.getElementById("btnCrearPregunta").addEventListener("click", carregarFormulariCrear);
+        tempsElement.style.display = "none";
     }
     
     fetch('../php/admin/llistatPreguntes.php')

@@ -437,12 +437,13 @@ main {
     color: white;
     border: none;
     padding: 15px 25px;
-    border-radius: 15px;
+    border-radius: 25px;
     font-size: 1.2rem;
     font-weight: 700;
     font-family: 'Poppins', sans-serif;
     cursor: pointer;
     transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 #btnCrearPregunta:hover {

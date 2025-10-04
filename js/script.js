@@ -350,12 +350,7 @@ function renderPreguntaActual() {
                        `<button id="btnSeguent" class="btn-navegacio">Següent</button>` : 
                        '';
     
-    // Botó FINALITZAR (Si som a l'última pregunta)
-    const btnFinalitzar = (index === totalPreguntes - 1) ? 
-                          `<button id="btnFinalitzar" class="btn-finalitzar">Finalitzar</button>` : 
-                          '';
-
-    htmlString += `<div class="navegacio-buttons">${btnEnrera} ${btnSeguent} ${btnFinalitzar}</div>`;
+    htmlString += `<div class="navegacio-buttons">${btnEnrera} ${btnSeguent}</div>`;
     
     contenidor.innerHTML = htmlString;
     
@@ -367,10 +362,6 @@ function renderPreguntaActual() {
     //click botó seguent
     if (document.getElementById("btnSeguent")) {
         document.getElementById("btnSeguent").addEventListener("click", () => canviarPregunta(1));
-    }
-    //click botó finalitzar
-    if (document.getElementById("btnFinalitzar")) {
-        document.getElementById("btnFinalitzar").addEventListener("click", mostrarResultats);
     }
     
     // 4. Afegim l'escolta d'esdeveniments per marcar la resposta
@@ -561,13 +552,8 @@ function carregarAdmin() {
                 
                 htmlString += `<div class="admin-question-options">`;
                 pregunta.respostes.forEach((resposta, j) => {
-                    // Provar diferents formats del camp correcta
-                    const isCorrect = resposta.correcta === 1 || 
-                                    resposta.correcta === "1" || 
-                                    resposta.correcta === true || 
-                                    resposta.correcta === "true";
+                    const isCorrect = resposta.correcta === 1;
                     const className = isCorrect ? "admin-option-button correct" : "admin-option-button";
-                    console.log(`Resposta ${j}: "${resposta.resposta}", correcta: ${resposta.correcta} (${typeof resposta.correcta}), isCorrect: ${isCorrect}, className: ${className}`);
                     htmlString += `<div class="${className}">${resposta.resposta}</div>`;
                 });
                 htmlString += `</div>`;
@@ -750,8 +736,8 @@ function editarPregunta(idPregunta) {
                 </div>
                 <div class="form-section">
                     <h3>Imatge</h3>
+                    <img src="../${pregunta.imatge}" id="imatgeActualPreview" alt="Imatge actual" style="width: 100%; max-width: 400px; height: 200px; object-fit: cover; border-radius: 15px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); margin-bottom: 15px;">
                     <input type="file" class="form-input" id="imatgeFitxerEditar" accept="image/*">
-                    <img src="../${pregunta.imatge}" id="imatgeActualPreview" alt="Imatge actual" class="imatge-previsualitzada">
                     <div id="nova-preview-container"></div>
                 </div>
             </div>

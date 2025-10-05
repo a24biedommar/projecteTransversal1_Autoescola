@@ -345,12 +345,18 @@ function renderPreguntaActual() {
                       `<button id="btnEnrera" class="btn-navegacio">Enrera</button>` : 
                       '';
     
+    //Calculem i mostrem el span que mostra el numero de la pregunta (index) aixo suplantaria a la anterior versió del marcador
+    const numeroDePreguntaVisible = index + 1;
+    const numeroFormatejat = numeroDePreguntaVisible < 10 ? '0' + numeroDePreguntaVisible : numeroDePreguntaVisible;
+    const spanNumeroPregunta = `<span id="indexPregunta" class="numero-pregunta-estil">${numeroFormatejat}</span>`;
+    
     // Botó SEGÜENT (Si no som a l'última pregunta)
     const btnSeguent = (index < totalPreguntes - 1) ? 
                        `<button id="btnSeguent" class="btn-navegacio">Següent</button>` : 
                        '';
     
-    htmlString += `<div class="navegacio-buttons">${btnEnrera} ${btnSeguent}</div>`;
+    // MODIFICAT: Afegim el span entre els botons
+    htmlString += `<div class="navegacio-buttons">${btnEnrera} ${spanNumeroPregunta} ${btnSeguent}</div>`;
     
     contenidor.innerHTML = htmlString;
     
@@ -432,7 +438,7 @@ function mostrarResultats() {
         const contenidor = document.getElementById("questionari");
         contenidor.innerHTML = `
             <h2>Resultats</h2>
-            <p>Total preguntes: ${estatDeLaPartida.contadorPreguntes}</p>
+            <p>Preguntes respostes: ${estatDeLaPartida.contadorPreguntes}</p>
             <p>Correctes: ${resultat.correctes}</p>
             
             <button class="btn-Reiniciar" id="btnReiniciar">Reiniciar</button>

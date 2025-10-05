@@ -18,10 +18,10 @@ body {
     overflow: hidden;
 }
 
-/* ---- MODIFICACIONES DEL HEADER (MÉS REDUÏT) ---- */
+/* ---- HEADER ---- */
 header {
     width: 100%;
-    padding: 8px 20px; /* Reducido de 10px 20px */
+    padding: 8px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -30,14 +30,14 @@ header {
 
 header h1 {
     color: white;
-    font-size: 1.8rem; /* Reducido de 2rem */
+    font-size: 1.8rem;
     font-weight: 700;
     margin: 0;
 }
 
 #temps {
     color: white;
-    font-size: 1.3rem; /* Reducido de 1.5rem */
+    font-size: 1.3rem;
     font-weight: 700;
     position: absolute;
     left: 50%;
@@ -48,7 +48,7 @@ header h1 {
     background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
     color: white;
     border: none;
-    padding: 8px 18px; /* Reducido de 10px 20px */
+    padding: 8px 18px;
     border-radius: 12px;
     font-size: 1rem;
     font-weight: 700;
@@ -62,12 +62,12 @@ header h1 {
     box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
 }
 
-/* ---- AJUST DEL CONTENEDOR PRINCIPAL ---- */
+/* ---- CONTENEDOR PRINCIPAL ---- */
 main {
     background: white;
     border-radius: 20px 20px 0 0;
     width: 100%;
-    height: calc(100vh - 55px); /* Aumentada la altura para ocupar el nuevo espacio */
+    height: calc(100vh - 55px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -76,7 +76,6 @@ main {
     flex: 1;
 }
 
-/* Contenidor principal - invisible pero centrado */
 #contenidor-principal {
     width: 100%;
     height: 100%;
@@ -85,7 +84,7 @@ main {
     justify-content: center;
 }
 
-/* Formulario de login */
+/* ---- Formulario de login ---- */
 #login {
     width: 100%;
     max-width: 400px;
@@ -136,7 +135,6 @@ main {
     border-radius: 10px;
     font-size: 1.1rem;
     font-weight: 600;
-    font-family: 'Poppins', sans-serif;
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -146,11 +144,7 @@ main {
     box-shadow: 0 5px 15px rgba(60, 179, 113, 0.3);
 }
 
-#login button:active {
-    transform: translateY(0);
-}
-
-/* Qüestionari */
+/* ---- Qüestionari ---- */
 #questionari {
     width: 100%;
     height: 100%;
@@ -183,25 +177,15 @@ main {
     line-height: 1.4;
 }
 
-#questionari img {
-    width: 100%;
-    max-width: 450px;
-    height: 240px;
-    object-fit: cover;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
 .question-options {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 15px; /* Aumentado el espacio entre respuestas */
     justify-content: flex-start;
     align-items: stretch;
 }
 
-/* Botons de resposta */
 .btn-resposta {
     width: 100%;
     padding: 15px 24px;
@@ -230,25 +214,37 @@ main {
     font-weight: 700;
 }
 
-/* Botons de navegació */
+/* ---- Botons de navegació ---- */
 .navegacio-buttons {
     display: flex;
-    justify-content: space-between;
     margin-top: 25px;
-    gap: 20px;
     align-items: center;
 }
 
+/* NOU: Estil del número de la pregunta com un cercle */
 .numero-pregunta-estil {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #333;
-    margin: 0 15px;
+    width: 50px;
+    height: 50px;
+    background-color: #4682B4;
+    color: white;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* Evita que el círculo se encoja */
 }
 
-.navegacio-buttons .btn-navegacio:only-child {
-    margin-left: auto;
+/* NOU: Truc per centrar el número */
+#btnEnrera {
+    margin-right: auto; /* Empuja el número y el botón siguiente a la derecha */
 }
+
+#btnSeguent {
+    margin-left: auto; /* Empuja el número y el botón anterior a la izquierda */
+}
+
 
 .btn-navegacio {
     padding: 18px 35px;
@@ -259,7 +255,6 @@ main {
     font-family: 'Poppins', sans-serif;
     cursor: pointer;
     transition: all 0.3s ease;
-    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
     color: white;
 }
 
@@ -272,7 +267,11 @@ main {
     background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
 }
 
-/* Vista d'Administració */
+#btnSeguent {
+    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+}
+
+/* ---- Vista d'Administració ---- */
 #admin {
     width: 100%;
     height: 100%;
@@ -291,7 +290,6 @@ main {
     font-size: 1.4rem;
     font-weight: 700;
     margin: 0 0 20px 0;
-    text-align: left;
     line-height: 1.4;
 }
 
@@ -304,15 +302,6 @@ main {
 
 .admin-question-left {
     flex: 1;
-}
-
-.admin-question img {
-    width: 100%;
-    max-width: 450px;
-    height: 280px;
-    object-fit: cover;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .admin-question-options {
@@ -353,11 +342,17 @@ main {
 }
 
 .admin-numero-pregunta {
-    font-size: 1.2rem;
+    width: 50px;
+    height: 50px;
+    background-color: #4682B4;
+    color: white;
+    border-radius: 50%;
+    font-size: 1.5rem;
     font-weight: 700;
-    color: #4682B4;
-    flex-grow: 1;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 .admin-btn-editar,
@@ -367,7 +362,6 @@ main {
     border-radius: 15px;
     font-size: 1.1rem;
     font-weight: 700;
-    font-family: 'Poppins', sans-serif;
     cursor: pointer;
     transition: all 0.3s ease;
     color: white;
@@ -410,6 +404,7 @@ main {
     box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
 }
 
+/* ---- Formularios de Admin ---- */
 #crearPregunta,
 #editarPregunta {
     width: 100%;
@@ -492,7 +487,6 @@ main {
     border-radius: 15px;
     font-size: 1.2rem;
     font-weight: 700;
-    font-family: 'Poppins', sans-serif;
     cursor: pointer;
     transition: all 0.3s ease;
     color: white;
@@ -519,14 +513,23 @@ main {
     max-width: 450px;
 }
 
+/* ---- TAMAÑO UNIFICADO PARA TODAS LAS IMÁGENES ---- */
+#questionari img,
+.admin-question img,
 .imatge-previsualitzada {
-    width: 100% !important;
-    height: 280px !important;
-    object-fit: cover !important;
-    border-radius: 15px !important;
+    width: 100%;
+    max-width: 450px;
+    height: 240px; /* Altura unificada */
+    object-fit: cover; /* Asegura que la imagen cubra el espacio sin deformarse */
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.imatge-previsualitzada {
     border: 3px solid #87CEEB !important;
 }
 
+/* Ocultar contenidors per defecte */
 #questionari,
 #admin,
 #crearPregunta,
@@ -534,6 +537,7 @@ main {
     display: none;
 }
 
+/* ---- Responsive ---- */
 @media (max-width: 768px) {
     header h1 {
         font-size: 1.8rem;
@@ -556,7 +560,7 @@ main {
     .admin-question img,
     .imatge-previsualitzada {
         max-width: 100% !important;
-        height: auto !important;
+        height: auto !important; /* En móvil, la altura es automática para mantener la proporción */
         min-height: 200px !important;
     }
     .btn-resposta,

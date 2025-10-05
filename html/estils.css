@@ -176,7 +176,7 @@ main {
 
 #questionari h3 {
     color: #333;
-    font-size: 1.4rem;
+    font-size: 1.2rem; /* Reducido de 1.4rem a 1.2rem */
     margin: 0;
     text-align: left;
     line-height: 1.4;
@@ -185,7 +185,7 @@ main {
 #questionari img {
     width: 100%;
     max-width: 450px;
-    height: 280px;
+    height: 240px; /* Reducida la altura de 280px a 240px */
     object-fit: cover;
     border-radius: 15px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);

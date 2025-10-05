@@ -437,12 +437,17 @@ function mostrarResultats() {
         //2. Mostrem els resultats a la pantalla al div questionari
         const contenidor = document.getElementById("questionari");
         contenidor.innerHTML = `
-            <h2>Resultats</h2>
-            <p>Preguntes respostes: ${estatDeLaPartida.contadorPreguntes}</p>
-            <p>Correctes: ${resultat.correctes}</p>
-            
-            <button class="btn-Reiniciar" id="btnReiniciar">Reiniciar</button>
-            <button class="btn-Sortir" id="btnSortir">Sortir</button>
+            <div id="resultats">
+                <h2>Resultats</h2>
+                <div class="resultats-stats">
+                    <p>Preguntes respostes: ${estatDeLaPartida.contadorPreguntes}</p>
+                    <p>Correctes: ${resultat.correctes}</p>
+                </div>
+                <div class="resultats-buttons">
+                    <button class="btn-reiniciar" id="btnReiniciar">Reiniciar</button>
+                    <button class="btn-sortir" id="btnSortir">Sortir</button>
+                </div>
+            </div>
         `;
 
         //3. Afegim els Event Listeners als nous botons:

@@ -144,6 +144,76 @@ main {
     box-shadow: 0 5px 15px rgba(60, 179, 113, 0.3);
 }
 
+/* ---- Pantalla de Resultados ---- */
+#resultats {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+#resultats h2 {
+    color: #333;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.resultats-stats {
+    margin-bottom: 30px;
+}
+
+.resultats-stats p {
+    color: #666;
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.resultats-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-reiniciar {
+    flex: 1;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #90EE90 0%, #3CB371 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-reiniciar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(60, 179, 113, 0.3);
+}
+
+.btn-sortir {
+    flex: 1;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-sortir:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+}
+
 /* ---- Qüestionari ---- */
 #questionari {
     width: 100%;
@@ -574,8 +644,15 @@ main {
     .admin-btn-eliminar,
     .btn-navegacio,
     .form-btn-cancelar,
-    .form-btn-guardar {
+    .form-btn-guardar,
+    .btn-reiniciar,
+    .btn-sortir {
         padding: 15px 20px;
         font-size: 1rem;
+    }
+    
+    .resultats-buttons {
+        flex-direction: column;
+        gap: 10px;
     }
 }

@@ -236,13 +236,6 @@ main {
     overflow-y: auto;
 }
 
-/* ---- Qüestionari en modo formulario (para resultados) ---- */
-#questionari.formulari-mode {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .question-content {
     display: flex;
     gap: 30px;
@@ -632,22 +625,81 @@ main {
 }
 
 /* ---- Responsive ---- */
-@media (max-width: 768px) {
-    header h1 {
-        font-size: 1.8rem;
+
+/* Pantallas muy grandes */
+@media (min-width: 1400px) {
+    .contenidor-centrat {
+        max-width: 500px;
+        padding: 50px;
     }
+    
+    #login h2,
+    #resultats h2 {
+        font-size: 2.2rem;
+    }
+    
+    .btn-resposta,
+    .btn-navegacio,
+    .btn-reiniciar,
+    .btn-sortir {
+        padding: 20px 40px;
+        font-size: 1.2rem;
+    }
+}
+
+/* Tablets grandes y laptops pequeñas */
+@media (max-width: 1024px) {
+    .contenidor-centrat {
+        max-width: 400px;
+        padding: 35px;
+    }
+    
+    #questionari {
+        padding: 20px 30px;
+    }
+    
+    .admin-question-content,
+    .form-content {
+        gap: 25px;
+    }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+    header {
+        padding: 10px 15px;
+    }
+    
+    header h1 {
+        font-size: 1.6rem;
+    }
+    
+    #temps {
+        font-size: 1.1rem;
+    }
+    
+    #btn-sortir {
+        padding: 6px 15px;
+        font-size: 0.9rem;
+    }
+    
     main {
-        padding: 15px 20px 30px 20px;
+        padding: 15px 20px 25px 20px;
         height: calc(100vh - 60px);
     }
     
     .contenidor-centrat {
-        padding: 30px 20px;
-        margin: 20px auto;
+        max-width: 350px;
+        padding: 25px 20px;
+        margin: 15px auto;
     }
-    #login h2 {
+    
+    #login h2,
+    #resultats h2 {
         font-size: 1.5rem;
+        margin-bottom: 25px;
     }
+    
     .question-content,
     .admin-question-content,
     .form-content {
@@ -655,13 +707,20 @@ main {
         gap: 20px !important;
         align-items: stretch !important;
     }
+    
+    #questionari {
+        padding: 15px 20px;
+    }
+    
     #questionari img,
     .admin-question img,
     .imatge-previsualitzada {
         max-width: 100% !important;
-        height: auto !important; /* En móvil, la altura es automática para mantener la proporción */
-        min-height: 200px !important;
+        height: auto !important;
+        min-height: 180px !important;
+        max-height: 200px !important;
     }
+    
     .btn-resposta,
     .admin-option-button,
     .admin-btn-editar,
@@ -671,12 +730,378 @@ main {
     .form-btn-guardar,
     .btn-reiniciar,
     .btn-sortir {
-        padding: 15px 20px;
-        font-size: 1rem;
+        padding: 12px 18px;
+        font-size: 0.95rem;
     }
     
     .resultats-buttons {
         flex-direction: column;
         gap: 10px;
+    }
+    
+    .navegacio-buttons {
+        gap: 15px;
+    }
+    
+    .numero-pregunta-estil {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+    }
+}
+
+/* Móviles grandes */
+@media (max-width: 480px) {
+    header {
+        padding: 8px 12px;
+    }
+    
+    header h1 {
+        font-size: 1.4rem;
+    }
+    
+    #temps {
+        font-size: 1rem;
+    }
+    
+    #btn-sortir {
+        padding: 5px 12px;
+        font-size: 0.85rem;
+    }
+    
+    main {
+        padding: 10px 15px 20px 15px;
+    }
+    
+    .contenidor-centrat {
+        max-width: 100%;
+        padding: 20px 15px;
+        margin: 10px auto;
+        border-radius: 15px;
+    }
+    
+    #login h2,
+    #resultats h2 {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+    }
+    
+    #login input {
+        padding: 12px 15px;
+        font-size: 0.95rem;
+    }
+    
+    #login button,
+    .btn-reiniciar,
+    .btn-sortir {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+    
+    #questionari {
+        padding: 10px 15px;
+    }
+    
+    #questionari img,
+    .admin-question img,
+    .imatge-previsualitzada {
+        min-height: 160px !important;
+        max-height: 180px !important;
+        border-radius: 10px;
+    }
+    
+    .btn-resposta,
+    .admin-option-button {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+        border-radius: 12px;
+    }
+    
+    .btn-navegacio {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .numero-pregunta-estil {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
+    .admin-numero-pregunta {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
+    .admin-btn-editar,
+    .admin-btn-eliminar {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .form-input,
+    .answer-input {
+        padding: 12px 15px;
+        font-size: 0.95rem;
+    }
+    
+    .form-btn-cancelar,
+    .form-btn-guardar {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+    
+    .resultats-stats p {
+        font-size: 1rem;
+    }
+}
+
+/* Móviles pequeños */
+@media (max-width: 360px) {
+    header {
+        padding: 6px 10px;
+    }
+    
+    header h1 {
+        font-size: 1.2rem;
+    }
+    
+    #temps {
+        font-size: 0.9rem;
+    }
+    
+    #btn-sortir {
+        padding: 4px 10px;
+        font-size: 0.8rem;
+    }
+    
+    main {
+        padding: 8px 12px 15px 12px;
+    }
+    
+    .contenidor-centrat {
+        padding: 15px 12px;
+        margin: 8px auto;
+        border-radius: 12px;
+    }
+    
+    #login h2,
+    #resultats h2 {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+    }
+    
+    #login input {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+    
+    #login button,
+    .btn-reiniciar,
+    .btn-sortir {
+        padding: 10px 15px;
+        font-size: 0.95rem;
+    }
+    
+    #questionari {
+        padding: 8px 12px;
+    }
+    
+    #questionari img,
+    .admin-question img,
+    .imatge-previsualitzada {
+        min-height: 140px !important;
+        max-height: 160px !important;
+        border-radius: 8px;
+    }
+    
+    .btn-resposta,
+    .admin-option-button {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        border-radius: 10px;
+    }
+    
+    .btn-navegacio {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .numero-pregunta-estil {
+        width: 35px;
+        height: 35px;
+        font-size: 1.1rem;
+    }
+    
+    .admin-numero-pregunta {
+        width: 35px;
+        height: 35px;
+        font-size: 1.1rem;
+    }
+    
+    .admin-btn-editar,
+    .admin-btn-eliminar {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .form-input,
+    .answer-input {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .form-btn-cancelar,
+    .form-btn-guardar {
+        padding: 10px 15px;
+        font-size: 0.95rem;
+    }
+    
+    .resultats-stats p {
+        font-size: 0.95rem;
+    }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 320px) {
+    header {
+        padding: 5px 8px;
+    }
+    
+    header h1 {
+        font-size: 1.1rem;
+    }
+    
+    #temps {
+        font-size: 0.85rem;
+    }
+    
+    #btn-sortir {
+        padding: 3px 8px;
+        font-size: 0.75rem;
+    }
+    
+    main {
+        padding: 5px 8px 10px 8px;
+    }
+    
+    .contenidor-centrat {
+        padding: 12px 8px;
+        margin: 5px auto;
+        border-radius: 10px;
+    }
+    
+    #login h2,
+    #resultats h2 {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+    }
+    
+    #login input {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+    }
+    
+    #login button,
+    .btn-reiniciar,
+    .btn-sortir {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+    
+    #questionari {
+        padding: 5px 8px;
+    }
+    
+    #questionari img,
+    .admin-question img,
+    .imatge-previsualitzada {
+        min-height: 120px !important;
+        max-height: 140px !important;
+        border-radius: 6px;
+    }
+    
+    .btn-resposta,
+    .admin-option-button {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+        border-radius: 8px;
+    }
+    
+    .btn-navegacio {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+    
+    .numero-pregunta-estil {
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+    
+    .admin-numero-pregunta {
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+    
+    .admin-btn-editar,
+    .admin-btn-eliminar {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+    
+    .form-input,
+    .answer-input {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+    }
+    
+    .form-btn-cancelar,
+    .form-btn-guardar {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .resultats-stats p {
+        font-size: 0.9rem;
+    }
+    
+    .navegacio-buttons {
+        gap: 10px;
+    }
+}
+
+/* Orientación landscape en móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+    header {
+        padding: 4px 12px;
+    }
+    
+    header h1 {
+        font-size: 1.2rem;
+    }
+    
+    main {
+        padding: 5px 15px 10px 15px;
+    }
+    
+    .contenidor-centrat {
+        padding: 15px 20px;
+        margin: 5px auto;
+    }
+    
+    #login h2,
+    #resultats h2 {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+    }
+    
+    #questionari img,
+    .admin-question img,
+    .imatge-previsualitzada {
+        min-height: 120px !important;
+        max-height: 140px !important;
     }
 }

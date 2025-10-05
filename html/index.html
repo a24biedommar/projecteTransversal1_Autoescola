@@ -5,34 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Autoescola</title>
     <link rel="shortcut icon" href="../favIcon.jpeg" type="image/x-icon">
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <!-- Google Fonts - Poppins -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <script type="module" src="../js/script.js"></script>
     <link rel="stylesheet" href="normalize.css">
     <link rel="stylesheet" href="estils.css">
-
-
+    <!-- Bootstrap CSS para utilidades adicionales -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="d-flex align-items-center justify-content-center vh-100">
-    <header class="glass-header position-fixed top-0 start-0 w-100 d-flex justify-content-between align-items-center px-4 py-3">
-        <h1 id="missatgeBenvinguda" class="text-white fw-bold mb-0 gradient-text"></h1>
-        <div id="temps" class="timer-badge"></div>
-        <button id="btn-sortir" class="btn btn-outline-light btn-lg rounded-pill px-4"></button>
+<body>
+    <header>
+        <h1 id="missatgeBenvinguda"></h1>
+        <div id="temps"></div>
+        <button id="btn-sortir"></button>
     </header>
     
-    <main class="glass-main w-100 h-100 d-flex align-items-center justify-content-center">
-        <div id="contenidor-principal" class="glass-container w-100 h-100 d-flex align-items-center justify-content-center">
-            <div id="login" class="glass-panel w-100 h-100 d-flex align-items-center justify-content-center"></div>
-            <div id="questionari" class="glass-panel w-100 h-100 d-flex align-items-center justify-content-center"></div>
-            <div id="admin" class="glass-panel w-100 h-100 d-flex align-items-center justify-content-center"></div>
-            <div id="crearPregunta" class="glass-panel w-100 h-100 d-flex align-items-center justify-content-center"></div>
-            <div id="editarPregunta" class="glass-panel w-100 h-100 d-flex align-items-center justify-content-center"></div>
+    <main>
+        <div id="contenidor-principal">
+            <div id="login"></div>
+            <div id="questionari"></div>
+            <div id="admin"></div>
+            <div id="crearPregunta"></div>
+            <div id="editarPregunta"></div>
         </div>
     </main>
 </body>

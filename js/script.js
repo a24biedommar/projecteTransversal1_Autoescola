@@ -5,7 +5,7 @@ let estatDeLaPartida = {
     preguntaActualIndex: 0,
     contadorPreguntes: 0,
     respostesUsuari: [],
-    tempsRestant: 30, // Modificat a 30 segons
+    tempsRestant: 30, 
 };
 // Variable per emmagatzemar el nom de l'usuari inicialment buida
 let nomUsuari = "";
@@ -43,14 +43,22 @@ function mostrarLogin() {
     const btnCrearPregunta = document.getElementById("btnCrearPregunta");
     if (btnCrearPregunta) btnCrearPregunta.style.display = "none";
 
-    // 4. Generem el formulari de login
+    // 4. Generem el formulari de login amb glassmorphism
     loginDiv.innerHTML = `
-        <h2>Inici de Sessió</h2>
-        <form id="loginForm">
-            <label for="username">Introdueix el teu nom:</label><br>
-            <input type="text" id="username" name="username" required><br><br>
-            <button type="submit" id="btnLogin">Entrar</button>
-        </form>
+        <div class="login-container">
+            <h2>Inici de Sessió</h2>
+            <form id="loginForm">
+                <label for="username">Introdueix el teu nom</label>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="username" name="username" placeholder="Introdueix el teu nom" required>
+                </div>
+                <button type="submit" id="btnLogin">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Entrar
+                </button>
+            </form>
+        </div>
     `;
     
     // 5. Afegim l'event listener al formulari (per el botó entrar)

@@ -555,7 +555,8 @@ function carregarAdmin() {
 
             data.preguntes.forEach((pregunta, i) => {
                 htmlString += `<div class="admin-question">`;
-                htmlString += `<h3>${i + 1}. ${pregunta.pregunta}</h3>`;
+                // NOU: L'h3 ja no mostrarà el número, només el text de la pregunta.
+                htmlString += `<h3>${pregunta.pregunta}</h3>`;
                 
                 htmlString += `<div class="admin-question-content">`;
                 htmlString += `<div class="admin-question-left">`;
@@ -570,9 +571,16 @@ function carregarAdmin() {
                 });
                 htmlString += `</div>`;
                 htmlString += `</div>`;
+
+                // NOU: Calculem i formatem el número de la pregunta per a l'admin
+                const numeroDePreguntaVisible = i + 1;
+                const numeroFormatejat = numeroDePreguntaVisible < 10 ? '0' + numeroDePreguntaVisible : numeroDePreguntaVisible;
+                const spanNumeroPregunta = `<span class="admin-numero-pregunta">${numeroFormatejat}</span>`;
                 
+                // MODIFICAT: Afegim el span entre els botons
                 htmlString += `<div class="admin-question-actions">`;
                 htmlString += `<button class="admin-btn-editar" data-id="${pregunta.id}">Editar</button>`;
+                htmlString += spanNumeroPregunta;
                 htmlString += `<button class="admin-btn-eliminar" data-id="${pregunta.id}">Eliminar</button>`;
                 htmlString += `</div>`;
                 htmlString += `</div>`;

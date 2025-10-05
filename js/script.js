@@ -432,7 +432,7 @@ function mostrarResultats() {
         const contenidor = document.getElementById("questionari");
         contenidor.innerHTML = `
             <h2>Resultats</h2>
-            <p>Total preguntes: ${resultat.total}</p>
+            <p>Total preguntes: ${estatDeLaPartida.contadorPreguntes}</p>
             <p>Correctes: ${resultat.correctes}</p>
             
             <button class="btn-Reiniciar" id="btnReiniciar">Reiniciar</button>

@@ -348,7 +348,7 @@ function renderPreguntaActual() {
     //Calculem i mostrem el span que mostra el numero de la pregunta (index) aixo suplantaria a la anterior versió del marcador
     const numeroDePreguntaVisible = index + 1;
     const numeroFormatejat = numeroDePreguntaVisible < 10 ? '0' + numeroDePreguntaVisible : numeroDePreguntaVisible;
-    const spanNumeroPregunta = `<span id="indexPregunta" class="numero-pregunta-estil">${numeroFormatejat}</span>`;
+    const spanNumeroPregunta = `<span class="numero-pregunta-estil">${numeroFormatejat}</span>`;    
     
     // Botó SEGÜENT (Si no som a l'última pregunta)
     const btnSeguent = (index < totalPreguntes - 1) ? 
@@ -572,12 +572,11 @@ function carregarAdmin() {
                 htmlString += `</div>`;
                 htmlString += `</div>`;
 
-                // NOU: Calculem i formatem el número de la pregunta per a l'admin
+                //Calculem i formatem el número de la pregunta per a l'admin
                 const numeroDePreguntaVisible = i + 1;
                 const numeroFormatejat = numeroDePreguntaVisible < 10 ? '0' + numeroDePreguntaVisible : numeroDePreguntaVisible;
-                const spanNumeroPregunta = `<span class="admin-numero-pregunta">${numeroFormatejat}</span>`;
-                
-                // MODIFICAT: Afegim el span entre els botons
+                const spanNumeroPregunta = `<span class="numero-pregunta-estil">${numeroFormatejat}</span>`;                
+                //Afegim el span entre els botons
                 htmlString += `<div class="admin-question-actions">`;
                 htmlString += `<button class="admin-btn-editar" data-id="${pregunta.id}">Editar</button>`;
                 htmlString += spanNumeroPregunta;

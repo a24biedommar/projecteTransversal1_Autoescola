@@ -43,22 +43,14 @@ function mostrarLogin() {
     const btnCrearPregunta = document.getElementById("btnCrearPregunta");
     if (btnCrearPregunta) btnCrearPregunta.style.display = "none";
 
-    // 4. Generem el formulari de login amb glassmorphism
+    // 4. Generem el formulari de login
     loginDiv.innerHTML = `
-        <div class="login-container">
-            <h2>Inici de Sessió</h2>
-            <form id="loginForm">
-                <label for="username">Introdueix el teu nom</label>
-                <div class="input-group">
-                    <i class="fas fa-user"></i>
-                    <input type="text" id="username" name="username" placeholder="Introdueix el teu nom" required>
-                </div>
-                <button type="submit" id="btnLogin">
-                    <i class="fas fa-sign-in-alt"></i>
-                    Entrar
-                </button>
-            </form>
-        </div>
+        <h2>Inici de Sessió</h2>
+        <form id="loginForm">
+            <label for="username">Introdueix el teu nom:</label><br>
+            <input type="text" id="username" name="username" required><br><br>
+            <button type="submit" id="btnLogin">Entrar</button>
+        </form>
     `;
     
     // 5. Afegim l'event listener al formulari (per el botó entrar)

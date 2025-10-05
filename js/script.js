@@ -583,7 +583,7 @@ function carregarAdmin() {
                 //Calculem i formatem el número de la pregunta per a l'admin
                 const numeroDePreguntaVisible = i + 1;
                 const numeroFormatejat = numeroDePreguntaVisible < 10 ? '0' + numeroDePreguntaVisible : numeroDePreguntaVisible;
-                const spanNumeroPregunta = `<span class="numero-pregunta-estil">${numeroFormatejat}</span>`;                
+                const spanNumeroPregunta = `<span class="admin-numero-pregunta">${numeroFormatejat}</span>`;                
                 //Afegim el span entre els botons
                 htmlString += `<div class="admin-question-actions">`;
                 htmlString += `<button class="admin-btn-editar" data-id="${pregunta.id}">Editar</button>`;

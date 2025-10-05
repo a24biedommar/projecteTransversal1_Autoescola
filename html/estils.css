@@ -667,25 +667,39 @@ main {
 /* Tablets */
 @media (max-width: 768px) {
     header {
-        padding: 10px 15px;
+        padding: 15px 15px;
+        flex-direction: column;
+        align-items: flex-start;
+        position: relative;
+        min-height: 70px;
     }
     
     header h1 {
         font-size: 1.6rem;
+        margin-bottom: 5px;
+        line-height: 1.2;
     }
     
     #temps {
         font-size: 1.1rem;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
     }
     
     #btn-sortir {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
         padding: 6px 15px;
         font-size: 0.9rem;
     }
     
     main {
         padding: 15px 20px 25px 20px;
-        height: calc(100vh - 60px);
+        height: calc(100vh - 90px);
     }
     
     .contenidor-centrat {
@@ -753,11 +767,13 @@ main {
 /* Móviles grandes */
 @media (max-width: 480px) {
     header {
-        padding: 8px 12px;
+        padding: 12px 12px;
+        min-height: 65px;
     }
     
     header h1 {
         font-size: 1.4rem;
+        margin-bottom: 3px;
     }
     
     #temps {
@@ -771,6 +787,7 @@ main {
     
     main {
         padding: 10px 15px 20px 15px;
+        height: calc(100vh - 85px);
     }
     
     .contenidor-centrat {
@@ -860,11 +877,13 @@ main {
 /* Móviles pequeños */
 @media (max-width: 360px) {
     header {
-        padding: 6px 10px;
+        padding: 10px 10px;
+        min-height: 60px;
     }
     
     header h1 {
         font-size: 1.2rem;
+        margin-bottom: 2px;
     }
     
     #temps {
@@ -878,6 +897,7 @@ main {
     
     main {
         padding: 8px 12px 15px 12px;
+        height: calc(100vh - 80px);
     }
     
     .contenidor-centrat {
@@ -966,11 +986,13 @@ main {
 /* Móviles muy pequeños */
 @media (max-width: 320px) {
     header {
-        padding: 5px 8px;
+        padding: 8px 8px;
+        min-height: 55px;
     }
     
     header h1 {
         font-size: 1.1rem;
+        margin-bottom: 2px;
     }
     
     #temps {
@@ -984,6 +1006,7 @@ main {
     
     main {
         padding: 5px 8px 10px 8px;
+        height: calc(100vh - 75px);
     }
     
     .contenidor-centrat {
@@ -1076,15 +1099,34 @@ main {
 /* Orientación landscape en móviles */
 @media (max-height: 500px) and (orientation: landscape) {
     header {
-        padding: 4px 12px;
+        padding: 8px 12px;
+        min-height: 50px;
+        flex-direction: row;
+        align-items: center;
     }
     
     header h1 {
         font-size: 1.2rem;
+        margin-bottom: 0;
+    }
+    
+    #temps {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    #btn-sortir {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
     }
     
     main {
         padding: 5px 15px 10px 15px;
+        height: calc(100vh - 70px);
     }
     
     .contenidor-centrat {

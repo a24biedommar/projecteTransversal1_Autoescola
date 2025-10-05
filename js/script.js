@@ -114,7 +114,7 @@ function mostrarJoc() {
     document.getElementById("editarPregunta").style.display = "none";
     
     // 2. Mostrem el missatge de benvinguda i el botó de Sortir
-    document.getElementById("missatgeBenvinguda").textContent = `Benvingut ${nomUsuari}!`;
+    document.getElementById("missatgeBenvinguda").innerHTML = `Benvingut<br>${nomUsuari}!`;
 
     const btnSortirGlobal = document.getElementById("btn-sortir");
     if (btnSortirGlobal) btnSortirGlobal.style.display = "block";
@@ -414,7 +414,7 @@ function canviarPregunta(direccio) {
 // Funció que mostra els resultats finals i permet reiniciar la partida.
 function mostrarResultats() {
     // Fem que el missatge de benvinguda canvii el benvingut per resultats
-    document.getElementById("missatgeBenvinguda").textContent = `Resultats ${nomUsuari}!`;
+    document.getElementById("missatgeBenvinguda").innerHTML = `Resultats<br>${nomUsuari}!`;
     
     // Aturem el timer
     aturarTimer();

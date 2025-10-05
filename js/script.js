@@ -537,10 +537,9 @@ function carregarAdmin() {
         btnCrearPregunta.textContent = "Crear Pregunta";
         
         // Inserir entre missatgeBenvinguda i btn-sortir
-        const missatgeBenvinguda = document.getElementById("missatgeBenvinguda");
         const btnSortir = document.getElementById("btn-sortir");
         
-        header.insertBefore(btnCrearPregunta, btnSortir);
+        btnSortir.before(btnCrearPregunta);
         
         // Afegir event listener
         btnCrearPregunta.addEventListener("click", carregarFormulariCrear);

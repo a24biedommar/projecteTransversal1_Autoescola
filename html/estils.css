@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-/* Reset y configuración base */
+/* ============================================
+   RESET Y CONFIGURACIÓN BASE
+   ============================================ */
 * {
     margin: 0;
     padding: 0;
@@ -18,7 +20,9 @@ body {
     overflow: hidden;
 }
 
-/* ---- HEADER ---- */
+/* ============================================
+   HEADER
+   ============================================ */
 header {
     width: 100%;
     padding: 12px 20px;
@@ -62,7 +66,9 @@ header h1 {
     box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
 }
 
-/* ---- CONTENEDOR PRINCIPAL ---- */
+/* ============================================
+   CONTENEDOR PRINCIPAL
+   ============================================ */
 main {
     background: white;
     border-radius: 20px 20px 0 0;
@@ -84,7 +90,6 @@ main {
     justify-content: center;
 }
 
-/* ---- Contenedor centrado para login y resultados ---- */
 .contenidor-centrat {
     width: 100%;
     max-width: 450px;
@@ -96,7 +101,9 @@ main {
     margin: 0 auto;
 }
 
-/* ---- Formulario de login ---- */
+/* ============================================
+   FORMULARIO DE LOGIN
+   ============================================ */
 #login {
     width: 100%;
     display: flex;
@@ -157,7 +164,9 @@ main {
     box-shadow: 0 5px 15px rgba(60, 179, 113, 0.3);
 }
 
-/* ---- Pantalla de Resultados ---- */
+/* ============================================
+   PANTALLA DE RESULTADOS
+   ============================================ */
 #resultats {
     width: 100%;
 }
@@ -187,30 +196,13 @@ main {
     justify-content: center;
 }
 
-.btn-reiniciar {
-    flex: 1;
-    padding: 15px 20px;
-    background: linear-gradient(135deg, #90EE90 0%, #3CB371 100%);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    font-family: 'Poppins', sans-serif;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-reiniciar:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(60, 179, 113, 0.3);
-}
-
+/* ============================================
+   BOTONES COMUNES
+   ============================================ */
+.btn-reiniciar,
 .btn-sortir {
     flex: 1;
     padding: 15px 20px;
-    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
-    color: white;
     border: none;
     border-radius: 10px;
     font-size: 1.1rem;
@@ -218,14 +210,26 @@ main {
     font-family: 'Poppins', sans-serif;
     cursor: pointer;
     transition: all 0.3s ease;
+    color: white;
 }
 
+.btn-reiniciar {
+    background: linear-gradient(135deg, #90EE90 0%, #3CB371 100%);
+}
+
+.btn-sortir {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+}
+
+.btn-reiniciar:hover,
 .btn-sortir:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* ---- Qüestionari ---- */
+/* ============================================
+   CUESTIONARIO
+   ============================================ */
 #questionari {
     width: 100%;
     height: 100%;
@@ -263,7 +267,7 @@ main {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Aumentado el espacio entre respuestas */
+    gap: 15px;
     justify-content: flex-start;
     align-items: stretch;
 }
@@ -296,7 +300,9 @@ main {
     font-weight: 700;
 }
 
-/* ---- Botons de navegació ---- */
+/* ============================================
+   NAVEGACIÓN
+   ============================================ */
 .navegacio-buttons {
     display: flex;
     margin-top: 25px;
@@ -305,7 +311,6 @@ main {
     position: relative;
 }
 
-/* NOU: Estil del número de la pregunta com un cercle */
 .numero-pregunta-estil {
     width: 50px;
     height: 50px;
@@ -323,16 +328,14 @@ main {
     transform: translateX(-50%);
 }
 
-/* NOU: Truc per centrar el número */
 #btnEnrera {
     margin-right: auto;
-    background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%); /* Empuja el número y el botón siguiente a la derecha */
+    background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
 }
 
 #btnSeguent {
-    margin-left: auto; /* Empuja el número y el botón anterior a la izquierda */
+    margin-left: auto;
 }
-
 
 .btn-navegacio {
     padding: 18px 35px;
@@ -355,7 +358,9 @@ main {
     background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
 }
 
-/* ---- Vista d'Administració ---- */
+/* ============================================
+   VISTA DE ADMINISTRACIÓN
+   ============================================ */
 #admin {
     width: 100%;
     height: 100%;
@@ -458,7 +463,8 @@ main {
     background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
 }
 
-.admin-btn-editar:hover, .admin-btn-eliminar:hover {
+.admin-btn-editar:hover,
+.admin-btn-eliminar:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
@@ -487,7 +493,9 @@ main {
     box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
 }
 
-/* ---- Formularios de Admin ---- */
+/* ============================================
+   FORMULARIOS DE ADMIN
+   ============================================ */
 #crearPregunta,
 #editarPregunta {
     width: 100%;
@@ -596,14 +604,16 @@ main {
     max-width: 450px;
 }
 
-/* ---- TAMAÑO UNIFICADO PARA TODAS LAS IMÁGENES ---- */
+/* ============================================
+   IMÁGENES
+   ============================================ */
 #questionari img,
 .admin-question img,
 .imatge-previsualitzada {
     width: 100%;
     max-width: 450px;
-    height: 240px; /* Altura unificada */
-    object-fit: cover; /* Asegura que la imagen cubra el espacio sin deformarse */
+    height: 240px;
+    object-fit: cover;
     border-radius: 15px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
@@ -612,7 +622,9 @@ main {
     border: 3px solid #87CEEB !important;
 }
 
-/* Ocultar contenidors per defecte */
+/* ============================================
+   OCULTAR CONTENEDORES
+   ============================================ */
 #questionari,
 #admin,
 #crearPregunta,
@@ -620,7 +632,9 @@ main {
     display: none;
 }
 
-/* ---- Responsive ---- */
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
 
 /* Pantallas muy grandes */
 @media (min-width: 1400px) {

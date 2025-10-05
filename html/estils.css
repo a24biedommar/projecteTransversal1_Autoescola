@@ -219,6 +219,8 @@ main {
     display: flex;
     margin-top: 25px;
     align-items: center;
+    justify-content: space-between;
+    position: relative;
 }
 
 /* NOU: Estil del número de la pregunta com un cercle */
@@ -233,7 +235,10 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0; /* Evita que el círculo se encoja */
+    flex-shrink: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 /* NOU: Truc per centrar el número */

@@ -682,4 +682,128 @@ height: calc(100vh - 70px);
 #login h2 {
 font-size: 1.5rem;
 }
+
+/* Layout vertical para móvil - Questionari */
+#questionari {
+overflow-y: auto;
+padding: 20px;
+}
+
+.question-content {
+flex-direction: column !important;
+gap: 20px !important;
+align-items: stretch !important;
+}
+
+.question-left {
+flex: none !important;
+display: flex;
+flex-direction: column;
+gap: 20px;
+align-items: stretch;
+}
+
+.question-options {
+flex: none !important;
+display: flex;
+flex-direction: column;
+gap: 15px;
+justify-content: flex-start;
+align-items: stretch;
+}
+
+/* Layout vertical para móvil - Admin */
+#admin {
+overflow-y: auto;
+padding: 20px;
+}
+
+.admin-question {
+margin-bottom: 25px;
+}
+
+.admin-question-content {
+flex-direction: column !important;
+gap: 20px !important;
+align-items: stretch !important;
+}
+
+.admin-question-left {
+flex: none !important;
+display: flex;
+flex-direction: column;
+gap: 15px;
+align-items: stretch;
+}
+
+.admin-question-options {
+flex: none !important;
+display: flex;
+flex-direction: column;
+gap: 15px;
+justify-content: flex-start;
+align-items: stretch;
+}
+
+.admin-question-actions {
+gap: 15px;
+margin-top: 15px;
+}
+
+.admin-btn-editar, .admin-btn-eliminar {
+padding: 12px 20px;
+font-size: 1rem;
+}
+
+/* Layout vertical para móvil - Formularios */
+#crearPregunta, #editarPregunta {
+overflow-y: auto;
+padding: 20px;
+}
+
+.form-content {
+flex-direction: column !important;
+gap: 25px !important;
+align-items: stretch !important;
+}
+
+.form-left, .form-right {
+flex: none !important;
+display: flex;
+flex-direction: column;
+gap: 20px;
+}
+
+.form-actions {
+gap: 15px;
+margin-top: 25px;
+}
+
+.form-btn-cancelar, .form-btn-guardar {
+padding: 15px 25px;
+font-size: 1.1rem;
+}
+
+/* Ajustes específicos para móvil */
+#questionari img, .admin-question img, .imatge-previsualitzada {
+max-width: 100% !important;
+height: auto !important;
+min-height: 200px !important;
+}
+
+.btn-resposta, .admin-option-button {
+padding: 15px 20px;
+font-size: 1rem;
+margin-bottom: 12px;
+}
+
+.navegacio-buttons {
+gap: 15px;
+margin-top: 20px;
+}
+
+.btn-navegacio, .btn-finalitzar {
+padding: 15px 25px;
+font-size: 1.1rem;
+}
 }

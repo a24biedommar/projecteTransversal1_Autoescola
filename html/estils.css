@@ -1,5 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
+/* Bootstrap Customization */
+:root {
+    --bs-font-sans-serif: 'Poppins', sans-serif;
+    --bs-primary: #4682B4;
+    --bs-secondary: #87CEEB;
+    --bs-success: #3CB371;
+    --bs-danger: #ff6b6b;
+    --bs-warning: #FFA500;
+    --bs-info: #87CEEB;
+    --bs-light: #fff8dc;
+}
+
 /* Reset y configuración base */
 * {
     margin: 0;
@@ -18,77 +30,43 @@ body {
     overflow: hidden;
 }
 
+/* Header personalizado */
 header {
     width: 100%;
     padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
 }
 
 header h1 {
-    color: white;
     font-size: 2.5rem;
-    font-weight: 700;
-    margin: 0;
 }
 
 #temps {
-    color: white;
     font-size: 1.8rem;
-    font-weight: 700;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
 }
 
 #btn-sortir {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
-    color: white;
-    border: none;
-    padding: 15px 25px;
-    border-radius: 15px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    font-family: 'Poppins', sans-serif;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%) !important;
+    border: none !important;
+    padding: 15px 25px !important;
+    border-radius: 15px !important;
+    font-size: 1.2rem !important;
+    transition: all 0.3s ease !important;
 }
 
 #btn-sortir:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3) !important;
 }
 
-/* Main container - Tarjeta blanca principal */
+/* Main container personalizado */
 main {
-    background: white;
-    border-radius: 20px 20px 0 0;
-    width: 100%;
-    height: calc(100vh - 80px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px 40px 40px 40px;
-    position: relative;
-    flex: 1;
-}
-
-/* Contenidor principal - invisible pero centrado */
-#contenidor-principal {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* Este contenedor es invisible pero mantiene el centrado */
+    border-radius: 20px 20px 0 0 !important;
+    height: calc(100vh - 80px) !important;
+    padding: 20px 40px 40px 40px !important;
 }
 
 /* Formulario de login */
 #login {
-    width: 100%;
-    max-width: 400px;
     text-align: center;
 }
 
@@ -109,57 +87,43 @@ main {
 }
 
 #login input {
-    width: 100%;
-    padding: 15px 20px;
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-family: 'Poppins', sans-serif;
-    margin-bottom: 20px;
-    background: #f9f9f9;
-    transition: all 0.3s ease;
+    padding: 15px 20px !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 10px !important;
+    font-size: 1rem !important;
+    margin-bottom: 20px !important;
+    background: #f9f9f9 !important;
+    transition: all 0.3s ease !important;
 }
 
 #login input:focus {
-    outline: none;
-    border-color: #4682B4;
-    background: white;
-    box-shadow: 0 0 10px rgba(70, 130, 180, 0.1);
+    outline: none !important;
+    border-color: #4682B4 !important;
+    background: white !important;
+    box-shadow: 0 0 10px rgba(70, 130, 180, 0.1) !important;
 }
 
 #login button {
     width: 100%;
-    padding: 15px 30px;
-    background: linear-gradient(135deg, #90EE90 0%, #3CB371 100%);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    font-family: 'Poppins', sans-serif;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    padding: 15px 30px !important;
+    background: linear-gradient(135deg, #90EE90 0%, #3CB371 100%) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
 }
 
 #login button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(60, 179, 113, 0.3);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(60, 179, 113, 0.3) !important;
 }
 
 #login button:active {
-    transform: translateY(0);
+    transform: translateY(0) !important;
 }
 
 /* Qüestionari */
-#questionari {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 40px;
-    overflow-y: auto;
-}
-
 .question-content {
     display: flex;
     gap: 30px;
@@ -204,41 +168,39 @@ main {
 /* Botons de resposta */
 .btn-resposta {
     width: 100%;
-    padding: 18px 24px;
-    border: none;
-    border-radius: 15px;
-    font-size: 1.1rem;
-    font-family: 'Poppins', sans-serif;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: left;
-    background: #fff8dc;
-    color: #333;
-    border: 2px solid transparent;
-    margin-bottom: 18px;
-    display: block;
+    padding: 18px 24px !important;
+    border: 2px solid transparent !important;
+    border-radius: 15px !important;
+    font-size: 1.1rem !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    text-align: left !important;
+    background: #fff8dc !important;
+    color: #333 !important;
+    margin-bottom: 18px !important;
+    display: block !important;
 }
 
 .btn-resposta:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
 }
 
 .btn-resposta.seleccionada {
-    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
-    color: white;
-    border-color: #4682B4;
-    font-weight: 700;
+    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%) !important;
+    color: white !important;
+    border-color: #4682B4 !important;
+    font-weight: 700 !important;
 }
 
 .btn-resposta.correct {
-    background: linear-gradient(135deg, #90EE90 0%, #3CB371 100%);
-    color: white;
+    background: linear-gradient(135deg, #90EE90 0%, #3CB371 100%) !important;
+    color: white !important;
 }
 
 .btn-resposta.incorrect {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
-    color: white;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%) !important;
+    color: white !important;
 }
 
 /* Botons de navegació */
@@ -254,37 +216,36 @@ main {
 }
 
 .btn-navegacio {
-    padding: 18px 35px;
-    border: none;
-    border-radius: 15px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    font-family: 'Poppins', sans-serif;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
-    color: white;
+    padding: 18px 35px !important;
+    border: none !important;
+    border-radius: 15px !important;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%) !important;
+    color: white !important;
 }
 
 .btn-navegacio:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Estil específic per al botó Enrera */
 #btnEnrera {
-    background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+    background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%) !important;
 }
 
 /* Estil específic per al botó Següent */
 #btnSeguent {
-    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%) !important;
 }
 
 .btn-navegacio:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
 }
 
 .btn-finalitzar {
@@ -306,15 +267,6 @@ main {
 }
 
 /* Vista d'Administració */
-#admin {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 40px;
-    overflow-y: auto;
-}
-
 .admin-question {
     margin-bottom: 30px;
 }
@@ -363,19 +315,17 @@ main {
 
 .admin-option-button {
     width: 100%;
-    padding: 18px 24px;
-    border: none;
-    border-radius: 15px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    font-family: 'Poppins', sans-serif;
-    cursor: default;
-    text-align: left;
-    background: #fff8dc;
-    color: #333;
-    border: 2px solid transparent;
-    margin-bottom: 0;
-    display: block;
+    padding: 18px 24px !important;
+    border: 2px solid transparent !important;
+    border-radius: 15px !important;
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    cursor: default !important;
+    text-align: left !important;
+    background: #fff8dc !important;
+    color: #333 !important;
+    margin-bottom: 0 !important;
+    display: block !important;
 }
 
 .admin-option-button.correct {
@@ -394,34 +344,32 @@ main {
 }
 
 .admin-btn-editar {
-    padding: 15px 30px;
-    border: none;
-    border-radius: 15px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    font-family: 'Poppins', sans-serif;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: linear-gradient(135deg, #90EE90 0%, #3CB371 100%);
-    color: white;
+    padding: 15px 30px !important;
+    border: none !important;
+    border-radius: 15px !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    background: linear-gradient(135deg, #90EE90 0%, #3CB371 100%) !important;
+    color: white !important;
 }
 
 .admin-btn-eliminar {
-    padding: 15px 30px;
-    border: none;
-    border-radius: 15px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    font-family: 'Poppins', sans-serif;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
-    color: white;
+    padding: 15px 30px !important;
+    border: none !important;
+    border-radius: 15px !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%) !important;
+    color: white !important;
 }
 
 .admin-btn-editar:hover, .admin-btn-eliminar:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Separador entre preguntes */
@@ -435,34 +383,23 @@ main {
 
 /* Botó Crear Pregunta al header */
 #btnCrearPregunta {
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: white;
-    border: none;
-    padding: 15px 25px;
-    border-radius: 25px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    font-family: 'Poppins', sans-serif;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%) !important;
+    border: none !important;
+    padding: 15px 25px !important;
+    border-radius: 25px !important;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    white-space: nowrap !important;
 }
 
 #btnCrearPregunta:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3) !important;
 }
 
 /* Formulari de creació/edició de preguntes */
-#crearPregunta, #editarPregunta {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 40px;
-    overflow-y: auto;
-}
-
 .form-content {
     display: flex;
     gap: 40px;
@@ -493,51 +430,45 @@ main {
 }
 
 .form-input {
-    width: 100%;
-    padding: 15px 20px;
-    border: 2px solid #e0e0e0;
-    border-radius: 15px;
-    font-size: 1rem;
-    font-family: 'Poppins', sans-serif;
-    background: #f9f9f9;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
+    padding: 15px 20px !important;
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 15px !important;
+    font-size: 1rem !important;
+    background: #f9f9f9 !important;
+    transition: all 0.3s ease !important;
 }
 
 .form-input:focus {
-    outline: none;
-    border-color: #4682B4;
-    background: white;
-    box-shadow: 0 0 10px rgba(70, 130, 180, 0.1);
+    outline: none !important;
+    border-color: #4682B4 !important;
+    background: white !important;
+    box-shadow: 0 0 10px rgba(70, 130, 180, 0.1) !important;
 }
 
 .form-input::placeholder {
-    color: #999;
+    color: #999 !important;
 }
 
 .form-textarea {
-    width: 100%;
-    min-height: 120px;
-    padding: 15px 20px;
-    border: 2px solid #e0e0e0;
-    border-radius: 15px;
-    font-size: 1rem;
-    font-family: 'Poppins', sans-serif;
-    background: #f9f9f9;
-    transition: all 0.3s ease;
-    resize: vertical;
-    box-sizing: border-box;
+    min-height: 120px !important;
+    padding: 15px 20px !important;
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 15px !important;
+    font-size: 1rem !important;
+    background: #f9f9f9 !important;
+    transition: all 0.3s ease !important;
+    resize: vertical !important;
 }
 
 .form-textarea:focus {
-    outline: none;
-    border-color: #4682B4;
-    background: white;
-    box-shadow: 0 0 10px rgba(70, 130, 180, 0.1);
+    outline: none !important;
+    border-color: #4682B4 !important;
+    background: white !important;
+    box-shadow: 0 0 10px rgba(70, 130, 180, 0.1) !important;
 }
 
 .form-textarea::placeholder {
-    color: #999;
+    color: #999 !important;
 }
 
 .answer-container {
@@ -549,52 +480,51 @@ main {
 
 .answer-input {
     flex: 1;
-    padding: 15px 20px;
-    border: 2px solid #e0e0e0;
-    border-radius: 15px;
-    font-size: 1rem;
-    font-family: 'Poppins', sans-serif;
-    background: #f9f9f9;
-    transition: all 0.3s ease;
+    padding: 15px 20px !important;
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 15px !important;
+    font-size: 1rem !important;
+    background: #f9f9f9 !important;
+    transition: all 0.3s ease !important;
 }
 
 .answer-input:focus {
-    outline: none;
-    border-color: #4682B4;
-    background: white;
-    box-shadow: 0 0 10px rgba(70, 130, 180, 0.1);
+    outline: none !important;
+    border-color: #4682B4 !important;
+    background: white !important;
+    box-shadow: 0 0 10px rgba(70, 130, 180, 0.1) !important;
 }
 
 .answer-input::placeholder {
-    color: #999;
+    color: #999 !important;
 }
 
 .radio-button {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #e0e0e0;
-    border-radius: 50%;
-    background: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
+    width: 20px !important;
+    height: 20px !important;
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 50% !important;
+    background: white !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
 }
 
 .radio-button:checked {
-    border-color: #4682B4;
-    background: #4682B4;
+    border-color: #4682B4 !important;
+    background: #4682B4 !important;
 }
 
 .radio-button:checked::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: white;
+    content: '' !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background: white !important;
 }
 
 .form-actions {
@@ -605,34 +535,32 @@ main {
 }
 
 .form-btn-cancelar {
-    padding: 18px 35px;
-    border: none;
-    border-radius: 15px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    font-family: 'Poppins', sans-serif;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
-    color: white;
+    padding: 18px 35px !important;
+    border: none !important;
+    border-radius: 15px !important;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%) !important;
+    color: white !important;
 }
 
 .form-btn-guardar {
-    padding: 18px 35px;
-    border: none;
-    border-radius: 15px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    font-family: 'Poppins', sans-serif;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: linear-gradient(135deg, #90EE90 0%, #3CB371 100%);
-    color: white;
+    padding: 18px 35px !important;
+    border: none !important;
+    border-radius: 15px !important;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    background: linear-gradient(135deg, #90EE90 0%, #3CB371 100%) !important;
+    color: white !important;
 }
 
 .form-btn-cancelar:hover, .form-btn-guardar:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Previsualització d'imatges als formularis */
@@ -667,19 +595,49 @@ main {
     display: none;
 }
 
-/* Responsive */
+/* Bootstrap responsive overrides */
 @media (max-width: 768px) {
     header h1 {
-        font-size: 2rem;
+        font-size: 2rem !important;
     }
     
     main {
-        padding: 15px 20px 30px 20px;
-        height: calc(100vh - 70px);
+        padding: 15px 20px 30px 20px !important;
+        height: calc(100vh - 70px) !important;
     }
     
     #login h2 {
-        font-size: 1.5rem;
+        font-size: 1.5rem !important;
+    }
+    
+    /* Mobile responsive classes */
+    .question-content {
+        flex-direction: column !important;
+        gap: 20px !important;
+    }
+    
+    .admin-question-content {
+        flex-direction: column !important;
+        gap: 20px !important;
+    }
+    
+    .form-content {
+        flex-direction: column !important;
+        gap: 20px !important;
+    }
+    
+    #questionari img, .admin-question img {
+        height: 200px !important;
+    }
+    
+    .navegacio-buttons {
+        position: static !important;
+        margin-top: 20px !important;
+    }
+    
+    .btn-navegacio {
+        flex: 1 !important;
     }
 }
+
 

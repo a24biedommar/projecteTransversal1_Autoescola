@@ -43,15 +43,13 @@ function mostrarLogin() {
     const btnCrearPregunta = document.getElementById("btnCrearPregunta");
     if (btnCrearPregunta) btnCrearPregunta.style.display = "none";
 
-    // 4. Generem el formulari de login amb Bootstrap
+    // 4. Generem el formulari de login
     loginDiv.innerHTML = `
-        <h2 class="text-center mb-4">Inici de Sessió</h2>
+        <h2>Inici de Sessió</h2>
         <form id="loginForm">
-            <div class="mb-3">
-                <label for="username" class="form-label">Introdueix el teu nom:</label>
-                <input type="text" class="form-control" id="username" name="username" required>
-            </div>
-            <button type="submit" class="btn btn-success w-100" id="btnLogin">Entrar</button>
+            <label for="username">Introdueix el teu nom:</label><br>
+            <input type="text" id="username" name="username" required><br><br>
+            <button type="submit" id="btnLogin">Entrar</button>
         </form>
     `;
     
@@ -324,17 +322,17 @@ function renderPreguntaActual() {
     
     let htmlString = "";
     
-    //2. Creem l'estructura del layout amb Bootstrap
-    htmlString += `<div class="question-content d-flex">`;
-    htmlString += `<div class="question-left flex-fill">`;
-    htmlString += `<h3 class="mb-4">${pregunta.pregunta}</h3>`;
-    htmlString += `<img src="../${pregunta.imatge}" alt="Pregunta ${index + 1}" class="img-fluid rounded shadow">`;
+    //2. Creem l'estructura del layout amb flexbox
+    htmlString += `<div class="question-content">`;
+    htmlString += `<div class="question-left">`;
+    htmlString += `<h3>${pregunta.pregunta}</h3>`;
+    htmlString += `<img src="../${pregunta.imatge}" alt="Pregunta ${index + 1}">`;
     htmlString += `</div>`;
     
-    htmlString += `<div class="question-options flex-fill">`;
+    htmlString += `<div class="question-options">`;
     pregunta.respostes.forEach((resposta, j) => {
         const idResposta = `${index}_${resposta.id}`; 
-        htmlString += `<button id="${idResposta}" class="btn-resposta w-100 mb-3" data-preg="${index}" data-resp="${resposta.id}">${resposta.resposta}</button>`; 
+        htmlString += `<button id="${idResposta}" class="btn-resposta" data-preg="${index}" data-resp="${resposta.id}">${resposta.resposta}</button>`; 
     });
     htmlString += `</div>`;
     htmlString += `</div>`;
@@ -344,15 +342,15 @@ function renderPreguntaActual() {
     
     // Botó ENRERA (No es mostra a la Pregunta 1)
     const btnEnrera = (index > 0) ? 
-                      `<button id="btnEnrera" class="btn-navegacio btn">Enrera</button>` : 
+                      `<button id="btnEnrera" class="btn-navegacio">Enrera</button>` : 
                       '';
     
     // Botó SEGÜENT (Si no som a l'última pregunta)
     const btnSeguent = (index < totalPreguntes - 1) ? 
-                       `<button id="btnSeguent" class="btn-navegacio btn">Següent</button>` : 
+                       `<button id="btnSeguent" class="btn-navegacio">Següent</button>` : 
                        '';
     
-    htmlString += `<div class="navegacio-buttons d-flex justify-content-between mt-4">${btnEnrera} ${btnSeguent}</div>`;
+    htmlString += `<div class="navegacio-buttons">${btnEnrera} ${btnSeguent}</div>`;
     
     contenidor.innerHTML = htmlString;
     
@@ -544,26 +542,26 @@ function carregarAdmin() {
             let htmlString = "";
 
             data.preguntes.forEach((pregunta, i) => {
-                htmlString += `<div class="admin-question mb-4">`;
-                htmlString += `<h3 class="mb-3">${i + 1}. ${pregunta.pregunta}</h3>`;
+                htmlString += `<div class="admin-question">`;
+                htmlString += `<h3>${i + 1}. ${pregunta.pregunta}</h3>`;
                 
-                htmlString += `<div class="admin-question-content d-flex">`;
-                htmlString += `<div class="admin-question-left flex-fill">`;
-                htmlString += `<img src="../${pregunta.imatge}" alt="Imatge de la pregunta" class="img-fluid rounded shadow">`;
+                htmlString += `<div class="admin-question-content">`;
+                htmlString += `<div class="admin-question-left">`;
+                htmlString += `<img src="../${pregunta.imatge}" alt="Imatge de la pregunta">`;
                 htmlString += `</div>`;
                 
-                htmlString += `<div class="admin-question-options flex-fill">`;
+                htmlString += `<div class="admin-question-options">`;
                 pregunta.respostes.forEach((resposta, j) => {
                     const isCorrect = resposta.correcta === 1;
                     const className = isCorrect ? "admin-option-button correct" : "admin-option-button";
-                    htmlString += `<div class="${className} w-100 mb-3">${resposta.resposta}</div>`;
+                    htmlString += `<div class="${className}">${resposta.resposta}</div>`;
                 });
                 htmlString += `</div>`;
                 htmlString += `</div>`;
                 
-                htmlString += `<div class="admin-question-actions d-flex justify-content-between mt-3">`;
-                htmlString += `<button class="admin-btn-editar btn" data-id="${pregunta.id}">Editar</button>`;
-                htmlString += `<button class="admin-btn-eliminar btn" data-id="${pregunta.id}">Eliminar</button>`;
+                htmlString += `<div class="admin-question-actions">`;
+                htmlString += `<button class="admin-btn-editar" data-id="${pregunta.id}">Editar</button>`;
+                htmlString += `<button class="admin-btn-eliminar" data-id="${pregunta.id}">Eliminar</button>`;
                 htmlString += `</div>`;
                 htmlString += `</div>`;
                 
@@ -585,45 +583,45 @@ function carregarFormulariCrear() {
     crearPreguntaDiv.style.display = "block";
 
     crearPreguntaDiv.innerHTML = `
-        <div class="form-content d-flex">
-            <div class="form-left flex-fill">
-                <div class="form-section mb-4">
-                    <h3 class="mb-3">Pregunta</h3>
-                    <input type="text" class="form-input form-control" id="preguntaText" placeholder="Introdueix la Pregunta" required>
+        <div class="form-content">
+            <div class="form-left">
+                <div class="form-section">
+                    <h3>Pregunta</h3>
+                    <input type="text" class="form-input" id="preguntaText" placeholder="Introdueix la Pregunta" required>
                 </div>
-                <div class="form-section mb-4">
-                    <h3 class="mb-3">Imatge</h3>
-                    <input type="file" class="form-input form-control" id="imatgeFitxer" accept="image/*">
-                    <div id="preview-container mt-3"></div>
+                <div class="form-section">
+                    <h3>Imatge</h3>
+                    <input type="file" class="form-input" id="imatgeFitxer" accept="image/*">
+                    <div id="preview-container"></div>
                 </div>
             </div>
             
-            <div class="form-right flex-fill">
-                <div class="form-section mb-4">
-                    <h3 class="mb-3">Respostes</h3>
-                    <div class="answer-container d-flex align-items-center mb-3">
-                        <input type="text" class="answer-input form-control flex-grow-1 me-3" name="resposta1" placeholder="Introdueix la resposta" required>
-                        <input type="radio" class="radio-button form-check-input" name="correcta" value="0" required>
+            <div class="form-right">
+                <div class="form-section">
+                    <h3>Respostes</h3>
+                    <div class="answer-container">
+                        <input type="text" class="answer-input" name="resposta1" placeholder="Introdueix la resposta" required>
+                        <input type="radio" class="radio-button" name="correcta" value="0" required>
                     </div>
-                    <div class="answer-container d-flex align-items-center mb-3">
-                        <input type="text" class="answer-input form-control flex-grow-1 me-3" name="resposta2" placeholder="Introdueix la resposta" required>
-                        <input type="radio" class="radio-button form-check-input" name="correcta" value="1">
+                    <div class="answer-container">
+                        <input type="text" class="answer-input" name="resposta2" placeholder="Introdueix la resposta" required>
+                        <input type="radio" class="radio-button" name="correcta" value="1">
                     </div>
-                    <div class="answer-container d-flex align-items-center mb-3">
-                        <input type="text" class="answer-input form-control flex-grow-1 me-3" name="resposta3" placeholder="Introdueix la resposta" required>
-                        <input type="radio" class="radio-button form-check-input" name="correcta" value="2">
+                    <div class="answer-container">
+                        <input type="text" class="answer-input" name="resposta3" placeholder="Introdueix la resposta" required>
+                        <input type="radio" class="radio-button" name="correcta" value="2">
                     </div>
-                    <div class="answer-container d-flex align-items-center mb-3">
-                        <input type="text" class="answer-input form-control flex-grow-1 me-3" name="resposta4" placeholder="Introdueix la resposta" required>
-                        <input type="radio" class="radio-button form-check-input" name="correcta" value="3">
+                    <div class="answer-container">
+                        <input type="text" class="answer-input" name="resposta4" placeholder="Introdueix la resposta" required>
+                        <input type="radio" class="radio-button" name="correcta" value="3">
                     </div>
                 </div>
             </div>
         </div>
         
-        <div class="form-actions d-flex justify-content-between mt-4">
-            <button type="button" class="form-btn-cancelar btn" id="btnTornarEnrereCrear">Cancelar</button>
-            <button type="button" class="form-btn-guardar btn" id="btnGuardarPregunta">Guardar</button>
+        <div class="form-actions">
+            <button type="button" class="form-btn-cancelar" id="btnTornarEnrereCrear">Cancelar</button>
+            <button type="button" class="form-btn-guardar" id="btnGuardarPregunta">Guardar</button>
         </div>
     `;
     
@@ -728,38 +726,38 @@ function editarPregunta(idPregunta) {
     //3. Trobar l'índex de la resposta correcta
     const indexCorrecta = pregunta.respostes.findIndex(resposta => resposta.correcta === 1);
 
-    //4. Generem el HTML del formulari amb les dades de la pregunta amb Bootstrap
+    //4. Generem el HTML del formulari amb les dades de la pregunta
     editarDiv.innerHTML = `
-        <div class="form-content d-flex">
-            <div class="form-left flex-fill">
-                <div class="form-section mb-4">
-                    <h3 class="mb-3">Pregunta</h3>
-                    <input type="text" class="form-input form-control" id="editarTextPregunta" value="${pregunta.pregunta}" required>
+        <div class="form-content">
+            <div class="form-left">
+                <div class="form-section">
+                    <h3>Pregunta</h3>
+                    <input type="text" class="form-input" id="editarTextPregunta" value="${pregunta.pregunta}" required>
                 </div>
-                <div class="form-section mb-4">
-                    <h3 class="mb-3">Imatge</h3>
-                    <img src="../${pregunta.imatge}" id="imatgeActualPreview" alt="Imatge actual" class="img-fluid rounded shadow mb-3" style="max-width: 400px; height: 200px; object-fit: cover;">
-                    <input type="file" class="form-input form-control" id="imatgeFitxerEditar" accept="image/*">
-                    <div id="nova-preview-container mt-3"></div>
+                <div class="form-section">
+                    <h3>Imatge</h3>
+                    <img src="../${pregunta.imatge}" id="imatgeActualPreview" alt="Imatge actual" style="width: 100%; max-width: 400px; height: 200px; object-fit: cover; border-radius: 15px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); margin-bottom: 15px;">
+                    <input type="file" class="form-input" id="imatgeFitxerEditar" accept="image/*">
+                    <div id="nova-preview-container"></div>
                 </div>
             </div>
             
-            <div class="form-right flex-fill">
-                <div class="form-section mb-4">
-                    <h3 class="mb-3">Respostes</h3>
+            <div class="form-right">
+                <div class="form-section">
+                    <h3>Respostes</h3>
                     ${pregunta.respostes.map((resposta, i) => `
-                        <div class="answer-container d-flex align-items-center mb-3">
-                            <input type="text" class="answer-input form-control flex-grow-1 me-3" id="resposta${i}" value="${resposta.resposta}" required>
-                            <input type="radio" class="radio-button form-check-input" name="correctaEditar" value="${i}" ${i === indexCorrecta ? 'checked' : ''}>
+                        <div class="answer-container">
+                            <input type="text" class="answer-input" id="resposta${i}" value="${resposta.resposta}" required>
+                            <input type="radio" class="radio-button" name="correctaEditar" value="${i}" ${i === indexCorrecta ? 'checked' : ''}>
                         </div>
                     `).join('')}
                 </div>
             </div>
         </div>
         
-        <div class="form-actions d-flex justify-content-between mt-4">
-            <button type="button" class="form-btn-cancelar btn" id="btnCancelarEdicio">Cancelar</button>
-            <button type="button" class="form-btn-guardar btn" id="btnGuardarCanvis">Guardar</button>
+        <div class="form-actions">
+            <button type="button" class="form-btn-cancelar" id="btnCancelarEdicio">Cancelar</button>
+            <button type="button" class="form-btn-guardar" id="btnGuardarCanvis">Guardar</button>
         </div>
     `;
 

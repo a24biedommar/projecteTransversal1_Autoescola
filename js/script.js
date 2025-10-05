@@ -379,14 +379,20 @@ function renderPreguntaActual() {
 //-------------------------
 //Gestiona la navegació entre preguntes (Següent/Enrera)
 function canviarPregunta(direccio) {
+    // Si l'usuari intenta anar a la seguent pregunta sense respondre la pregunta
+    if (direccio > 0) {
+        //mostrem un missatge de alerta
+        if (estatDeLaPartida.respostesUsuari[estatDeLaPartida.preguntaActualIndex] === undefined) {
+            alert("Has de respondre la pregunta actual abans de continuar.");
+            return;
+        }
+    }
     const nouIndex = estatDeLaPartida.preguntaActualIndex + direccio;
     const total = totesLesPreguntes.length;
-
     // Comprovem que el nou índex sigui vàlid (no surti dels límits de l'array)
     if (nouIndex >= 0 && nouIndex < total) {
         // 1. Actualitzem l'índex de la pregunta que s'està mirant
         estatDeLaPartida.preguntaActualIndex = nouIndex;
-        
         // 2. Redibuixem la pantalla per mostrar la nova pregunta
         renderPreguntaActual(); 
     }

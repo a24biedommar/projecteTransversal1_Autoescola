@@ -46,3 +46,6 @@ Aquesta aplicació contribueix a aquest objectiu, ja que proporciona un recurs e
 Per finalitzar, enllaço per aqui el link d’accés al fitxer que conté tota la documentació demanada per l’assignatura DigiSos:
 
 - https://docs.google.com/document/d/1ZGLu2Rj9SBQIZY8U-fL_egjqRQ3o4rylJ1J1yplqnjU/edit?usp=sharing
+
+## Enllaç al video
+- https://youtu.be/FXxYuBes4ws

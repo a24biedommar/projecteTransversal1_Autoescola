@@ -317,6 +317,7 @@ function marcarResposta(numPregunta, numResposta) {
 function renderPreguntaActual() {
     //1. Agafem el contenidor i la pregunta actual (el seu index)
     const contenidor = document.getElementById("questionari");
+    contenidor.classList.remove("formulari-mode");
     const index = estatDeLaPartida.preguntaActualIndex;
     const pregunta = totesLesPreguntes[index];
 
@@ -438,6 +439,7 @@ function mostrarResultats() {
 
         //2. Mostrem els resultats a la pantalla al div questionari
         const contenidor = document.getElementById("questionari");
+        contenidor.classList.add("formulari-mode");
         contenidor.innerHTML = `
             <div class="contenidor-centrat">
                 <div id="resultats">

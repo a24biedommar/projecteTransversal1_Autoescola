@@ -84,11 +84,24 @@ main {
     justify-content: center;
 }
 
+/* ---- Contenedor centrado para login y resultados ---- */
+.contenidor-centrat {
+    width: 100%;
+    max-width: 450px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    text-align: center;
+    margin: 0 auto;
+}
+
 /* ---- Formulario de login ---- */
 #login {
     width: 100%;
-    max-width: 400px;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #login h2 {
@@ -147,8 +160,6 @@ main {
 /* ---- Pantalla de Resultados ---- */
 #resultats {
     width: 100%;
-    max-width: 400px;
-    text-align: center;
 }
 
 #resultats h2 {
@@ -620,6 +631,11 @@ main {
     main {
         padding: 15px 20px 30px 20px;
         height: calc(100vh - 55px);
+    }
+    
+    .contenidor-centrat {
+        padding: 30px 20px;
+        margin: 20px auto;
     }
     #login h2 {
         font-size: 1.5rem;

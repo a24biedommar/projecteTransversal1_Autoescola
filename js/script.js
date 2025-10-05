@@ -45,12 +45,14 @@ function mostrarLogin() {
 
     // 4. Generem el formulari de login
     loginDiv.innerHTML = `
-        <h2>Inici de Sessió</h2>
-        <form id="loginForm">
-            <label for="username">Introdueix el teu nom:</label><br>
-            <input type="text" id="username" name="username" required><br><br>
-            <button type="submit" id="btnLogin">Entrar</button>
-        </form>
+        <div class="contenidor-centrat">
+            <h2>Inici de Sessió</h2>
+            <form id="loginForm">
+                <label for="username">Introdueix el teu nom:</label><br>
+                <input type="text" id="username" name="username" required><br><br>
+                <button type="submit" id="btnLogin">Entrar</button>
+            </form>
+        </div>
     `;
     
     // 5. Afegim l'event listener al formulari (per el botó entrar)
@@ -437,15 +439,17 @@ function mostrarResultats() {
         //2. Mostrem els resultats a la pantalla al div questionari
         const contenidor = document.getElementById("questionari");
         contenidor.innerHTML = `
-            <div id="resultats">
-                <h2>Resultats</h2>
-                <div class="resultats-stats">
-                    <p>Preguntes respostes: ${estatDeLaPartida.contadorPreguntes}</p>
-                    <p>Correctes: ${resultat.correctes}</p>
-                </div>
-                <div class="resultats-buttons">
-                    <button class="btn-reiniciar" id="btnReiniciar">Reiniciar</button>
-                    <button class="btn-sortir" id="btnSortir">Sortir</button>
+            <div class="contenidor-centrat">
+                <div id="resultats">
+                    <h2>Resultats</h2>
+                    <div class="resultats-stats">
+                        <p>Preguntes respostes: ${estatDeLaPartida.contadorPreguntes}</p>
+                        <p>Correctes: ${resultat.correctes}</p>
+                    </div>
+                    <div class="resultats-buttons">
+                        <button class="btn-reiniciar" id="btnReiniciar">Reiniciar</button>
+                        <button class="btn-sortir" id="btnSortir">Sortir</button>
+                    </div>
                 </div>
             </div>
         `;

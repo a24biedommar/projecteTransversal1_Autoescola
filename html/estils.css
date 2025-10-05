@@ -18,10 +18,10 @@ body {
     overflow: hidden;
 }
 
-/* ---- MODIFICACIONES DEL HEADER ---- */
+/* ---- MODIFICACIONES DEL HEADER (MÉS REDUÏT) ---- */
 header {
     width: 100%;
-    padding: 10px 20px; /* Reducido de 20px */
+    padding: 8px 20px; /* Reducido de 10px 20px */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -30,14 +30,14 @@ header {
 
 header h1 {
     color: white;
-    font-size: 2rem; /* Reducido de 2.5rem */
+    font-size: 1.8rem; /* Reducido de 2rem */
     font-weight: 700;
     margin: 0;
 }
 
 #temps {
     color: white;
-    font-size: 1.5rem; /* Reducido de 1.8rem */
+    font-size: 1.3rem; /* Reducido de 1.5rem */
     font-weight: 700;
     position: absolute;
     left: 50%;
@@ -48,9 +48,9 @@ header h1 {
     background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
     color: white;
     border: none;
-    padding: 10px 20px; /* Reducido de 15px 25px */
-    border-radius: 12px; /* Ligeramente más pequeño */
-    font-size: 1rem; /* Reducido de 1.2rem */
+    padding: 8px 18px; /* Reducido de 10px 20px */
+    border-radius: 12px;
+    font-size: 1rem;
     font-weight: 700;
     font-family: 'Poppins', sans-serif;
     cursor: pointer;
@@ -62,12 +62,12 @@ header h1 {
     box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
 }
 
-/* ---- AJUSTE DEL CONTENEDOR PRINCIPAL ---- */
+/* ---- AJUST DEL CONTENEDOR PRINCIPAL ---- */
 main {
     background: white;
     border-radius: 20px 20px 0 0;
     width: 100%;
-    height: calc(100vh - 65px); /* Aumentada la altura para ocupar el espacio ganado */
+    height: calc(100vh - 55px); /* Aumentada la altura para ocupar el nuevo espacio */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -540,7 +540,7 @@ main {
     }
     main {
         padding: 15px 20px 30px 20px;
-        height: calc(100vh - 60px);
+        height: calc(100vh - 55px);
     }
     #login h2 {
         font-size: 1.5rem;

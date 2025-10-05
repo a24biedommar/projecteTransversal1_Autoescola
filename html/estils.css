@@ -325,7 +325,8 @@ main {
 
 /* NOU: Truc per centrar el número */
 #btnEnrera {
-    margin-right: auto; /* Empuja el número y el botón siguiente a la derecha */
+    margin-right: auto;
+    background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%); /* Empuja el número y el botón siguiente a la derecha */
 }
 
 #btnSeguent {
@@ -348,10 +349,6 @@ main {
 .btn-navegacio:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-#btnEnrera {
-    background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
 }
 
 #btnSeguent {
